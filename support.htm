@@ -1,0 +1,167 @@
+<html>
+<head>
+	<title>Consola de Ayuda de Ciclpe</title>
+	
+	<link rel="stylesheet" type="text/css" href="#!-- #stylesheets:support.css --#"/>
+	
+	<style type="text/css">
+		body
+		{
+			margin-left: 8px; 
+		}
+		
+		div.header
+		{
+			margin-left: -8px;
+			margin-right: -8px; 
+			margin-top: 0px;
+		}
+		
+		.submit
+		{
+			width: 150px;
+		}
+		
+		.note
+		{
+			color: gray;
+		}
+	</style>
+
+	<script type="text/javascript">
+	
+	function viewProperties()
+	{
+		var extra_sel = document.properties_form.extra_sel.value;
+		if (extra_sel.charAt(0) != ";")
+		{
+			document.properties_form.sdoclist_sel.value += ";";
+		}
+		document.properties_form.sdoclist_sel.value += extra_sel;
+				
+		
+		return true;
+	}
+	
+	
+	function exception()
+	{
+		var exception_type = getSelectedRadioValue(document.exception_form.exception_types);
+		var url = "#!-- #executive:script_name --#?f=support$support_c=exception$support_ex=" + exception_type;
+		
+		window.open(url, "exception_window", "width=400 height=200 resizable scrollbars");
+		
+		return false;
+	}
+	
+	
+	function getSelectedRadioValue(radiobuttons)
+	{
+		var value = "";
+		for (var i = 0; i < radiobuttons.length; i++)
+		{
+			if (radiobuttons[i].checked)
+			{
+				value = radiobuttons[i].value;
+				break;
+			}
+		}
+		return value;
+	}
+	
+	</script>
+	
+</head>
+<body>
+
+	<!-- Header -->
+	<div class="header">
+		<table width="100%" border="0">
+			<tr>
+				<td valign="top">
+					<b><script type="text/javascript">document.write(window.location.host + "#!-- #executive:script_name --#");</script></b>
+				</td>
+				<td align="right">
+					<h1>Soporte Ciclope</h1><br/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<h2>System Information</h2>
+	<form name="system_form" action="#!-- #executive:script_name --#">
+		<p>View information about the server that is hosting Ciclope.</p>
+		<input type="hidden" name="f" value="support"/>
+		<input type="hidden" name="support_c" value="sysinfo"/>
+		<input type="hidden" name="support_xsl" value="support-sys.xsl"/>
+		<input class="submit" type="submit" value="Show System Info"/>
+	</form>
+
+	<h2>Binaries</h2>
+	<form name="binaries_form" action="#!-- #executive:script_name --#">
+		<p>Browse a site's Ciclope binary directory, displaying properties for each file.</p>
+		<input type="hidden" name="f" value="support"/>
+		<input type="hidden" name="support_c" value="bininfo"/>
+		<input type="hidden" name="support_xsl" value="support-bin.xsl"/>
+		<p><label for="bin"><input id="bin" type="radio" name="support_p" value="" checked="checked"/>Main binaries directory</label><br/>
+		<label for="ext"><input id="ext" type="radio" name="support_p" value="../ext"/>Extension binaries directory</label></p>
+		<input class="submit" type="submit" value="Show Binaries"/>
+	</form>
+
+	<h2>Site Properties</h2>
+	<form name="properties_form" action="#!-- #executive:script_name --#" onsubmit="return viewProperties()">
+		<p>Browse an Ciclope site's node hierarchy, displaying properties for each node.</p>
+		<input type="hidden" name="f" value="sdoclist"/>
+		<input type="hidden" name="sdoclist_lsel" value="title"/>
+		<input type="hidden" name="sdoclist_sel" value="title;path;has-children;content-type"/>
+		<input type="hidden" name="sdoclist_xsl" value="support-prop.xsl"/>
+		<input type="hidden" name="sdoclist_vps" value="0"/>
+	
+		<table>
+			<tr>
+				<td align="right"><label for="extra_sel">Properties:</label></td>
+				<td><input type="text" name="extra_sel" id="extra_sel" value="name;id;hidden" size="25"/></td>
+				<td><span class="note">(title, path, content-type, and has-children automatically included for UI)</span></td>
+			</tr>
+			<tr>
+				<td align="right"><label for="vid">SiteView Instance:</label></td>
+				<td><input type="text" name="vid" id="vid" value="default" size="25"/></td>
+				<td><span class="note">(SiteView instances are defined in <a href="#!-- #executive:script_name --#?f=support$support_c=get$support_fn=siteview.ini">siteview.ini</a>.
+				The support templates may need to be copied if a view changes the templates directory.)</span></td>
+			</tr>
+		</table>
+		<br/>
+		<input class="submit" type="submit" value="Show Properties"/>
+	</form>
+	
+	<h2>Exceptions</h2>
+	<form name="exception_form" action="#!-- #executive:script_name --#" onsubmit="return exception()">
+		<p>Intentionally raise a hardware or software exception. This simulates a programming error
+		within Ciclope, and can be used to ensure that exceptions are handled correctly by the gateway.</p>
+		<p>Normal behavior is for a pop-up window to appear with the error message "The Executive was unable to process the given request."</p>
+		<p>Exceptions are logged to <a href="#!-- #executive:script_name --#?f=support$support_c=get$support_fn=NPLog.txt">NPLog.txt</a>.</p>
+
+		<table>
+			<tr>
+				<td><label for="av"><input id="av" type="radio" name="exception_types" value="accessviolation" checked="checked"/> Access Violation</label></td>
+				<td><span class="note">(access memory in an illegal way, such as dereferencing a null pointer)</span></td>
+			</tr>
+			<tr>
+				<td><label for="uh"><input id="uh" type="radio" name="exception_types" value="uncaughthresult"/> Uncaught HRESULT</label></td>
+				<td><span class="note">(throw an HRESULT without an enclosing try/catch block)</span></td>
+			</tr>
+			<tr>
+				<td><label for="uc"><input id="uc" type="radio" name="exception_types" value="uncaughtclass"/> Uncaught Class</label></td>
+				<td><span class="note">(throw an object without an enclosing try/catch block)</span></td>
+			</tr>
+			<tr>
+				<td><label for="t"><input id="t" type="radio" name="exception_types" value="terminate"/> Terminate</label></td>
+				<td><span class="note">(throw an exception in a destructor while handling another exception)</span></td>
+			</tr>
+		</table>
+		<br/>
+		<input class="submit" type="submit" value="Raise Exception"/>
+	</form>
+	<br/>
+</body>
+</html>

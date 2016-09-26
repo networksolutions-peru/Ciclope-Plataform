@@ -1,0 +1,194 @@
+<script type="text/javascript">
+
+function OpenHitList()
+{
+	var topFrame = top.document.all("topFrame");
+//	var topFrame = top.frames["topFrame"];
+	topFrame.rows = "40, *, 180";
+}
+
+function SetupQuery()
+{
+	top.frames.DocNav.total_hits=0;
+	top.frames.DocNav.current_hit=-1;
+	OpenHitList();
+}
+
+function getDomain()
+{
+	// get from the contents window
+	var contents_window = top.frames["contents"];
+	return contents_window.getDomain();
+}
+
+function cancelQuery()
+{
+	parent.setMainTab("document");			
+	location = "#!-- #TEMPLATES:document-frameset.htm --#";
+}
+
+function submitQuery()
+{
+	var ui = document.ui_form;
+	var request = document.request_form;
+
+	// domain (this function is in searchform.htm)
+	request.xhitlist_d.value = getDomain();
+	
+	// kwic
+	if (ui.kwic.options[ui.kwic.selectedIndex].value == 0)
+	{
+		request.xhitlist_hc.value="";
+	}
+	else
+	{
+		selected_index = ui.kwic.selectedIndex;
+		/*
+		var sorting = request.xhitlist_hc.value;
+
+		request.xhitlist_hc.value = "[XML][kwic," + 
+			ui.kwic.options[selected_index].value + 
+			"]" +
+			sorting;
+		*/
+		request.xhitlist_hc.value = "[XML][kwic," + 
+			ui.kwic.options[selected_index].value + 
+			"]";
+		
+		if (request.xhitlist_sel.value.indexOf("hit-context") == -1)
+			request.xhitlist_sel.value += ";hit-context";
+	}
+
+	if (ui.q.value.indexOf('[rank') != -1)
+	{
+		request.xhitlist_s.value = 'Relevance-Weight';
+	}
+	
+	request.xhitlist_q.value = ui.q.value;
+	
+	if (request.xhitlist_q.value != "")
+	{
+		SetupQuery();
+		request.submit();
+	}
+	else
+	{
+		alert("Complete algun campo.");
+	}
+}
+
+</script>
+
+<table width="100%" border="0" cellspacing="0">
+  <tr>
+	<td><BR><BR><a href="#!-- #TEMPLATES:field-search.htm --#"><img src="#!-- #IMAGES:title-busqueda.gif --#" border="0"/></a></td>
+  </tr>
+  <tr>
+	<td><BR><BR><a href="#!-- #TEMPLATES:_advsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda2.gif --#" border="0"/></a><BR><BR><BR></td>
+  </tr>
+</table>
+	<img src="#!-- #IMAGES:title-busqueda3.gif --#" border="0"/><BR><BR>
+	<font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+<p>Puede <strong>buscar un subgrupo</strong> del sitio, marcando secciones en la tabla de contenidos (en el sector izquierdo).</p>
+
+<form name="ui_form" onsubmit="submitQuery(); return false;" target="HitList">
+	<label for="query" accesskey="q">Palabras de B&uacute;squeda:</label>
+	<input id="query" name="q" size="40" class="control"><br><br>
+
+	<label for="kwic" accesskey="e">Ver resumen&nbsp;</label>
+	<select id="kwic" name="kwic" size="1" class="control">
+		<option value="0" selected>No</option>
+		<option value="5">Corto</option>
+		<option value="10">Medio</option>
+		<option value="25">Largo</option>
+	</select>
+
+	<p>
+		<input type="submit" value="Buscar" class="button">&nbsp;&nbsp;
+		<input type="button" value="Cancelar" onclick="cancelQuery()" class="button">
+	</p>
+</form>
+
+
+<form name="request_form" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" method="get" target="HitList">
+	<input type="hidden" size="0" name="f" value="xhitlist">
+	<input type="hidden" size="0" name="xhitlist_q" value="">
+	<input type="hidden" size="0" name="xhitlist_x"	value="Advanced">
+	<input type="hidden" size="0" name="xhitlist_s"	value="">
+	<input type="hidden" size="0" name="xhitlist_hc" value="">
+	<input type="hidden" size="0" name="xhitlist_d" value="">
+	<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl">
+	<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
+	<input type="hidden" size="0" name="xhitlist_sel" value="title;path;content-type;home-title">
+</form>
+
+<table width="100%" border="0" cellspacing="0">
+  <tr>
+	<td><img src="#!-- #IMAGES:title-busqueda4.gif --#" border="0"/></td><BR><BR>
+  </tr>
+</table><br /><br />
+<table border="1" cellspacing="1" cellpadding="2" bordercolor="#999999">
+	<tr>
+		<td bgcolor="#999999"><font size="2" color="#FFFFCC">Operador</font></td>
+		<td bgcolor="#999999"><font size="2" color="#FFFFCC">Ejemplo</font></td>
+		<td bgcolor="#999999"><font size="2" color="#FFFFCC">Resultado</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Y</font></td>
+		<td><font size="1">el ella<br>el &amp; ella<br>el and ella</font></td>
+		<td><font size="1">Encuentra ambos "el" y "ella".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">O</font></td>
+		<td><font size="1">el | ella<br>el o ella</font></td>
+		<td><font size="1">Encuentra cualquiera "el" o "ella".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">NO</font></td>
+		<td><font size="1">^el<br>no el</font></td>
+		<td><font size="1">Encuentra documentos que no contengan "el".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">O Exclusivo</font></td>
+		<td><font size="1">el ~ ella<br>el xor ella</font></td>
+		<td><font size="1">Encuentra cualquiera "el" o "ella", pero que no contengan ambos.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Frase</font></td>
+		<td><font size="1">"el y ella"</font></td>
+		<td><font size="1">Encuentra documentos con la frase exacta "el y ella".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Caracter &uacute;nico variable</font></td>
+		<td><font size="1">e?<br>e??a</font></td>
+		<td><font size="1">Encuentra documentos con "el", "es", "en", etc., o "ella", "esta","echa", etc.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Caracter m&uacute;ltiple variable</font></td>
+		<td><font size="1">e*<br>e**a</font></td>
+		<td><font size="1">Encuentra documentos con "el", "este", "elefante", etc., o "ella", "era", "estrella", "esperanza", etc.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Orden de Proximidad</font></td>
+		<td><font size="1">"el y ella"/10</font></td>
+		<td><font size="1">Encuentra documentos con "el", "y", "ella" con 10 palabras entre ellas, en el orden buscado.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Desorden de Proximidad</font></td>
+		<td><font size="1">"el y ella"@10</font></td>
+		<td><font size="1">Encuentra documentos con "el", "y", "ella" con 10 palabras entre ellas, en cualquier orden.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Familia de Palabras</font></td>
+		<td><font size="1">ver%</font></td>
+		<td><font size="1">Encuentra documentos con "veo", "vere", "vista", y "viendo".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Sin&oacute;nimos</font></td>
+		<td><font size="1">ver$</font></td>
+		<td><font size="1">Encuentra documentos con "ver", "mirar", "revisar", "observar", etc.</font></td>
+	</tr>
+
+</table>
+</font>
+

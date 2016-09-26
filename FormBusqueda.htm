@@ -1,0 +1,59 @@
+<html>
+<head>
+<script language="JavaScript" type="text/JavaScript">
+function OpenHitList()
+{
+	var topFrame = top.document.all("topFrame");
+//	var topFrame = top.frames["topFrame"];
+	topFrame.rows = "40, *, 180";
+}
+
+function EnviarFormulario()
+{
+	top.frames.DocNav.total_hits=0;
+	top.frames.DocNav.current_hit=-1;
+	OpenHitList();
+	document.forms[0].submit();
+}
+</script>
+<title>CICLOPE</title>
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:estilosciclope.css --#"/></head>
+<body bgcolor="DEDBDE" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" >
+<table border="0">
+	<tr>
+		<td valign="top" align="left" colspan="3">
+			<img src="#!-- #IMAGES:logociclope.gif --#"/>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" align="right" width="0" >
+			<form name="main_form" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" target="HitList" method="get" onSubmit="javascript:EnviarFormulario();">
+				<INPUT TYPE="text" NAME="xhitlist_q" SIZE="22"/>
+				<input type="hidden" size="0" name="f" value="xhitlist" 
+				/><input type="hidden" size="0" name="xhitlist_x"	value="Simple" 
+				/><input type="hidden" size="0" name="xhitlist_s"	value="relevance-weight"
+				/><input type="hidden" size="0" name="xhitlist_d"	value=""
+				/><input type="hidden" size="0" name="xhitlist_hc"	value=""
+				/><input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl"
+				/><input type="hidden" size="0" name="xhitlist_vpc" value="first"
+				/><input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title" />
+			</form>
+		</td>
+		<td valign="top" align="center">
+			<img alt="Buscar" onclick="javascript:EnviarFormulario();" src="#!-- #IMAGES:botonbusqueda.gif --#" style="cursor: hand;"/>
+		</td>
+		<td valign="top" align="left">
+			<img src="#!-- #IMAGES:space.gif --#"/>
+		</td>
+	</tr>
+<!--	<tr>
+		<td valign="top" align="left" colspan="3">
+			<img src="#!-- #IMAGES:busccomp.gif --#"/>
+			<font class="a">
+		<a href="Pegaso.dll?FormBusquedaCompleja" target="Fondo" >Búsqueda compleja</a>
+		</font>
+		</td>
+	</tr>-->
+</table>
+</body>
+</html>

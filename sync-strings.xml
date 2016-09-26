@@ -1,0 +1,44 @@
+<ld:locale-data locale="EN-US">
+	<ld:str id="product">Dot SA Ciclope</ld:str>
+	<ld:str id="avail-title">Disponibilidad de sincronización</ld:str>
+	<ld:str id="apply-title">Aplicar actualizaciones</ld:str>
+	<ld:str id="log-title">Registrando resultados</ld:str>
+	<ld:str id="get-title">Sincronizar</ld:str>
+	<ld:str id="result-title">Resultados de la sincronizacion</ld:str>
+	<ld:str id="avail-yes">Hay disponible una nueva version de este sitio.</ld:str>
+	<ld:str id="avail-yes-instructions">Para descargar e intalar una nueva version, Presione el boton "Instalar actualizacion".</ld:str>
+	<ld:str id="avail-no">Your version of this site is up-to-date.</ld:str>
+	<ld:str id="avail-no-instructions">No synchronization is needed at this time.</ld:str>
+	<ld:str id="date-label">Fecha:</ld:str>
+	<ld:str id="size-label">Tamaño:</ld:str>
+	<ld:str id="time-label">Tiempo estimo de descarga(modem):</ld:str>
+	<ld:str id="install">Instalar actualizacion</ld:str>
+	<ld:str id="ok">&#160;OK&#160;</ld:str> <!-- Non breaking spaces (&#160;) are here just to widen things out since 'OK' makes a skinny button. -->
+	<ld:str id="cancel">Cancelar</ld:str>
+	<ld:str id="retry">Re-intentar</ld:str>
+	<ld:str id="minute">minuto</ld:str>
+	<ld:str id="minutes">minutos</ld:str>
+	<ld:str id="hour">hora</ld:str>
+	<ld:str id="hours">horas</ld:str>
+	<ld:str id="checking">Comprobando nuevo contenido para su sitio.</ld:str>
+	<ld:str id="wait-server">Espere mientras el servidor se contacta...</ld:str>
+	<ld:str id="applying">Aplicando actualizaciones a su sitio.</ld:str>
+	<ld:str id="wait-apply">Espere mientras su sitio local es sincronizado con el servidor...</ld:str>
+	<ld:str id="logging">Logging synchronization results.</ld:str>
+	<ld:str id="success">Sincronización completa</ld:str>
+	<ld:str id="success-instructions">Su sitio local ha sido sincronizado correctamente con el servidor.<br/>Puede desconectarse de la red con toda seguridad.</ld:str>
+	<ld:str id="error">Sincronización Incompleta</ld:str>
+	<ld:str id="error-instructions">Ocurrio un problema mientras se sincronizaba.</ld:str>
+	<ld:str id="error-unknown">Error inesperado.</ld:str>
+	<ld:str id="error-label">Codigo: </ld:str>
+
+	<!-- HRESULT to string mappings -->
+	<ld:str id="0x81140071">Attempt to call a server-side method while acting as a client.</ld:str>
+	<ld:str id="0x81140072">Attempt to call a client-side method while acting as a server.</ld:str>
+	<ld:str id="0x81140073">The server has not been set up to synchronize your content. There may be a problem with the installation.</ld:str>
+	<ld:str id="0x81140074">The supplied synchronization version is not valid.</ld:str>
+	<ld:str id="0x81140075">There may be a problem with the software installation (invalid instance ID).</ld:str>
+	<ld:str id="0x81140076">This synchronization file can't be used to update your site. It was created for a different version of the site than what you currently have.</ld:str>
+	<ld:str id="0x8114007A">A synchronization file that you need is missing on the server. Please contact the server administrator to report this.</ld:str>
+
+</ld:locale-data>

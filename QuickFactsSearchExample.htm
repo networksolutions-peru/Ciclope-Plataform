@@ -1,0 +1,437 @@
+<SCRIPT LANGUAGE="javascript">
+<!-- Code for unemployment and inflation field search -->
+
+function submitSearch() 
+{
+	// build the query string
+	if (document.UnemploymentSearchForm.greaterless[0].checked == "1")
+	{
+		document.UnemploymentSearchForm.xhitlist_q.value="[Field " + document.UnemploymentSearchForm.fieldname.options[document.UnemploymentSearchForm.fieldname.selectedIndex].value + ": >" + document.UnemploymentSearchForm.rate.value + "]";
+	}
+	else
+	{
+		document.UnemploymentSearchForm.xhitlist_q.value="[Field " + document.UnemploymentSearchForm.fieldname.options[document.UnemploymentSearchForm.fieldname.selectedIndex].value + ": <" + document.UnemploymentSearchForm.rate.value + "]";
+	}
+	// if they are searching on unemployment instead of inflation
+	if (document.UnemploymentSearchForm.fieldname.value == "unemployment")
+	{
+		// Change sort order
+		document.UnemploymentSearchForm.xhitlist_s.value="Field:Unemployment,Desc";
+		document.UnemploymentSearchForm.xhitlist_sel.value="title;path;field:unemployment;field:inflation";
+	}
+}
+<!-- end of code for unemployment and inflation search -->
+
+<!-- Code for searches using the Border-Country field -->
+
+function BorderJWWHook(sTerm)
+{
+	exist = document.BorderEditBox.getText(); 
+	document.BorderEditBox.Insert(exist + sTerm + ", ");
+}
+
+function BorderJEBHook(sTerm)
+{
+	document.BorderWordWheel.Seek(sTerm);
+}
+
+function BorderSearchForm_onsubmit() {
+	var bquery;
+	var brdrterm;
+	var i = 0;
+	var btext = document.BorderEditBox.getText();
+	var len = btext.length;
+	var start;
+	var end;
+	
+	bquery = "[Field BORDER-COUNTRY: ";
+	while (i < len)
+	{
+		while ((i < len) && ((btext.charAt(i) == ',') || (document.BorderSearchForm.xhitlist_q.value.charAt(i) == ' ')))
+		{
+			i++;
+		}
+		start = i;
+		i++;
+		while ((i < len) && (btext.charAt(i) != ','))
+		{
+			i++;
+		}
+		end = i - 1;
+		if (start != end)
+		{
+			brdrterm = document.BorderEditBox.getText().substring(start, end+1);
+			bquery += "\"" + brdrterm + "\" ";
+			if (btext.charAt(i) == ',')
+			{
+				if (document.BorderSearchForm.SearchType[0].checked)
+				{
+					bquery += "| ";
+				}
+				else
+				{
+					bquery += "& ";
+				}
+			}
+		}
+	}
+
+	newquery = bquery;
+	newlen = newquery.length;
+	newquery = newquery.slice(newlen - 3);
+	if (newquery == " | " || newquery == " & ") {
+		bquery = bquery.slice(0,newlen - 2);
+	}
+	else {
+		newquery = bquery.slice(newlen - 3);
+		if (newquery == " \" ") {
+			bquery = bquery.slice(0,newlen - 7);
+		}
+	}
+
+	bquery += "]";
+	document.BorderSearchForm.xhitlist_q.value = bquery;
+}
+
+<!-- End of code for Border-country field search -->
+
+<!-- Code for searches using the Resource field -->
+
+function ResourceJWWHook(sTerm)
+{
+	exist = document.ResourceEditBox.getText(); 
+	document.ResourceEditBox.Insert(exist + sTerm + ", ");
+}
+
+function ResourceJEBHook(sTerm)
+{
+	document.ResourceWordWheel.Seek(sTerm);
+}
+
+function ResourceSearchForm_onsubmit() {
+	var rquery;
+	var rsrcterm;
+	var i = 0;
+	var rtext = document.ResourceEditBox.getText();
+	var len = rtext.length;
+	var start;
+	var end;
+	
+	rquery = "[Field RESOURCE: ";
+	while (i < len)
+	{
+		while ((i < len) && ((rtext.charAt(i) == ',') || (document.ResourceSearchForm.xhitlist_q.value.charAt(i) == ' ')))
+		{
+			i++;
+		}
+		start = i;
+		
+		i++;
+		while ((i < len) && (rtext.charAt(i) != ','))
+		{
+			i++;
+		}
+		end = i - 1;
+		if (start != end)
+		{
+			rsrcterm = document.ResourceEditBox.getText().substring(start, end+1);
+			rquery += "\"" + rsrcterm + "\" ";
+			if (rtext.charAt(i) == ',')
+			{
+				if (document.ResourceSearchForm.SearchType[0].checked)
+				{
+					rquery += "| ";
+				}
+				else
+				{
+					rquery += "& ";
+				}
+			}
+		}
+	}
+
+	newquery = rquery;
+	newlen = newquery.length;
+	newquery = newquery.slice(newlen - 3);
+	if (newquery == " | " || newquery == " & ") {
+		rquery = rquery.slice(0,newlen - 2);
+	}
+	else {
+		newquery = rquery.slice(newlen - 3);
+		if (newquery == " \" ") {
+			rquery = rquery.slice(0,newlen - 7);
+		}
+	}
+
+	rquery += "]";
+	document.ResourceSearchForm.xhitlist_q.value = rquery;
+
+}
+<!-- End of code for Resource field searches -->
+
+</SCRIPT>
+
+<br><br><br>
+<h1 align="center">Country Quick Facts Search Form Examples</h1>
+All search form examples search the Country Quick Facts document collection. Choose from the following search form examples:<br>
+<UL>
+<LI><a href="#simple">Simple Search</a> - Performs a search using Simple Query syntax rules.
+<LI><a href="#unemploy">Unemployment and Inflation Field Search</a> - Performs a search on the unemployment or inflation field
+based on greater than or less than values.
+<LI><a href="#border">Border Country Field Search</a> - Performs a search on the Border-Country field.
+<LI><a href="#resource">Resource Field Search</a> - Performs a search on the Resource field.
+</ul>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<HR>
+<a name="simple"><br><br><br><br><br><br><br><br><br><br><br><br></a>
+<!-- Simple search form for searching the Quickfacts.nfo-->
+<H1>Country Quick Facts</H1>
+<H2>Simple Search</H2>
+
+<form name="SimpleSearchForm" action="#!-- #EXECUTIVE:SCRIPT_NAME --#?f=xhitlist" method="post" target="main">
+	<span class="label">Words to search for:</span><BR>
+	<input size="40" name="xhitlist_q" value="" />
+	<input type="hidden" size="0" name="f" value="xhitlist" />
+	<input type="hidden" size="0" name="xhitlist_pcd" value="" />
+	<input type="hidden" size="0" name="xhitlist_ncd" value="" />
+	<input type="hidden" size="0" name="xhitlist_vpc" value="first" />
+	<input type="hidden" size="0" name="xhitlist_xsl" value="QuickFactsSearchExample.xsl" />
+	<input type="hidden" size="0" name="xhitlist_d" value="{10.1048/NXT3/3.2/QuickFacts}" />
+	<input type="hidden" size="0" name="xhitlist_s" value="relevance-weight" />
+	<input type="hidden" size="0" name="xhitlist_x" value="Simple" />
+	<input type="hidden" size="0" name="xhitlist_hc" value="" />
+	<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight" />
+	<input type="submit" value="Go!" class="button"> 
+</form>
+<!-- end of simple search form -->
+
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<HR>
+<a name="unemploy"><br><br><br><br><br><br><br><br><br><br><br><br></a>
+<!-- Form for searching the unemployment and inflation fields -->
+
+<h1>Country Quick Facts</h1>
+<h2>Unemployment and Inflation Search</h2>
+<table border="0" cellPadding=3 cellSpacing="0">
+<form name="UnemploymentSearchForm" onsubmit="submitSearch()" action="#!-- #EXECUTIVE:SCRIPT_NAME --#?f=xhitlist" method="post" target="main">
+	<!-- This is the part of the form that sends the values
+	the server cares about for executing the query. -->
+	<input type="hidden" size="0" name="f" value="xhitlist" />
+	<input type="hidden" size="0" name="xhitlist_pcd" value="" />
+	<input type="hidden" size="0" name="xhitlist_ncd" value="" />
+	<input type="hidden" size="0" name="xhitlist_vpc" value="first" />
+	<input type="hidden" size="0" name="xhitlist_xsl" value="QuickFactsSearchExample.xsl" />
+	<input type="hidden" size="0" name="xhitlist_d" value="{10.1048/NXT3/3.2/QuickFacts}" />
+	<input type="hidden" size="0" name="xhitlist_s" value="Field:Inflation,Desc" />
+	<input type="hidden" size="0" name="xhitlist_x" value="Advanced" />
+	<input type="hidden" size="0" name="xhitlist_hc" value="" />
+	<input type="hidden" size="0" name="xhitlist_q" value="" />
+	<input type="hidden" size="0" name="xhitlist_sel" value="title;path;field:inflation;field:unemployment" />
+
+    <tbody>
+    
+	<!-- This part of the form provides the search user interface. 
+	The user's inputs are extracted from this form to create the 
+	query that will be sent to the server. -->
+    <tr>
+        <td></td>
+	</tr>
+    <tr>
+        <td><font face=Arial>
+			Search for countries with an&nbsp;
+			<select name="fieldname" size="2" class="control">
+				<option selected value="inflation">inflation</option>
+				<option value="unemployment">unemployment</option>
+			</select>
+			&nbsp;rate
+			<br><br>
+			<input type="radio" name="greaterless" value="greater" checked>greater than 
+			<input type="radio" name="greaterless" value="less" >&nbsp;less than
+			<input size="30" name="rate" value="" />
+			percent</font>
+			<br>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="submit" value="Search" class="button">&nbsp;&nbsp;
+			<input type="button" value="Cancel" onClick="cancelQuery('#!-- #EXECUTIVE:PARAM:G_MAIN_FRAMESET --#')" class="button">
+		<td>
+	</tr>
+	</tbody> 
+</form>
+</table>
+<!-- end of unemployment and inflation field search -->
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<HR>
+<a name="border"><br><br><br><br><br><br></a>
+<!-- Form for Border-country field search -->
+<H1>Country Quick Facts</H1>
+<H2>Border Country Search</H2>
+
+<form name="BorderSearchForm" onsubmit="BorderSearchForm_onsubmit()" action="#!-- #EXECUTIVE:SCRIPT_NAME --#?f=xhitlist" method="post" target="main">
+	<span class="label">
+	
+	<input type="hidden" size="0" name="f" value="xhitlist" />
+	<input type="hidden" size="0" name="xhitlist_pcd" value="" />
+	<input type="hidden" size="0" name="xhitlist_ncd" value="" />
+	<input type="hidden" size="0" name="xhitlist_vpc" value="first" />
+	<input type="hidden" size="0" name="xhitlist_xsl" value="QuickFactsSearchExample.xsl" />
+	<input type="hidden" size="0" name="xhitlist_d" value="{10.1048/NXT3/3.2/QuickFacts}" />
+	<input type="hidden" size="0" name="xhitlist_s" value="Relevance-Weight" />
+	<input type="hidden" size="0" name="xhitlist_x" value="Advanced" />
+	<input type="hidden" size="0" name="xhitlist_hc" value="" />
+	<input type="hidden" size="0" name="xhitlist_q" value="" />
+	<input type="hidden" size="0" name="xhitlist_sel" value="title;path" />
+	
+<TABLE border=1 cellPadding=5 cellSpacing=1 cols=2>
+  <TR>
+    <TD>
+      <P>Search for countries which are bordered by:<BR>(separate countries with a comma)<BR>
+		<APPLET 
+		      archive="JWW.jar"
+		      code=EditBox.class
+		      codeBase="/NXTApplets"
+		      name="BorderEditBox"
+		      width=300
+		      height=22
+		      MAYSCRIPT>
+		      	<!-- Appearance Parameters -->
+				<param name=background	value="0xf0f0f0">
+				<param name=bordercolor	value="0xb0b0b0">
+				<param name=textcolor	value="0x000000">
+
+				<!-- Operation Parameters -->
+ 				<PARAM NAME=wordwheel	VALUE="BorderWordWheel"> 
+				<PARAM NAME=query		VALUE="[Field, BORDER-COUNTRY: *]">
+				<PARAM NAME=ScriptName  VALUE="<!-- #EXECUTIVE:SCRIPT_NAME -->">
+		</APPLET>
+      <P><INPUT name=SearchType type=radio CHECKED>Find countries that border with <STRONG>ANY</STRONG> of the specified countries.<BR><BR>
+      <INPUT name=SearchType type=radio>Find countries that border with <STRONG>ALL</STRONG> of the specified countries.</P>
+      <P align="center"> <INPUT class=button type=submit value="Search Now"></P></TD>
+    <TD width=200>
+      <P>Double-click a country to add it to the search list:</P>
+      <P align="center">
+		<APPLET 
+		      archive="JWW.jar"
+		      code=WordWheel.class
+		      codeBase="/NXTApplets"
+		      name="BorderWordWheel"
+		      width=150
+		      height=200
+		      MAYSCRIPT>
+		      	<!-- Appearance Parameters -->
+				<param name=background	value="0xf0f0f0">
+				<param name=buttoncolor	value="0xb0b0b0">
+				<param name=scrollcolor	value="0xd0d0d0">
+				<param name=bordercolor	value="0xb0b0b0">
+				<param name=textcolor	value="0x000000">
+				<param name=selectcolor	value="0xe0e0e0">
+				<param name=selecttextcolor	value="0x000000">
+
+				<!-- Operation Parameters -->
+				<PARAM NAME=cachesize	VALUE="500">
+				<PARAM NAME=chunksize	VALUE="100">
+				<PARAM NAME=domain		VALUE="{10.1048/NXT3/3.2/QuickFacts}">
+				<PARAM NAME=selecthook	VALUE="BorderJWWHook">
+				<PARAM NAME=extdll		VALUE="#!-- #EXECUTIVE:SCRIPT_NAME --#">
+				<PARAM NAME=query		VALUE="[Field, BORDER-COUNTRY: *]">
+				<PARAM NAME=selectable	VALUE="1">
+				<param NAME="editbox"	VALUE="BorderEditBox">
+		</APPLET>
+	</P></TD>
+  </TR></TABLE> 
+
+	</span>
+</form>
+
+<!-- end of form for border-country search -->
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<HR>
+<a name="resource"><br><br><br><br><br><br></a>
+<!-- Form for Resource field search -->
+
+<H1>Country Quick Facts</H1>
+<H2>Natural Resource Search</H2>
+
+<form name="ResourceSearchForm" onsubmit="ResourceSearchForm_onsubmit()" action="#!-- #EXECUTIVE:SCRIPT_NAME --#?f=xhitlist" method="post" target="main">
+	<span class="label">
+	
+	<input type="hidden" size="0" name="f" value="xhitlist" />
+	<input type="hidden" size="0" name="xhitlist_pcd" value="" />
+	<input type="hidden" size="0" name="xhitlist_ncd" value="" />
+	<input type="hidden" size="0" name="xhitlist_vpc" value="first" />
+	<input type="hidden" size="0" name="xhitlist_xsl" value="QuickFactsSearchExample.xsl" />
+	<input type="hidden" size="0" name="xhitlist_d" value="{10.1048/NXT3/3.2/QuickFacts}" />
+	<input type="hidden" size="0" name="xhitlist_s" value="Relevance-Weight" />
+	<input type="hidden" size="0" name="xhitlist_x" value="Advanced" />
+	<input type="hidden" size="0" name="xhitlist_hc" value="" />
+	<input type="hidden" size="0" name="xhitlist_q" value="" />
+	<input type="hidden" size="0" name="xhitlist_sel" value="title;path" />
+	
+<TABLE border=1 cellPadding=5 cellSpacing=1 cols=2>
+  <TR>
+    <TD >
+      <P>Search for the following Natural Resources:<BR>(separate resources with a comma)
+		<APPLET 
+		      archive="JWW.jar"
+		      code=EditBox.class
+		      codeBase="/NXTApplets"
+		      name="ResourceEditBox"
+		      width=300
+		      height=22
+		      MAYSCRIPT>
+		      	<!-- Appearance Parameters -->
+				<param name=background	value="0xf0f0f0">
+				<param name=bordercolor	value="0xb0b0b0">
+				<param name=textcolor	value="0x000000">
+
+				<!-- Operation Parameters -->
+				<PARAM NAME=wordwheel	VALUE="ResourceWordWheel"> --> 
+				<PARAM NAME=query		VALUE="[Field, RESOURCE: *]">
+		</APPLET>
+      <P><INPUT name="SearchType" type=radio CHECKED>Find countries with <STRONG>ANY</STRONG> of these resources.<BR><BR>
+      <INPUT name="SearchType" type=radio>Find countries with <STRONG>ALL</STRONG> of these resources.</P>
+      <P align="center"> <INPUT class=button type=submit value="Search Now"> </P></TD>
+    <TD width=200>
+      <P>Double-click a resource to add it to the search list:</P>
+      <P align="center">
+		<APPLET 
+		      archive="JWW.jar"
+		      code=WordWheel.class
+		      codebase="/NXTApplets"
+		      name="ResourceWordWheel"
+		      width=150
+		      height=200 
+		      MAYSCRIPT>
+		      	<!-- Appearance Parameters -->
+				<param name=background	value="0xf0f0f0">
+				<param name=buttoncolor	value="0xb0b0b0">
+				<param name=scrollcolor	value="0xd0d0d0">
+				<param name=bordercolor	value="0xb0b0b0">
+				<param name=textcolor	value="0x000000">
+				<param name=selectcolor	value="0xe0e0e0">
+				<param name=selecttextcolor	value="0x000000">
+
+				<!-- Operation Parameters -->
+				<PARAM NAME=cachesize	VALUE="500">
+				<PARAM NAME=chunksize	VALUE="20">
+				<PARAM NAME=domain		VALUE="{10.1048/NXT3/3.2/QuickFacts}">
+				<PARAM NAME=selecthook	VALUE="ResourceJWWHook">
+				<PARAM NAME=extdll		VALUE="#!-- #EXECUTIVE:SCRIPT_NAME --#">
+				<PARAM NAME=query		VALUE="[Field, RESOURCE: *]">
+				<PARAM NAME=selectable	VALUE="1">
+				<param NAME="editbox"	VALUE="ResourceEditBox">			
+			</APPLET>
+      </P></TD>
+  </TR></TABLE></span> 
+
+</form>
+<!-- end of form for resource search -->
+<br><br><br>

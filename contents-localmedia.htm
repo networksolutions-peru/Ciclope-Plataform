@@ -1,0 +1,52 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<title>Local Media</title>
+<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:main.css --#" />
+
+<script type="text/javascript">
+
+function retry()
+{
+	if ("#!-- #LOCALMEDIA:PRESENT --#" == "true")
+	{
+		var refreshMedia = parent.frames["contents"].refreshMedia;
+		if (refreshMedia != null)
+		{
+			refreshMedia();
+		}
+		
+		// The path info in this case might not point to a real document, so we'll
+		// not use the templates tag (which includes path info) and just get the document 
+		// referred to by the cookie instead.
+		window.location = "#!-- #EXECUTIVE:SCRIPT_NAME --#?f=templates$fn=document-frameset.htm";
+	}
+}
+
+</script>
+
+</head>
+
+<body>
+<script type="text/javascript">
+retry();
+</script>
+
+<h1><img class="icon" src="#!-- #IMAGES:localmedia.gif --#" alt="CD" align="absmiddle"/>&#160;&#160;Media no habilitado</h1>
+<p>Por favor inserte uno de los siguientes y clickee "reintentar":</p>
+
+<table border="0" summary="Removeable Media List">
+<!-- #LOCALMEDIA:NAMES -->
+</table>
+
+<br/>
+
+<form>
+<input onclick="window.location.reload()" type="button" class="button" name="B1" value=" Retry "/>
+</form>
+
+</body>
+
+</html>
+

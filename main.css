@@ -1,0 +1,16 @@
+body,td,th,input,select	{ color: #000000; background-color: #ffffff; font-family: Arial; font-size: 8pt; }
+input.button 				{ background-color: #c1c1b8; }
+h1,h2,h3				{ color: #18284a; }
+h1					{ font-size: 14pt; }
+h2					{ font-size: 11pt; }
+form					{ margin: 0; padding: 0; }
+a:link					{ color: #18284a; }
+a:visited 				{ color: #555544; }
+a.button,a.button:visited
+					{ color: #18284a; text-decoration: none; }
+a.bannerbutton,a.bannerbutton:visited	{ color: #c1c1b8; text-decoration: none; }					
+.hit-head				{ background-color: #e7e7e7; color: #333333; }
+.hit-title				{ font-weight: bold; }
+.scroll					{ background-color: #c1c1b8; }
+a.scroll-link,a.scroll-link:visited     { text-decoration: none; color: #18284a; }
+.reference				{ font-size: 8pt; }

@@ -1,0 +1,28 @@
+<script type="text/javascript">
+function showDetails()
+{
+	document.all.details.style.display = "block";
+	return false;
+}
+
+if (navigator.appName.indexOf("Microsoft") != -1 &&	parseInt(navigator.appVersion) >= 4)
+{
+	document.write('<p><a onclick="return showDetails()" href="">Details</a></p>');
+	document.write('<div id="details" style="display:none">');
+	document.write('<table cellpadding="5">');
+	document.write('<tr>');
+	document.write('<th align="left">Value:</th>');
+	document.write('<td><!-- #EXECUTIVE:ERROR_VALUE --></td>');
+	document.write('</tr>');
+	document.write('<tr>');
+	document.write('<th align="left">Context:</th>');
+	document.write('<td><!-- #EXECUTIVE:ERROR_CONTEXT --></td>');
+	document.write('</tr>');
+	document.write('</table>');
+	document.write('</div>');
+}
+
+</script>
+
+
+

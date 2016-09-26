@@ -1,0 +1,135 @@
+<html>
+
+<head>
+	<title>Contenidos</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:estilosciclope.css --#">
+	<style type="text/css">
+		td 						{  background-color: "#FFFFCC"; }
+		a:visited 				{ color: #999999; }
+		.CONTENTS-SELECT 		{ background-color: "#FFFFCC"; color: #c1c1b8; }
+		hr						{ color: #999999; width: 100% }
+		.CONTENTS-PARENT-ANCHOR	
+		{	
+			font-family: "Verdana";
+			font-size: "10px";
+			color: "#000000";
+			text-decoration: none;
+		}
+		.CONTENTS-PARENT-LABEL
+		{	
+			font-family: "Verdana";
+			font-size: "10px";
+			color: "#000000";
+			text-decoration: none;
+		}
+		.CONTENTS-CHILD-LABEL
+		{	
+			font-family: "Verdana";
+			font-size: "10px";
+			color: "#000000";
+			text-decoration: none;
+		}
+body,td,th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+a {
+	font-size: 10px;
+	color: #999900;
+}
+body {
+	background-color: #FFFFCC;
+}
+</style>
+</head>
+
+<script type="text/javascript">
+
+	function initPage()
+	{
+		if (parent.setContentsTab != null)
+		{
+			parent.setContentsTab("html");
+		}
+	}
+
+	function getDomain()
+	{
+		return "<!-- #CONTENTS:selected -->";
+	}
+	
+	
+	function synchronize(current_document)
+	{
+		window.location = "<!-- #TEMPLATES:contents-frame-h.htm -->" + "&tf=main&cp=" + current_document + "&c=100&sync=2#TOCSYNC";
+	}
+	
+	
+	function setSelectMode(select)
+	{
+		if (select)
+		{
+			window.location.search = "?f=templates&fn=contents-frame-h.htm&tf=_self&tt=contents-frame-h.htm&t=contents-frame-h.htm&sel=1";
+		}
+		else
+		{
+			window.location.search = "?f=templates&fn=contents-frame-h.htm&tf=main&tt=document-frameset.htm&t=contents-frame-h.htm&sel=0"
+		}
+	}
+
+
+	function onClick(url)
+	{
+		var doc_window = parent.frames["main"];
+		if (doc_window != null)
+		{
+			var doc_body_window = doc_window.frames["doc-body"];
+			if (doc_body_window != null)
+			{
+				var pathname = url.substring(0, url.indexOf('?'));
+				if(doc_window.frames["doc-body"].location.pathname == pathname)
+				{
+					var changeHash = doc_window.changeHash;
+					if (changeHash != null)
+					{
+						return changeHash(url);
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	
+	function refreshMedia()
+	{
+		window.location.reload();
+	}
+
+	// arreglar targets equivocados y de paso ejecutar onClick que no se estaba
+	// ejecutando.
+	function fixLinks() 
+	{
+		var i;
+		for (i=0; i < document.links.length; ++i)
+		{
+			var link = document.links[i];
+			if (link.href.indexOf("document-frame.htm") != -1)
+			{
+				//	alert(link.text);
+				link.target = "main";
+				link.onclick = "return onClick('"+link.href+"')";
+			}
+		}
+	}
+	
+</script>
+
+<body onload="fixLinks();" class="colorfondo" leftmargin="6">
+<font class="nombres">
+	<!-- #CONTENTS -->
+</font>
+</body>
+
+</html>

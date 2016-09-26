@@ -1,0 +1,101 @@
+<!-- This template is not required to have a working site. It simply
+verifies that the UTF-8 functions in escape.js are working correctly. -->
+<html>
+<head>
+<title>escape.js unit test</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<script type="text/javascript" src="escape.js"></script>
+
+<script type="text/javascript">
+
+var failures = 0;
+
+
+function writeCharCodes(s)
+{
+	document.write("<span style='font-family:courier new; font-size:8pt'>");
+	for (var i = 0; i < s.length; i++)
+	{
+		document.write(" " + s.charCodeAt(i));
+	}
+	document.write("</span>");
+}
+
+
+function assertEqual(s1, s2)
+{
+	if (s1 != s2)
+	{
+		document.writeln("<b>Failure!!!</b> Expected equal values:<br/>");
+		writeCharCodes(s1);
+		document.writeln(" ==> " + s1 + "<br/>");
+		writeCharCodes(s2);
+		document.writeln(" ==> " + s2 + "<br/>");
+		failures++;
+	}
+}
+
+
+function test0()
+{
+	// A<not identical to><alpha>.
+	var ucs2_0 = String.fromCharCode(0x0041) + String.fromCharCode(0x2262) + String.fromCharCode(0x0391) + String.fromCharCode(0x002E);
+	var utf8_0 = String.fromCharCode(0x0041) + String.fromCharCode(0x00E2) + String.fromCharCode(0x0089) + String.fromCharCode(0x00A2) + String.fromCharCode(0x00CE) + String.fromCharCode(0x0091) + String.fromCharCode(0x002E);
+	
+	assertEqual(ucs2_0, utf8Decode(utf8_0));
+	assertEqual(utf8_0, utf8Encode(ucs2_0));
+	assertEqual(ucs2_0, utf8Decode(utf8Encode(ucs2_0)));
+}
+
+
+function test1()
+{
+	// ASCII characters
+	var ucs2_1 = "This is a test. 123.";
+	var utf8_1 = "This is a test. 123.";
+
+	assertEqual(ucs2_1, utf8Decode(utf8_1));
+	assertEqual(utf8_1, utf8Encode(ucs2_1));
+	assertEqual(ucs2_1, utf8Decode(utf8Encode(ucs2_1)));
+}
+
+
+function test2()
+{
+	// Korean Hangul for "hangugo"
+	var ucs2_2 = String.fromCharCode(0xD55C) + String.fromCharCode(0xAD6D) + String.fromCharCode(0xC5B4);
+	var utf8_2 = String.fromCharCode(0x00ED) + String.fromCharCode(0x0095) + String.fromCharCode(0x009C) + String.fromCharCode(0x00EA) + String.fromCharCode(0x00B5) + String.fromCharCode(0x00AD) + String.fromCharCode(0x00EC) + String.fromCharCode(0x0096) + String.fromCharCode(0x00B4);
+	
+	assertEqual(ucs2_2, utf8Decode(utf8_2));
+	assertEqual(utf8_2, utf8Encode(ucs2_2));
+	assertEqual(ucs2_2, utf8Decode(utf8Encode(ucs2_2)));
+}
+
+
+function runTests()
+{
+	test0();
+	test1();
+	test2();
+
+	if (failures == 0)
+	{
+		document.writeln("<b>All tests OK.</b>");
+	}
+	else
+	{
+		document.writeln(failures + " failures.");
+	}
+}
+
+</script>
+
+</head>
+<body>
+<h1>escape.js unit test</h1>
+<p>See <a href="http://www.ietf.org/rfc/rfc2279.txt">http://www.ietf.org/rfc/rfc2279.txt</a></p>
+<script type="text/javascript">
+runTests();
+</script>
+</body>
+</html>

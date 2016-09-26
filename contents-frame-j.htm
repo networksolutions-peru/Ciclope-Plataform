@@ -1,0 +1,114 @@
+<html>
+
+<head>
+	<title>Contenidos</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	
+	<style type="text/css">
+		body { background-color: #e7e7e7; }
+	</style>
+	
+	<script type="text/javascript">
+	
+		var select_mode = false;
+		
+		function initPage()
+		{
+			if (parent.setContentsTab != null)
+			{
+				parent.setContentsTab("java");
+			}
+			
+			if (parent.getContentsSelectMode())
+			{
+				setSelectMode(true);
+			}
+		}
+		
+	
+		function getDomain()
+		{
+			return document.JTOC.getQueryPaths();
+		}
+		
+
+		function synchronize(current_document)
+		{
+			document.JTOC.syncTOC(current_document, true);
+		}
+		
+		
+		function setSelectMode(select)
+		{
+			if (select != select_mode)
+			{
+				select_mode = select;
+				document.JTOC.showCheckBoxes(select);
+			}
+		}
+		
+		
+		function onClick(url)
+		{
+			var doc_window = parent.frames["main"];
+			if (doc_window != null)
+			{
+				var changeHash = doc_window.changeHash;
+				if (changeHash != null)
+				{
+					changeHash(url);
+				}
+			}
+			return true;
+		}
+
+	
+		function refreshMedia()
+		{
+			document.JTOC.mediaChanged();
+		}
+
+	
+	</script>
+</head>
+
+<body scroll="no" leftmargin="0" topmargin="0" onload="initPage()">
+	<applet
+		code="JTOC.class"
+		archive="JTOC.jar"
+		codebase="/NXTApplets"
+		name="JTOC"
+		width="100%"
+		height="99%"
+		mayscript="mayscript">
+		<!-- Using height="100%" in the applet tag causes the window's scrollbar to appear in Netscape, 
+		so you end up with a double scrollbar - one from the window, and one from the applet. -->
+
+		<param name="Target" value="main">
+		<param name="ExtDll" value="#!-- #EXECUTIVE:SCRIPT_NAME --#">
+		<param name="DocTemplate" value="document-frameset.htm">
+		<param name="SyncPath" value="">
+		<param name="TextColor" value="#000000">
+		<param name="LineColor" value="#666666">
+		<param name="VisitedTextColor" value="#006666">
+		<param name="BackgroundColor" value="#c1c1b8">
+		<param name="MouseOverColor" value="#18284a">
+		<param name="SelectedBackColor" value="#18284a">
+		<param name="SelectedTextColor" value="#c1c1b8">
+		<param name="ShowImages" value="1">
+		<param name="ShowCheckBoxes" value="0">
+		<param name="OnClickHook" value="onClick">
+		<param name="LangLoadingNode" value="Loading..."> 
+		<param name="LangMoreNode" value="More...">
+		<param name="LangProcessingData" value="Processing Data...">
+		<param name="LangErrorNoServerData" value="No data returned from server.">
+		<param name="LangLoadedNDocuments" value="Loaded %i documents.">
+		<param name="LangSynchronizingTOC" value="Synchronizing the TOC...">
+		<param name="LangRequestingChildren" value="Requesting children...">
+		<param name="LangAddingDocument" value="Adding document %s">
+		<param name="LangErrorNoTitle" value="Error - Child with no name or title,">
+		<param name="LangServerError" value="Error returned from server.">
+	</applet>
+</body>
+
+</html>

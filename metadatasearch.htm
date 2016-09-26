@@ -1,0 +1,69 @@
+<script type="text/javascript">
+
+function submitQuery()
+{
+	// domain (this function is in searchform.htm)
+	document.request_form.xhitlist_d.value = getDomain();
+
+	var query = "";
+	
+	if (document.ui_form.title.value != "")
+	{
+		query += "[field 'dc:title':" + document.ui_form.title.value + "]";
+	}
+
+	if (document.ui_form.subject.value != "")
+	{
+		query += "[field 'dc:subject':" + document.ui_form.subject.value + "]";
+	}
+
+	if (document.ui_form.author.value != "")
+	{
+		query += "[field 'dc:creator':" + document.ui_form.author.value + "]";
+	}
+
+	if (document.ui_form.description.value != "")
+	{
+		query += "[field 'dc:description':" + document.ui_form.description.value + "]";
+	}
+	
+	document.request_form.xhitlist_q.value = query;
+	document.request_form.submit();
+}
+
+</script>
+
+<h1>Sumario de B&uacute;squeda de Documentos</h1>
+
+<form name="ui_form" onsubmit="submitQuery(); return false;">
+
+	<p><label for="title" accesskey="t">T&iacute;tulo:</label><br>
+	<input id="title" name="title" size="40" class="control"></p>
+
+	<p><label for="subject" accesskey="s">Tema:</label><br>
+	<input id="subject" name="subject" size="40" class="control"></p>
+
+	<p><label for="author" accesskey="a">Autor:</label><br>
+	<input id="author" name="author" size="40" class="control"></p>
+
+	<p><label for="abstract" accesskey="b">Resumen:</label><br>
+	<input id="abstract" name="description" size="40" class="control"></p>
+
+	<p>
+		<input type="submit" value="Search" class="button">&nbsp;&nbsp;
+		<input type="button" value="Cancel" onclick="cancelQuery()" class="button">
+	</p>
+</form>
+
+
+<form name="request_form" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" method="get" target="_self">
+	<input type="hidden" size="0" name="f" value="xhitlist">
+	<input type="hidden" size="0" name="xhitlist_q" value="">
+	<input type="hidden" size="0" name="xhitlist_x"	value="Advanced">
+	<input type="hidden" size="0" name="xhitlist_s"	value="">
+	<input type="hidden" size="0" name="xhitlist_hc" value="">
+	<input type="hidden" size="0" name="xhitlist_d" value="">
+	<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl">
+	<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
+	<input type="hidden" size="0" name="xhitlist_sel" value="title;path;content-type;home-title">
+</form>

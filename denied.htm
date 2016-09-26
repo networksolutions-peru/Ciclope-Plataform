@@ -1,0 +1,76 @@
+<!-- Don't use replacement tags in this template. -->
+
+<html>
+<head>
+	<title>Acceso Denegado</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+
+	<style type="text/css">
+		body,td,th,input,select	{ color: #000000; margin-left: 0px; margin-right: 0px; margin-top: 0px;background-color: #ffffff; font-family: Arial; font-size: 8pt; }
+		input.button 			{ background-color: #c1c1b8; }
+		h1,h2,h3				{ color: #18284a; }
+		h1						{ font-size: 14pt; }
+		h2						{ font-size: 11pt; }
+	</style>
+
+	<script type="text/javascript">
+	
+		function getScriptName()
+		{
+			var path = document.location.pathname;
+			var nExtLen = 3;
+			if( path.substring( path.indexOf('.') + 1, path.indexOf('.') + 3) != "so")
+			{
+				nExtLen = 4;
+			}
+			path = path.substring(0, path.indexOf('.') + nExtLen);
+			return path;
+		}
+
+        
+		function send()
+		{
+			document.cookie = getScriptName().substring( 1, getScriptName().length) + "/NPUSERNAME=" + document.Auth_Form.UserID.value + "; path=/";
+			document.cookie = getScriptName().substring( 1, getScriptName().length) + "/NPPASSWORD=" + document.Auth_Form.PassWord.value + "; path=/";
+			document.cookie = getScriptName().substring( 1, getScriptName().length) + "/NPAC_CREDENTIALSPRESENT=TRUE" + "; path=/";
+
+			// IE workaround: If a request to the same URL first returns HTML, then XML, IE
+			// gets confused and won't render it as XML. So we'll tack on a parameter to help it out.
+			window.location = window.location + "$iefix=" + Math.round(Math.random() * 10000);
+		}
+	
+	</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0">
+  <tr>
+	<td><img src="logociclope.gif" border="0"/></td>
+  </tr>
+  <tr>	
+	<td>&nbsp;</td>
+  </tr>
+  <tr>	
+	<td><img src="title-acceso-n.gif" border="0"/></td>
+  </tr>
+</table>
+<blockquote>	
+	<p>Posiblemente las razones son:</p>
+	<ul>
+	<li>El nombre de usuario o contrase&ntilde;a son incorrectos.</li>
+	<li>No posee suficientes permisos para realizar la consulta.</li>
+	</ul>
+	</blockquote>
+	<br />
+        <td bgcolor="#000000"><img src="title-acceso-y.gif" border="0">
+	<blockquote>
+        <form name="Auth_Form" onsubmit="send();return false">
+        	<p>Nombre de usario:<br />
+       	  <input name="UserID" size="40" /></p>
+        	<p>Contrase&ntilde;a:<br />
+       	  <input type="password" name="PassWord" size="40" /></p>
+        	<p><input type="submit" value="Login" class="button" /></p>
+        </form>
+	</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+/*
+CICLOPE
+*/
+
+/* link-documento */
+a:link, a:active
+{
+	font-family: Verdana;
+	font-size: "10px";
+	color: "#777700";
+	text-decoration: none;
+}
+a:visited
+{
+	font-family: Verdana;
+	font-size: "10px";
+	color: "#666666";
+	text-decoration: none;
+}
+a:hover
+{
+	color: "#333333";
+	text-decoration: underline;
+}
+.nombres
+{
+	font-family: "Verdana";
+	font-size: "10px";
+	color: "#000000";
+	text-decoration: none;
+}
+
+.colorfondo
+{
+ background-color: "#FFFFCC";
+}
+
+.hit_par
+{
+ padding-top: 5px;
+ padding-bottom: 5px;
+ background-color: "#E7E7E7";
+}
+
+.hit_impar
+{
+ padding-top: 5px;
+ padding-bottom: 5px;
+ background-color: "#FFFFFF";
+}
+
+.hit_separator
+{
+	width: 3px;
+}
+
+.hit_data
+{
+	padding-left: 8px;
+	padding-right: 8px;
+}
+.highlight
+{
+	background: "#CCCC33";
+	color: black;
+}
+.titulares
+{
+	font-family: "Verdana";
+	font-size: "10px";
+	color: "#000000";
+	text-decoration: underline;
+}
+
+.btn
+{
+	font-family: "Verdana",
+	font-size: "10px";
+	color: "#000000";
+	border: 1px solid #666666;
+	padding: 1px 5px 1px 5px;
+}
+
+
+.hitlist-hit:link, .hitlist-hit:active
+{
+	font-family: Verdana;
+	font-size: "10px";
+	color: "#BDB309";
+	text-decoration: underline;
+}
+.hitlist-hit:visited
+{
+	font-family: Verdana;
+	font-size: "10px";
+	color: "#000000";
+	text-decoration: none;
+}
+.hitlist-hit:hover
+{
+	color: "#333333";
+	text-decoration: underline;
+}
+
+.temp
+{
+	color: "#BDB309";
+}

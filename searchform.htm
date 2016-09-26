@@ -1,0 +1,43 @@
+<html>
+
+<head>
+	<title>Formulario de Busqueda de Ciclope</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:main.css --#">
+	<script type="text/javascript">
+	
+		function initPage()
+		{
+			parent.setMainTab("searchform");
+			if (!parent.getContentsSelectMode())
+			{
+				parent.setContentsSelectMode(true);
+			}
+		}
+		
+
+		function getDomain()
+		{
+			// get from the contents window
+			var contents_window = parent.frames["contents"];
+			return contents_window.getDomain();
+		}
+		
+		
+		function cancelQuery()
+		{
+			parent.setMainTab("document");			
+			location = "#!-- #TEMPLATES:document-frameset.htm --#";
+		}
+		
+	</script>
+
+</head>
+
+<body onload="initPage()">
+
+<!-- #SEARCHFORMS:ID -->
+
+</body>
+
+</html>

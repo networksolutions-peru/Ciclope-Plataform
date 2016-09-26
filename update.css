@@ -1,0 +1,14 @@
+
+body			{ font-family: Arial, "Sans Serif"; font-size: 8pt; background-color: #FFFFFF }
+td,	th, input, textarea, select			
+				{ font-family: Arial, "Sans Serif"; font-size: 8pt;}
+h1				{ font-size: 14pt; margin: 0; padding: 0; }
+h2				{ font-size: 12pt; }
+form			{ margin: 0; padding: 0; }
+th				{ color: white; background-color: #18284a; font-weight: normal; }
+a,a:visited		{ color: #18284a; }
+.tiny			{ font-size: 6pt; }
+.dim			{ color: #999999; }
+.state			{ color: red; }
+.scroll			{ background-color: #c1c1b8; }
+.scroll-link	{ text-decoration: none; }

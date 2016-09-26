@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>Ciclope</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<script type="text/javascript" src="#!-- #TEMPLATES:tabs.js --#">
+</script>
+
+<script type="text/javascript">
+
+var pipi = document.cookie;
+pipi = pipi.substr(pipi.indexOf("User-Namec")+"User-Namec".length);
+pipi = pipi.substring(0,pipi.indexOf("%26"));
+if (pipi == "Anonymous")
+{
+   document.location.href = "#!-- #TEMPLATES:default.htm --#&vid=default";
+}
+else if (pipi == "Administrator")
+{
+   document.location.href = "#!-- #TEMPLATES:default.htm --#&vid=default";
+}
+else if (pipi == "martin")
+{
+   document.location.href = "#!-- #TEMPLATES:default.htm --#&vid=Ciclope:chica";
+}
+else if (pipi == "carlos")
+{
+   document.location.href = "#!-- #TEMPLATES:default.htm --#&vid=Ciclope:chica";
+}
+else 
+{
+   document.location.href = "#!-- #TEMPLATES:default.htm --#&vid=Ciclope:10.1048/Enu";
+}
+</script>
+</head>
+<body>
+</body>
+</html>

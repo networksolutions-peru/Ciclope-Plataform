@@ -1,0 +1,116 @@
+<!-- saved from url=(0022)http://internet.e-mail -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Busqueda</TITLE>
+<script language="Javascript">
+function makeQuery() 
+{
+	var f = document.forms["main_form"];
+	var query = "";
+	query = checkValue(query,'numero');
+	query = checkValue(query,'tipo');
+//	alert(query);
+	var error = 0;
+	if (error == 0) 
+	{
+		if (query != '') 
+		{
+			f.xhitlist_q.value = query;
+			f.G_QUERY.value = query;
+			//f.submit();
+			SetupQuery();
+			return true;
+		} 
+		else 
+		{
+			alert("Debe completar al menos un campo de búsqueda");
+			return false;
+		}
+	}
+}
+function checkValue(query,field) {
+	var val = eval('document.forms["main_form"].'+field+'.value');
+	if (val != '') {
+	if (query != '') {query += '&[Field '+field+':'+val+']'}
+				else {query = '[Field '+field+':'+val+']'}
+	}
+	return query;
+}
+function OpenHitList()
+{
+	var topFrame = top.document.all("topFrame");
+//	var topFrame = top.frames["topFrame"];
+	topFrame.rows = "40, *, 180";
+}
+
+function SetupQuery()
+{
+	top.frames.DocNav.total_hits=0;
+	top.frames.DocNav.current_hit=-1;
+	OpenHitList();
+}
+</script>
+</HEAD>
+<BODY>
+<form action="#!-- #EXECUTIVE:SCRIPT_NAME--#" method="get" target="HitList" name="main_form">
+<font face="verdana">
+<table width="46%" align="center" border="0">
+<table width="100%" border="0" cellspacing="0">
+  <tr>
+	<td><img src="#!-- #IMAGES:title-busqueda.gif --#" border="0"/></td><BR><BR>
+  </tr>
+</table>
+<tr bgcolor="#FFFFFF" bordercolor="#000000"><td align="center"><table width="90%">
+	<tr bgcolor="#FFFFFF"><td colspan="2"><b><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Datos:</font></b></td>
+	</tr><br/>
+	<tr bgcolor="#FFFFFF"><td width="30%">
+	 <li/> <font size="1">N&uacute;mero:</font></td>			
+	<td width="76%"><input type="text" name="numero"></td></tr>
+	<tr bgcolor="#FFFFFF"><td valign="top">
+	 <li/> <font size="1">Tipo:</font></td>			<td><input type="text" name="tipo">
+	    <br>
+	    <br>
+	    <font face="verdana">
+	    <input name="submit" type="submit" onClick="return makeQuery();" value="Buscar">
+	    </font></td></tr>
+	</table>
+<table width="100%" border="0" cellspacing="0">
+  <tr>
+	<td><a href="#!-- #TEMPLATES:_advsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda2.gif --#" border="0"/></a></td><BR><BR>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0">
+  <tr>
+	<td><a href="#!-- #TEMPLATES:boolsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda3.gif --#" border="0"/></a></td><BR><BR>
+  </tr>
+</table>
+</td></tr>
+</table></td></tr>
+<tr bgcolor="#FFFFFF" bordercolor="#000000">
+  <td colspan="2" align="center">&nbsp;</td>
+</tr>
+</table>
+</font>
+<input type="hidden" size="0" name="f" value="xhitlist" 
+/><input type="hidden" size="0" name="xhitlist_x"	value="Advanced" 
+/><input type="hidden" size="0" name="xhitlist_s"	value="relevance-weight"
+/><input type="hidden" size="0" name="xhitlist_d"	value=""
+/><input type="hidden" size="0" name="xhitlist_q"	value=""
+/><input type="hidden" size="0" name="xhitlist_hc"	value=""
+/><input type="hidden" size="0" name="global"	value="G_"
+/><input type="hidden" size="0" name="G_QUERY"	value=""
+/><input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl"
+/><input type="hidden" size="0" name="xhitlist_vpc" value="first"
+/><input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title" />
+<!--
+<input type="hidden" name="f" value="hitlist">
+<input type="hidden" name="q" value="">
+<input type="hidden" name="h1" value="Documento[,100]">
+<input type="hidden" name="x" value="Advanced">
+<input type="hidden" name="global" value="G_">
+<input type="hidden" name="G_QUERY" value="">
+-->
+</form>
+</BODY>
+</HTML>

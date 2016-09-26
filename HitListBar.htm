@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:estilosciclope.css --#"/>
+<script language="JavaScript">
+
+		function minwnd() 
+		{
+			var topFrame = top.document.all("topFrame");
+			//topFrame.old_rows = topFrame.rows;
+			topFrame.rows = "40, *, 22";
+/*			var tabla = document.getElementById("tabla");
+			tabla.style.display = "none";
+*/		}
+		function rstwnd() 
+		{
+			var topFrame = top.document.all("topFrame");
+			//if (topFrame.old_rows)
+			//	topFrame.rows = topFrame.old_rows;
+			topFrame.rows = "40, *, 180";
+/*
+			var tabla = document.getElementById("tabla");
+			tabla.style.display = "block";
+*/		}
+
+</script>
+
+</head>
+<body leftmargin="0" topmargin="0" vlink="#18284A" alink="#18284A" bgcolor="#999999">
+<table width="100%" border="0" cellpadding="1" cellspacing="0" bordercolor="#FFFFFF">
+	   <tr bgcolor="999999">
+		<td>
+			<img src="#!-- #IMAGES:flechahitlist.gif --#" border="0"/>
+			<font size="2" face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFCC" decoration="underline">Lista de Aciertos</font>
+		</td>
+		<td align="right">
+			<a href="#" onClick="rstwnd();return false;"><img src="#!-- #IMAGES:antpag.gif --#" border="0"/></a>
+			<img src="#!-- #IMAGES:gris2.gif --#" border="0"/>
+			<a href="#" onClick="minwnd();return false;"><img src="#!-- #IMAGES:proxpag.gif --#" border="0"/></a>
+			<img src="#!-- #IMAGES:gris2.gif --#" border="0"/>
+		</td>
+	  </tr>
+</table>
+</body>
+</html>
