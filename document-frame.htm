@@ -1,2 +1,512 @@
-<?xml version="1.0" encoding='ISO-8859-1'?>
-<!-- #document?t=document-frame.htm -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin título - x</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+<link rel="stylesheet type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style1.css --#">
+
+
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+
+<script type="text/javascript" src="#!-- #TEMPLATES:find3.js --#"></script>
+
+<!-- <link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style.css --#">  -->
+
+
+
+
+
+<style type="text/css">
+
+.titulo {
+	padding:5px;	
+}
+
+h2 {
+	padding:5px;	
+}
+
+p img{
+	/*width: 100%;
+	height: auto;
+*/
+
+}
+#content {
+    background: none repeat scroll 0 0 #FFFFFF;
+/*    border-bottom: 1px solid #FFFFFF;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);*/
+    margin-bottom: 25px;
+    margin-left: 0;
+ /*   min-height: 450px;	*/
+   /* overflow: hidden;*/
+    padding: 1px 2% !important;
+	border-top: none;
+	float:left;
+	height: auto;
+	width: 96%;
+	/*width: 950px;*/	/*   old 1050px*/
+	
+}
+table[width='950']{
+
+	width: 100%;
+}
+
+img[width='326']{
+	width: 80%;
+	height: 95%;
+
+}
+/*#datos_generales div table{
+	width: 100% !important;
+ }*/
+ 
+
+ 
+ 
+ .preview_gaceta_css_scope .Sumilla, p.Texto a {
+	color: #333;
+	font-family: 'Dosis';
+ }
+ 
+ 
+ header {
+	  width: 100%;
+	  height: 170px;
+	  overflow: hidden;
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  z-index: 999; 
+	
+
+ }
+ 
+ section {
+    margin-top: 160px;
+}
+
+
+nav#menus a {
+	padding-top: 1px;
+	padding-bottom: 0px;
+}
+
+
+#zone_cont_content {
+    padding: 0px 10px;
+    text-align: left;
+    width: 100% !important;
+	background-color: #3E6F76;
+}
+
+#miSeccion{
+	overflow-y: scroll;
+	-webkit-overflow-scrolling:touch;
+	height: 1200px;
+    min-height:80%;
+}
+</style>
+
+
+</head>
+<script type="text/javascript">
+	// arreglar targets equivocados y de paso ejecutar onClick que no se estaba
+	// ejecutando.
+/*	function fixLinks() 
+	{
+		var i;
+		for (i=0; i < document.links.length; ++i)
+		{
+			var link = document.links[i];
+			if (link.href.indexOf("document-frame.htm") != -1)
+			{
+					//alert(link.text);
+			//	link.target = "view_doc";
+				//link.onclick = "return onClick('"+link.href+"')";
+				//link.onclick = showerContentPrincipal;
+				link.onclick = function(){
+				//	alert(this.href.toString().substring(this.href.indexOf('Legislacion'), this.href.indexOf('?fn=')));RETURN;
+					var iniPath = null;	// Este Snippets busca cualqueira de los 33 terminos de los cuales  encuntera y extra la posicion para afinar el ID clave selccionado
+					var finPath = null;
+					var optFinal = '?fn=';
+					var pathRut = "<!-- #TEMPLATES:reference.htm -->$p=";
+					if (this.href.indexOf('/CLP/contenidos.dll?f=id$id=') > -1) {
+						iniPath = this.href.indexOf('/CLP/contenidos.dll?f=id$id=');
+						iniPath +=  28; 
+						optFinal = '$t=document-frame';
+						pathRut = "<!-- #TEMPLATES:reference.htm -->$id="
+					}else if (this.href.indexOf('Legislacion') > -1) {
+						iniPath = this.href.indexOf('Legislacion');
+					}else if(this.href.indexOf('Doctrina') > -1) {
+						iniPath = this.href.indexOf('Doctrina');	
+					}else if(this.href.indexOf('Jurisprudencia') > -1) {
+						iniPath = this.href.indexOf('Jurisprudencia');	
+					}
+					finPath = this.href.indexOf(optFinal);
+					var pathi = this.href.toString().substring(iniPath, finPath);
+					// alert(pathRut + ' - ' + pathi);return;
+					//alert("#!-- #TEMPLATES:reference.htm --#$p=" + ' - ' + pathi);return;
+					 top.frames[top.DOC_INFO_FRAME].location = pathRut + pathi;	
+					// top.frames[top.DOC_INFO_FRAME].location.reload();				
+					//showerContentPrincipal();
+				};
+			}
+		}
+	}
+	*/
+////////// TEst
+//	$(document).ready(function(){
+	//alert('Esto es lo que venga de aqui');
+	//	fixLinks();
+//	});
+			var separator_char = " >";
+			var reference_bold = false;
+				var dialog = null;
+
+			function reset()
+			{
+				$("#reference_text").html("");
+			}
+			
+			$(document).ready(function()
+			{
+			//	$("#reference_text").html("codigo MDJ");
+				//reloadRef();
+				// asigno el valor
+				//("#reference_text").html($(".numero").html());
+				//var texto =  $("span.tipo_norma").text() + " "+ $("span.numero").text();
+/*+++				var texto = $("span.hidden_data").text().replace("_", " ");
+				texto = texto.replace(/_/g, "-");
+				
+				if ( texto.indexOf("L") > -1 || texto.indexOf("DL") > -1)
+				{
+					texto = texto.substring(0, texto.indexOf("-"));
+				}
+				
+				$("#reference_text").html(texto);  */
+				//alert(texto);
+			});
+						
+			function reloadRef(e)
+			{ 
+				reset();
+				var ref_text = '<b>#!-- #REFERENCE --#</b>'.replace(/[^b]>/g, separator_char);
+				if (!reference_bold)
+					ref_text = ref_text.replace(/<[\/]?b>/g, "");
+				ref_text = ref_text.replace(/.*\//g, "");
+					
+				ref_text = ref_text.replace(/_/g, "-");
+				var myRegexp = /([^-]*)-(.*)/;
+				var match = myRegexp.exec(ref_text);
+				if (match != null)
+					ref_text = match[1]+" "+match[2];
+
+				/*ref_text = "hola "+$("#reference_text").name;*/
+				if(e){
+					$("#reference_text").html(e);
+				}else{
+					$("#reference_text").html(ref_text);
+				};
+				
+				//gettHitNumber();
+				/**
+				  * Es para agarrar el ID de la norma del DOC y ponerlo aca en la reference.
+				  *	SOLO ANDA EN FF
+				  **/
+				/*
+				if (top.frames[top.DOC_FRAME] != null && top.frames[top.DOC_FRAME].frames[0] != null)
+				{
+					var ref_buena = $("*", top.frames[top.DOC_FRAME].frames[0].document);
+					if ( ref_buena != null)
+					{
+						var id_norma_good = $(".norma_id", ref_buena).html();
+						if (id_norma_good != null && id_norma_good != "")
+						{
+							//alert(id_norma_good);
+							reset();
+							$("#reference_text").html(id_norma_good);
+							$(".norma_id", ref_buena).html("");
+						}
+					}
+				}
+				*/
+			}
+
+/*  CAMBIO POR Q ES MOVIL			
+			
+			$(document).ready(function()
+			{
+				scrollWin() ;
+
+			});			
+				function scrollWin() {
+					var URLhash = window.location.hash.substr(1);
+					//console.log(URLhash.substr(1));
+				    $('html,body').animate({
+				        scrollTop: ($("a[name='"+URLhash+"']").offset().top - 170)
+				    }, 100);
+				}	
+*/
+// para que carguen los links de "articulos"
+$(document).ready(function() {
+	$(document).find("a[onclick*='openPopup']").each(function(i, element){
+	//	console.log( "1 - " + $(this).attr("onclick").toString().substring(38, $(this).attr("onclick").toString().search(/\)\;/i) -1) );
+	// manejo de errores 
+	//	try{
+	//	$(this).attr("onclick", "location.href=" + $(this).attr("onclick").substring( $(this).attr("onclick").search(/\(/i) + 1, $(this).attr("onclick").search(/\)/i) - 1 ) + "'");
+	$(this).attr("href", $(this).attr("onclick").toString().substring(38, $(this).attr("onclick").toString().search(/\)\;/i) -1) );
+	//-	$(this).attr("href", $(this).attr("onclick").substring( $(this).attr("onclick").search(/\(/i) + 2, $(this).attr("onclick").search(/\)/i) - 1 ) );
+	//	$("#referencia").html($(this).attr("onclick").substring( $(this).attr("onclick").search(/\(/i) + 2, $(this).attr("onclick").search(/\)/i) - 1 ));
+	$(this).attr("onclick", "");
+	//	}catch(err){
+	//	$("#referencia").html(err.message);
+	//	}
+	});
+
+});
+// script for iPhone 
+			var ua = navigator.userAgent.toLowerCase();
+			var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+			if(!isAndroid) {
+					var native = window.webkit.messageHandlers.native;	
+			}
+
+			// script for call 
+			var clicks = 0;	
+				// iphone
+				function showIphoneToast(pin){
+					
+					var message = {"cmd":"increment","pin": pin,"close":"cerrar", "count":clicks,"callbackFunc":function(responseAsJSON){
+						var response = JSON.parse(responseAsJSON);
+						clicks = response['count']; /// la mac
+	
+						pin = response['pin'];
+
+					}.toString()}
+					native.postMessage(message)
+					}
+		
+
+// comunicacion con la APP
+function cerrarApp(){
+		var ua = navigator.userAgent.toLowerCase();
+		var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+		if(isAndroid) {
+		  Android.closeApp();
+		}else{
+		  showIphoneToast("");
+		}
+
+	//	Android.closeApp();
+	
+}			
+// para descargar el word
+function getCurrentDocument(bUnEscape)
+{
+	var current_document = "";
+
+	var all_cookies = document.cookie;
+
+	var label = "doc=";
+	var offset = all_cookies.indexOf(label);
+	if (offset != -1)
+	{
+		var start = offset + label.length;
+		var end = all_cookies.indexOf(";", start);
+		if (end == -1)
+		{
+			end = all_cookies.length;
+		}
+
+		current_document = all_cookies.substring(start, end);
+	}
+
+	return bUnEscape? unescape(current_document) : current_document;
+}
+//el documento
+			function getDocumentWindow()
+			{
+			//	var doc_window = parent.frames[1];
+				var doc_window = window.self; //document.body; //window.self //top.frames['view_doc'];
+			//+	if (doc_window.frames[0])
+			//+		doc_window = doc_window.frames[0];
+				//else
+					//alert('Ops!!');
+				return doc_window;
+			}
+
+function d2wCallWs(mode, to, body){
+	var docId = getCurrentDocument();
+
+	var doc = getDocumentWindow().location.href;
+	
+//	$("#reference_text").html(doc);
+//	return;	
+	
+	if (docId.indexOf('templates')>-1){
+		alert("El documento seleccionado es invalido. (" + doc+")");
+		return;
+	}
+	
+	var new_window = window.open(
+		'#!-- #EXECUTIVE:SCRIPT_NAME --#?f=templates&fn=generando_doc.htm&mode='+
+																	mode + 
+																	(to != null && to!='' ? "&to="+to : "")+
+																	(body != null && body!='' ? "&body="+body : ""), 
+		"ConvertirAWord", 
+		"width=256, height=160");
+	new_window.focus();
+}
+
+
+// script para resolver
+/*
+$(document).ready(function(){
+	if (navigator.platform == 'iPad' || navigator.platform == 'iPhone' || navigator.platform == 'iPod' || navigator.platform == 'Linux armv6l') 
+	{
+		window.ontouchstart = function () 
+		{
+			//$("#MyHeader").css("display", "none");
+			$("#reference_text").html("holi");
+		}
+
+		window.onscroll = function() 
+		{ 
+			$("#reference_text").html("hola mundo dsfsd f");
+		//	var iPadPosition = window.innerHeight + window.pageYOffset-45; // 45 is the height of the Footer
+		//	 $("#MyHeader").css("position", "absolute");
+		//	 $("#MyHeader").css("left", "0");
+		//	 $("#MyHeader").css("top", "0");
+		//	 $("#MyHeader").css("top", iPadPosition);
+		//	 $("#MyHeader").css("display", "block");
+		}
+	}
+});	 
+
+*/
+</script>
+<body>
+<header id="MyHeader">
+    <div class="container clearfix">
+        <h1 id="logo" style="margin-top: 0px">
+            <img src="#!-- #IMAGES:LOGO-ET.png --#" alt="logo" />
+        </h1>
+        <nav id="toper">
+ 			    <a href="#!-- #TEMPLATES:default.htm --#" class="btn btn-sq-sm btn-danger linki">
+              <i class="glyphicon glyphicon-home"></i><br/>
+              Inicio
+            </a>
+            <a onclick="cerrarApp();" class="btn btn-sq-sm btn-danger linki">
+              <i class="glyphicon glyphicon-log-out"></i><br/>
+              Salir
+            </a>         
+
+        </nav>
+    </div>
+    <div class="clearfix">
+        <nav id="menus" style="height: 36px; margin-top: 50px;">
+ 			<a onclick="history.back()" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-chevron-left"></i><br/>
+              Atras
+            </a>
+            <!-- <a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-chevron-right"></i><br/>
+              Acierto
+            </a> 
+            <a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-remove-sign"></i><br/>
+              Borrar
+            </a>  -->
+            <a href="#" onclick="show();" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-search"></i><br/>
+              Buscar
+            </a> 
+         <!--   <a href="#" onclick="d2wCallWs('download');return false;"  class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-log-out"></i><br/> 
+              A Word.
+            </a> -->
+                       
+        </nav>
+    </div>
+	<div class="clearfix">
+                <div id="zone_cont_content">
+                <!-- Begin Content Document -->
+                <p style="border-bottom: 1px solid #CC0000; color: #CC0000; font-weight: bold; font-family: 'Ebrima'; font-size: 16px; margin: 0 !important"> 
+	                <span id="reference_text" align="center"></span>
+                </p>
+                <!--- End Content Document -->
+                </div> 	
+	</div>
+</header>
+
+
+<!-- renovation software - Date: 08.4.2016 -->
+
+
+
+				
+
+
+
+
+<section id="miSeccion">
+  <div class="container clearfix">
+    <div class="row">
+    <div class="col-md-4">
+    <div class="form_main">
+               
+                <div class="form ">
+
+                <!-- Begin Content Document -->
+					<!-- #document?t=document-frame.htm -->
+                <!--- End Content Document -->
+
+				
+				</div>
+				</div>
+				</div>
+</div>
+</div>
+</section>
+
+
+                <script type="text/javascript">
+/*				
+				
+				
+// Create the DIV
+var findwindow = document.createElement("div");
+create_div();
+
+// over variable is whether mouse pointer is over the DIV to move
+var over = 0;
+
+// Object to hold findwindow for MouseMove
+var objDiv = null;
+
+// ID of DIV for MouseMove functions
+var DivID = null;
+
+var test = document.getElementById('test');
+
+///
+	if (ie) 
+	{	
+		document.getElementById('btnbusque').style.width = '190px';
+		document.getElementById('btnbusque').value = 'Pulse CTRL + F para Buscar';	
+		document.getElementById('btnbusque').onclick = '';
+	}
+				
+	*/			
+				</script>
+
+
+</body>
+</html>
+
+

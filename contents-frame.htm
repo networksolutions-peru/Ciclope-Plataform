@@ -1,30 +1,41 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Contenidos</title>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8">
-	<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:estilosciclope.css --#">
+	<meta charset="UTF-8">
+	<title>Gaceta Civil</title>
+	<meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=no">
+    <!-- <link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style.css --#">  -->
+	<!-- <link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:estilosciclope.css --#"> -->
+	
+<link rel="stylesheet type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style1.css --#">
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+	
 	<style type="text/css">
-		body {  background-color: #FFFFCC; }
-		td 	{  background-color: #FFFFCC; 
+		body {  background-color: #FFFFFF; }
+		td 	{  background-color: #FFFFFF; 
 			font-family: Verdana;
-			font-size: 10px;
+			font-size: 14px;
 			color: #000000;
 			text-decoration: none;}
-		a:visited 				{ color: #999999; }
-		.CONTENTS-SELECT 		{ background-color: #FFFFCC; color: #c1c1b8; }
+		.nombres > a
+		{
+			color:#AB1312;
+		}
+		a:visited 				{ color: #000; font-weight:bold; }
+		.CONTENTS-SELECT 		{ background-color: #FFFFFF; color: #c1c1b8; }
 		hr						{ color: #999999; width: 100% }
 		.CONTENTS-PARENT-ANCHOR	
 		{	
 			font-family: Verdana;
-			font-size: 10px;
+			font-size: 14px;
 			color: #000000;
 			text-decoration: none;
 		}
 		.CONTENTS-PARENT-LABEL
 		{	
 			font-family: Verdana;
-			font-size: 10px;
+			font-size: 14px;
 			color: #000000;
 			text-decoration: none;
 		}
@@ -35,6 +46,30 @@
 			color: #000000;
 			text-decoration: none;
 		}
+		
+		td a {
+			text-decoration: none;
+			color: #333;
+		}
+		
+#zone_cont_content {
+    padding: 15px 20px;
+    text-align: left;
+  /*  width: 910px !important; */
+	margin-top: 45px;
+}		
+
+hr {
+    color: #999999;
+    width: 100%;
+}
+ .linki{
+	color: #555;
+}
+table img {
+	width: 21px;
+	height: 24px;
+}
 	</style>
 </head>
 
@@ -75,18 +110,21 @@
 
 	function onClick(url)
 	{
-		var doc_window = parent.frames["main"];
+		var doc_window = top.frames["view_doc"];
 		if (doc_window != null)
-		{
+		{	
+					alert('Twint');
+				return;
 			var doc_body_window = doc_window.frames["doc-body"];
 			if (doc_body_window != null)
-			{
+			{		
+		
 				var pathname = url.substring(0, url.indexOf('?'));
 				if(doc_window.frames["doc-body"].location.pathname == pathname)
 				{
 					var changeHash = doc_window.changeHash;
 					if (changeHash != null)
-					{
+					{							
 						return changeHash(url);
 					}
 				}
@@ -101,6 +139,11 @@
 		window.location.reload();
 	}
 
+
+///
+$(document).ready(function(){
+	
+});
 	// arreglar targets equivocados y de paso ejecutar onClick que no se estaba
 	// ejecutando.
 	function fixLinks() 
@@ -111,19 +154,207 @@
 			var link = document.links[i];
 			if (link.href.indexOf("document-frame.htm") != -1)
 			{
-				//	alert(link.text);
-				link.target = "main";
-				link.onclick = "return onClick('"+link.href+"')";
+					//alert(link.text);
+				link.target = "view_doc";
+				//link.onclick = "return onClick('"+link.href+"')";
+				//link.onclick = showerContentPrincipal;
+				link.onclick = function(){
+				//	alert(this.href.toString().substring(this.href.indexOf('Legislacion'), this.href.indexOf('?fn=')));RETURN;
+					var iniPath = null;	// Este Snippets busca cualqueira de los 33 terminos de los cuales  encuntera y extra la posicion para afinar el ID clave selccionado
+					var finPath = null;
+					if (this.href.indexOf('Legislacion') > -1) {
+						iniPath = this.href.indexOf('Legislacion');
+					}else if(this.href.indexOf('Doctrina') > -1) {
+						iniPath = this.href.indexOf('Doctrina');	
+					}else if(this.href.indexOf('Jurisprudencia') > -1) {
+						iniPath = this.href.indexOf('Jurisprudencia');	
+					}
+					finPath = this.href.indexOf('?fn=');
+					var pathi = this.href.toString().substring(iniPath, finPath);
+					//alert(pathi);return;
+					 top.frames[top.DOC_INFO_FRAME].location = "<!-- #TEMPLATES:reference.htm -->$p=" + pathi;					
+					showerContentPrincipal();
+				};
 			}
 		}
 	}
+// Return Home
+function goHome(){
+	top.toogleLayout_home();		
+}	
 
+		function showerContent()
+		{
+			top.goToFrameDom();
+		}
+		
+		// Funciona para mostrar el contenido  y 
+		function showerContentPrincipal()
+		{	//alert()
+			top.toogleLayout_document();
+			top.showReference_content();
+		}	
+		
+////***********==============
+function goSHowLegislacion(){
+
+	top.toogleLayout_Legislacion();	
+}
+
+////***********==============
+function goSHowJurisprudencia(){
+
+	top.toogleLayout_jusrip();	
+}			
+
+function goSHowDroctrina(){
+
+	top.toogleLayout_doctrina();	
+}		
+		
+// script for iPhone 
+			var ua = navigator.userAgent.toLowerCase();
+			var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+			if(!isAndroid) {
+					var native = window.webkit.messageHandlers.native;	
+			}
+
+			// script for call 
+			var clicks = 0;	
+				// iphone
+				function showIphoneToast(pin){
+					
+					var message = {"cmd":"increment","pin": pin,"close":"cerrar", "count":clicks,"callbackFunc":function(responseAsJSON){
+						var response = JSON.parse(responseAsJSON);
+						clicks = response['count']; /// la mac
+	
+						pin = response['pin'];
+
+					}.toString()}
+					native.postMessage(message)
+					}
+		
+
+// comunicacion con la APP
+function cerrarApp(){
+		var ua = navigator.userAgent.toLowerCase();
+		var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+		if(isAndroid) {
+		  Android.closeApp();
+		}else{
+		  showIphoneToast("");
+		}
+
+	//	Android.closeApp();
+	
+}	
+
+
+$(document).ready(function(){
+	$("#zone_cont_content a:first").attr("href","#"); //  
+	if($("#zone_cont_content a:eq(1)").text() == 'Easy Law')
+	   $("#zone_cont_content a:eq(1)").attr("href","#");  
+});
 </script>
 
-<body onload="fixLinks();" class="colorfondo" leftmargin="6">
-<font class=nombres>
-	<!-- #CONTENTS -->
-</font>
-</body>
+<body onLoad="" class="colorfondo" leftmargin="6">
 
+<header>
+    <div class="container clearfix">
+        <h1 id="logo">
+            <img src="#!-- #IMAGES:LOGO-ET.png --#" alt="logo" />
+        </h1>
+        <nav id="toper">
+ 			    <a href="#!-- #TEMPLATES:default.htm --#" class="btn btn-sq-sm btn-danger linki">
+              <i class="glyphicon glyphicon-home"></i><br/>
+              Inicio
+            </a>
+            <a onclick="cerrarApp();" class="btn btn-sq-sm btn-danger linki">
+              <i class="glyphicon glyphicon-log-out"></i><br/>
+              Salir
+            </a>         
+
+        </nav>
+    </div>
+    <div class="clearfix">
+        <nav id="menus" style="height: 36px; margin-top: 50px;">
+ 			<a onclick="history.back()" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-chevron-left"></i><br/>
+              Atras
+            </a>
+            <!-- <a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-chevron-right"></i><br/>
+              Acierto
+            </a> 
+            <a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-remove-sign"></i><br/>
+              Borrar
+            </a>  -->
+            <a href="#" onclick="show();" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-circle-arrow-down"></i><br/>
+              Buscar
+            </a> 
+            <!--<a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-log-out"></i><br/>
+              Enviar Doc.
+            </a> -->
+                       
+        </nav>
+    </div>
+</header>
+        <div id="main">
+	<div id="container">    	
+
+        
+        <div id="content">
+        	<div id="content_forms" onClick="showerContent();">
+            	<form name="ui_form" onSubmit="makeQuery(); return false;" target="_self">
+
+
+				
+            </form>
+             
+            </div>
+            <!--  List Results -->
+            <div id="content_results">
+            	<div id="c_results_header"> 
+                	<div id="left_rheaders">               	                
+                        <ul>
+                            <li><a href="#" onClick="javascript:showerContent();" class="">Mostrar Aciertos</a></li>
+                            <li><a href="#" class="selecti">Mostrar Contenidos</a></li>
+                        </ul>
+                    </div>
+                    <div id="right_rheaders">               	                
+                 <!--   <ul>
+	                        <li><a href="#" class="ico_book">Cambiar Contexto</a></li>
+	                        <li><a href="#" class="ico_note">Termino de Busqueda</a></li>
+                            <li><a href="#" class="ico_save">Guardar Busqueda</a></li>
+                            <li>
+                                <select onChange="fnc_ordenar(this)" syle="width: 50px;"><option value="">Ordernar por:
+                                </option><option value="Field:tipo_norma,ASC;Field:fecha_server_publicacion,DESC">Tipo Norma</option>
+                                <option value="Field:emisor,ASC;Field:tipo_norma,ASC;Field:numero,ASC">Org. Emisor</option>
+                                <option value="Field:estado,DESC;Field:tipo_norma,ASC;Field:numero,ASC">Estado</option>
+                                <option value="Field:fecha_server_publicacion,DESC;Field:tipo_norma,ASC;Field:numero,ASC">Fecha</option>
+                                </select>
+                            </li>
+                        </ul> -->
+                    </div>
+                    
+                </div>     
+                <div id="zone_cont_content" style="overflow: auto;">
+                <!-- Begin Contenidos -->
+                
+				<!-- #CONTENTS -->
+                
+                <!-- End Contenidos -->                
+                
+                </div>     
+                
+
+            </div>
+               
+    </div>
+</div>
+</div>
+	</body>
 </html>

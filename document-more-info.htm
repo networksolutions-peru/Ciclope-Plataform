@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Untitled Document</title>
+				<script type="text/javascript">
+					function getCurrentDocument(bUnEscape)
+					{
+						var current_document = "";
+					
+						var all_cookies = document.cookie;
+					
+						var label = "doc=";
+						var offset = all_cookies.indexOf(label);
+						if (offset != -1)
+						{
+							var start = offset + label.length;
+							var end = all_cookies.indexOf(";", start);
+							if (end == -1)
+							{
+								end = all_cookies.length;
+							}
+					
+							current_document = all_cookies.substring(start, end);
+						}
+					
+						return bUnEscape? unescape(current_document) : current_document;
+					}
+					
+					function setup()
+					{
+						var separator = escape("</b> > <b>");
+						var document_path = escape(getCurrentDocument(true));
+						window.location = "<!-- #TEMPLATES:reference.htm -->$s=" + separator + "$p=" + document_path;
+					}
+			</script>
+		<style type="text/css">
+		<!--
+		body {
+			margin-left: 0px;
+			margin-top: 0px;
+		}
+		-->
+		</style>
+	</head>
+	<body style="margin:0px;">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:25px;">
+			<tr>
+				<td style="background-color:#003399"><strong><font color="#FFFFFF" face="Verdana, Arial, Helvetica, sans-serif" size="-1">&nbsp;Mas información</font></strong></td>
+			</tr>
+		</table>
+		<table width="90%" border="0" cellspacing="5" cellpadding="0">
+			<tr>
+				<td><img src="#!-- #IMAGES:nuevito.gif --#" border="0"/></td>
+				<td>
+					<font id="text" face="Verdana, Arial, Helvetica, sans-serif" size="-1">
+						<b><!-- #REFERENCE --><b>
+					</font>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

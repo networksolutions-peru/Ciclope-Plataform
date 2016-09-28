@@ -15,12 +15,12 @@ var hit_prefix = "LPHit";
 function HitTracker(document_window)
 {
 	// catch errors
-	onerror = HitTracker_handleError;
+	var onerror = HitTracker_handleError;
 
 	// public
-	this.prevMatch = HitTracker_prevMatch;		// Move to previous match. Returns false if at first.
-	this.nextMatch = HitTracker_nextMatch;		// Move to next match. Returns false if at last.
-	this.isTracking = HitTracker_isTracking;	// Able to track hits on this document?
+	this.prevMatch = HitTracker_prevMatch;   // Move to previous match. Returns false if at first.
+	this.nextMatch = HitTracker_nextMatch;   // Move to next match. Returns false if at last.
+	this.isTracking = HitTracker_isTracking; // Able to track hits on this document?
 	
 	// private
 	this.construct = HitTracker_construct;

@@ -1,13 +1,9 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE stylesheet [
-	<!ENTITY editable-area "list-section[not(item) or item/type='Document']">
-	<!ENTITY add-content-area "list-section/type[.!='site' and .!='folder']">
-]>
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output encoding="UTF-8" method="html"/>
-
+<xsl:variable name="editable_area" select="list-section[not(item) or item/type='Document']"/>
+<xsl:variable name="add_content_area" select="list-section/type[.!='site' and .!='folder']"/>
 
 <xsl:template match="@*|/|node()"/>
 
@@ -80,20 +76,22 @@ function setCheckState(state)
 	}
 }
 
-
-function updateDomain(checkbox)
+function updateDomainCbox(checkbox)
 {
 	var path = checkbox.value;
+	//var applet_cero = document.applets[0];
 	
 	// Accessing the applet by name in this case doesn't work in Netscape (for some unknown reason),
 	// so we'll use the array reference approach instead.
 	if (checkbox.checked)
 	{
-		document.applets[0].AddPath(path);
+		document.nodes_form.update_d.value = path;
+		//applet_cero.AddPath(path);
 	}
 	else
 	{
-		document.applets[0].RemovePath(path);
+		//applet_cero.RemovePath(path);
+		document.nodes_form.update_d.value = "";
 	}
 }
 
@@ -169,44 +167,32 @@ function viewDocument(doc_path)
 
 function createNewFolder()
 {
-	var folder_name = document.nodes_form.update_file_name.value;
+	var folder_name = document.createforlder_form.update_file_name.value;
+
 	if (folder_name.length == 0)
 	{
 		alert('Ingrese un nombre para la nueva carpeta.');
-		document.nodes_form.update_file_name.focus();
+		document.createforlder_form.update_file_name.focus();
 		return false;
 	}
 	
 	if (-1 != folder_name.indexOf("/") || -1 != folder_name.indexOf("\\"))
 	{
 		alert('The slash characters "/" and "\\" are not allowed in folder names.');
-		document.nodes_form.update_file_name.focus();
+		document.createforlder_form.update_file_name.focus();
 		return false;
 	}
 	
 	// set the title as well (to preserve case as they typed it)
-	document.nodes_form.update_prop_title.value = folder_name;
-	document.nodes_form.update_c.value = "mkcol;lock;proppatch;unlock";	
-	document.nodes_form.action = makeFullURL("?f=udoclist$udoclist_vpc=last$udoclist_sf=update");
+	document.createforlder_form.update_prop_title.value = folder_name;
+	document.createforlder_form.update_c.value = "mkcol;lock;proppatch;unlock";	
+	document.createforlder_form.action = makeFullURL("?f=udoclist$udoclist_vpc=last$udoclist_sf=update");
 		
 	return true;
 }
 
-
-function addDocumentWizard()
+function confirmDelete(obj)
 {
-	componentRequest("?f=udocprop$udocprop_upd=yes$udocprop_xsl=update-adddoc-1.xsl$udocprop_sel=title;path");
-}
-
-
-function confirmDelete()
-{
-	if (document.nodes_form.update_d.value.length == 0)
-	{
-		alert('Utilize los checkboxes para seleccionar los documentos y/o carpetas a borrar.');
-		return false;
-	}
-	
 	if (!confirm('Esta seguro que desea borrar todas los archivos y carpetas seleccionadas?'))
 	{
 		return false;
@@ -227,12 +213,46 @@ function confirmUnlock()
 	return true;
 }
 
+function addDocumentWizard()
+{
+	componentRequest("?f=udocprop$udocprop_upd=yes$udocprop_xsl=update-adddoc-1.xsl$udocprop_sel=title;path");
+}
 
-function doMultiDocumentOperation(select)
+function doMultiDocumentOperation(path, action)
+{
+	var should_submit = false;
+
+	if ( path.indexOf("[") > -1)
+		path = String(path).replace(/\[/, "\[");
+		
+	if ( path.indexOf("]") > -1)
+		path = String(path).replace(/\]/, "\]");
+
+	document.nodes_form.update_d.value = path;
+	document.nodes_form.update_c.value = action;
+	document.nodes_form.action = makeFullURL("?f=" + current_function + "$" + current_function + "_sf=update");
+	alert(document.nodes_form.action);
+	if (action == "delete")
+	{
+		should_submit = confirmDelete();
+	}
+	else if (action == "unlock")
+	{
+		should_submit = confirmUnlock();
+	}
+	
+	if (should_submit)
+	{	
+		//alert(document.nodes_form.action+"\n" + document.nodes_form.update_d.value+"\n" + document.nodes_form.update_c.value+"\n" +document.nodes_form.method);
+		document.nodes_form.submit();
+	}
+}
+
+function doMultiDocumentOperationCbox(select)
 {
 	var command = select[select.selectedIndex].value;
 	document.nodes_form.update_c.value = command;
-	document.nodes_form.update_d.value = document.applets[0].GetDomain();
+	//document.nodes_form.update_d.value = document.applets[0].GetDomain();
 	document.nodes_form.action = makeFullURL("?f=" + current_function + "$" + current_function + "_sf=update");
 	
 	var should_submit = false;
@@ -358,17 +378,17 @@ function setCurrentView(select)
 		</tr>
 	</table>
 	
-	<form name="nodes_form" method="post" onsubmit="return createNewFolder()">
-		<xsl:attribute name="action"><!-- #EXECUTIVE:SCRIPT_NAME --></xsl:attribute>
+	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+	<!-- form name="nodes_form" method="post" onsubmit="return createNewFolder();" action="#!-- #EXECUTIVE:SCRIPT_NAME --#">
 		<input type="hidden" name="update_c" value=""/>
 		<input type="hidden" name="update_d" value=""/>
-		<input type="hidden" name="update_fp" value=""/>
+		<input type="hidden" name="update_fp" value=""/ -->
 		
 		<table border="0" width="100%">
 			<tr>
-				<xsl:if test="&editable-area;">
+				<xsl:if test="$editable_area">
 	
-				<th width="1%">
+				<th width="1%" colspan="2">
 					<img width="8" height="8">
 						<xsl:attribute name="src"><!-- #IMAGES:update-check.gif --></xsl:attribute>
 					</img>
@@ -407,33 +427,38 @@ function setCurrentView(select)
 			</tr>
 			</xsl:if>
 			
-			<xsl:if test="&editable-area;">
+		</table>
+	<!-- /form -->
+	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+	
+	<form name="createforlder_form" method="post" onsubmit="return createNewFolder();" action="#!-- #EXECUTIVE:SCRIPT_NAME --#">
+		<input type="hidden" name="update_c" value=""/>
+		<input type="hidden" name="update_d" value=""/>
+		<input type="hidden" name="update_fp" value=""/>
+		
+		<table border="0" width="100%">
 	
 			<tr>
-				<td nowrap="nowrap" colspan="2" valign="top">
+				<!-- td nowrap="nowrap" colspan="2" valign="top">
 					<span class="tiny"><a href="javascript:setCheckState(true)">Seleccionar Todos</a></span><br/>
-					<span class="tiny"><a href="javascript:setCheckState(false)">DesSeleccionar Todos</a></span></td>
+					<span class="tiny"><a href="javascript:setCheckState(false)">DesSeleccionar Todos</a></span></td -->
 				<td valign="top" colspan="3">
-				
-					<!-- New folder only available when viewing the contents of a folder - not when querying by state -->
-					<xsl:if test="&add-content-area;">
-						<img border="0" width="18" height="16">
-							<xsl:attribute name="src"><!-- #IMAGES:update-folder-new.gif --></xsl:attribute>
-						</img>
-						Nueva Carpeta: 
-						<input type="text" name="update_file_name" size="20"/> 
-						<input type="hidden" name="update_prop_title" value=""/> 
-						<xsl:text> </xsl:text><input type="submit" value="Crear"/>
+					<xsl:if test="$editable_area">
+						<!-- New folder only available when viewing the contents of a folder - not when querying by state -->
+						<xsl:if test="$add_content_area">
+							<img border="0" width="18" height="16">
+								<xsl:attribute name="src"><!-- #IMAGES:update-folder-new.gif --></xsl:attribute>
+							</img>
+							Nueva Carpeta: 
+							<input type="text" name="update_file_name" size="20"/> 
+							<input type="hidden" name="update_prop_title" value=""/> 
+							<!-- xsl:text> </xsl:text --><input type="submit" value="Crear"/>
+						</xsl:if>
 					</xsl:if>
-					
 				</td>
 			</tr>
-			
-			</xsl:if>
-			
 		</table>
 	</form>
-	
 	<hr/>
 	
 	<!-- Bottom tool area -->
@@ -442,22 +467,11 @@ function setCurrentView(select)
 		<table border="0" width="100%">
 			<tr>
 				<td width="33%" valign="top">
-					<xsl:if test="&editable-area;">
-						<img>
-							<xsl:attribute name="src"><!-- #IMAGES:update-check-b.gif --></xsl:attribute>
-						</img>
-						<b>Documentos Seleccionados</b>:<br/>
-						<select name="operations" size="1" onchange="doMultiDocumentOperation(this)">
-							<option selected="selected">Elija una operacion</option>
-							<option value="delete">Borrar</option>
-							<option	value="unlock">DesHacer el Check Out</option>
-						</select>
-					</xsl:if>
 				</td>
 				
 				<!-- Publishing wizard only available when viewing the contents of a folder - not when querying by state -->
 				<xsl:choose>
-					<xsl:when test="&add-content-area;">
+					<xsl:when test="$add_content_area">
 						<td width="2%" valign="top">
 							<a href="javascript:addDocumentWizard()">
 								<img border="0" alt="Agregar Documento" width="33" height="33">
@@ -482,22 +496,16 @@ function setCurrentView(select)
 							<xsl:if test="list-section[not(query)]"><xsl:attribute name="selected">selected</xsl:attribute></xsl:if>
 							En la carpeta actual
 						</option>
-						<!-- <option>
+						<option>
 							<xsl:attribute name="value"><xsl:value-of select="list-section/user-name"/></xsl:attribute>
 							<xsl:if test="list-section/query"><xsl:attribute name="selected">selected</xsl:attribute></xsl:if>
 							Check out por mi
-						</option> -->
+						</option>
 					</select>
 				</td>
 			</tr>
 		</table>
 	</form>
-	
-	<div>
-		<applet code="DomainApp.class" codebase="/CLPAPPLETS" archive="domain.jar" width="0" height="0"	hspace="0" vspace="0" name="MultiSelectDomain">
-			<xsl:comment>not-empty</xsl:comment>
-		</applet>
-	</div>
 	
 </body>
 
@@ -514,7 +522,37 @@ function setCurrentView(select)
 <xsl:template match="item[has-children[. = 'yes'] or not(content-type)]">
 	<tr>
 		<td nowrap="nowrap" valign="top">
-			<input name="checkbox" type="checkbox"><xsl:attribute name="value"><xsl:value-of select="path"/></xsl:attribute><xsl:attribute name="onclick">updateDomain(this)</xsl:attribute></input>
+			<form method="post" action="" onsubmit="this.action = makeFullURL('?f=' + current_function + '$' + current_function + '_sf=update'); return confirmDelete(this); ">
+				<xsl:attribute name="name"><xsl:text>has_child_delete_form_</xsl:text><xsl:value-of select="path"/></xsl:attribute>
+				<input type="hidden" name="update_c" value="delete"/>
+				<input type="hidden" name="update_fp"/>
+				<input type="hidden" name="update_d" value="">
+					<xsl:attribute name="value"><xsl:value-of select="path"/></xsl:attribute>
+				</input>
+				<input type="image" src="#!-- #IMAGES:update-delete.gif --#">
+					<xsl:attribute name="alt"><xsl:text>Borrar elemento</xsl:text></xsl:attribute>
+					<xsl:attribute name="title"><xsl:text>Borrar elemento</xsl:text></xsl:attribute>
+				</input>
+			</form>
+		</td>
+
+		<td nowrap="nowrap" valign="top">
+			<xsl:if test="$editable_area">
+				<xsl:if test="locked[. = 'yes' or locked-by[. = /list-section/user-name]]">
+				<form method="post" action="" onsubmit="this.action = makeFullURL('?f=' + current_function + '$' + current_function + '_sf=update');">
+					<xsl:attribute name="name"><xsl:text>unlock_form_</xsl:text><xsl:value-of select="path"/></xsl:attribute>
+					<input type="hidden" name="update_c" value="unlock"/>
+					<input type="hidden" name="update_fp" value=""/>
+					<input type="hidden" name="update_d" value="">
+						<xsl:attribute name="value"><xsl:value-of select="path"/></xsl:attribute>
+					</input>
+					<input type="image" src="#!-- #IMAGES:update-undocheckout.gif --#">
+						<xsl:attribute name="alt"><xsl:text>Deshacer check-out</xsl:text></xsl:attribute>
+						<xsl:attribute name="title"><xsl:text>Deshacer check-out</xsl:text></xsl:attribute>
+					</input>
+				</form>
+				</xsl:if>
+			</xsl:if>
 		</td>
 		<td nowrap="nowrap" align="right" valign="top">
 			<xsl:if test="locked[. = 'no' or locked-by[. = /list-section/user-name]]">
@@ -551,28 +589,68 @@ function setCurrentView(select)
 <xsl:template match="item[has-children[.='no'] and content-type]">
 <tr>
 	<td nowrap="nowrap" valign="top">
-		<input name="checkbox" type="checkbox"><xsl:attribute name="value"><xsl:value-of select="path"/></xsl:attribute><xsl:attribute name="onclick">updateDomain(this)</xsl:attribute></input>
+			<form method="post" action="" onsubmit="this.action = makeFullURL('?f=' + current_function + '$' + current_function + '_sf=update'); return confirmDelete(this); ">
+				<xsl:attribute name="name"><xsl:text>delete_form_</xsl:text><xsl:value-of select="path"/></xsl:attribute>
+				<input type="hidden" name="update_c" value="delete"/>
+				<input type="hidden" name="update_fp"/>
+				<input type="hidden" name="update_d" value="">
+					<xsl:attribute name="value"><xsl:value-of select="path"/></xsl:attribute>
+				</input>
+				<input type="image" src="#!-- #IMAGES:update-delete.gif --#">
+					<xsl:attribute name="alt"><xsl:text>Borrar elemento</xsl:text></xsl:attribute>
+					<xsl:attribute name="title"><xsl:text>Borrar elemento</xsl:text></xsl:attribute>
+				</input>
+			</form>
 	</td>
+	
+	<td nowrap="nowrap" valign="top">
+			<xsl:if test="locked[. = 'yes' or locked-by[. = /list-section/user-name]]">
+			<form method="post" action="" onsubmit="this.action = makeFullURL('?f=' + current_function + '$' + current_function + '_sf=update');">
+				<xsl:attribute name="name"><xsl:text>unlock_form_</xsl:text><xsl:value-of select="path"/></xsl:attribute>
+				<input type="hidden" name="update_c" value="unlock"/>
+				<input type="hidden" name="update_fp" value=""/>
+				<input type="hidden" name="update_d" value="">
+					<xsl:attribute name="value"><xsl:value-of select="path"/></xsl:attribute>
+				</input>
+				<input type="image" src="#!-- #IMAGES:update-undocheckout.gif --#">
+					<xsl:attribute name="alt"><xsl:text>Deshacer check-out</xsl:text></xsl:attribute>
+					<xsl:attribute name="title"><xsl:text>Deshacer check-out</xsl:text></xsl:attribute>
+				</input>
+			</form>
+			</xsl:if>
+		</td>
 	<td nowrap="nowrap" align="right" valign="top">
 
 		<xsl:choose>
 			<xsl:when test="locked[.='no']">
 				<a href=""><xsl:attribute name="onclick">checkOutDocument("<xsl:value-of select="path"/>"); return false;</xsl:attribute>
-					<img border="0" alt="Check Out" width="16" height="16" align="top">
-					<xsl:attribute name="src"><!-- #IMAGES:update-checkout.gif --></xsl:attribute></img></a>
+					<img border="0" width="16" height="16" align="top">
+						<xsl:attribute name="src"><!-- #IMAGES:update-checkout.gif --></xsl:attribute>
+						<xsl:attribute name="alt"><xsl:text>Check Out</xsl:text></xsl:attribute>
+						<xsl:attribute name="title"><xsl:text>Check Out</xsl:text></xsl:attribute>
+					</img></a>
 
 				<a href=""><xsl:attribute name="onclick">editDocumentProperties("<xsl:value-of select="path"/>"); return false;</xsl:attribute>
-					<img border="0" alt="Editar Propiedades" width="16" height="16" align="top">
-					<xsl:attribute name="src"><!-- #IMAGES:update-edit-properties.gif --></xsl:attribute></img></a>
+					<img border="0" width="16" height="16" align="top">
+					<xsl:attribute name="src"><!-- #IMAGES:update-edit-properties.gif --></xsl:attribute>
+					<xsl:attribute name="alt"><xsl:text>Editar Propiedades</xsl:text></xsl:attribute>
+					<xsl:attribute name="title"><xsl:text>Editar Propiedades</xsl:text></xsl:attribute>
+				</img></a>
 			</xsl:when>
 			<xsl:when test="locked-by[. = /list-section/user-name]">
 				<a href=""><xsl:attribute name="onclick">checkInDocument("<xsl:value-of select="path"/>"); return false;</xsl:attribute>
-					<img border="0" alt="Check In" width="16" height="16" align="top">
-					<xsl:attribute name="src"><!-- #IMAGES:update-checkin.gif --></xsl:attribute></img></a>
+					<img border="0" width="16" height="16" align="top">
+					<xsl:attribute name="src"><!-- #IMAGES:update-checkin.gif --></xsl:attribute>
+					<xsl:attribute name="alt"><xsl:text>Check In</xsl:text></xsl:attribute>
+					<xsl:attribute name="title"><xsl:text>Check In</xsl:text></xsl:attribute>
+				</img></a>
 
 				<a href=""><xsl:attribute name="onclick">editDocumentProperties("<xsl:value-of select="path"/>"); return false;</xsl:attribute>
-					<img border="0" alt="Editar Propiedades" width="16" height="16" align="top">
-					<xsl:attribute name="src"><!-- #IMAGES:update-edit-properties.gif --></xsl:attribute></img></a>
+					<img border="0" width="16" height="16" align="top">
+					<xsl:attribute name="src"><!-- #IMAGES:update-edit-properties.gif --></xsl:attribute>
+					<xsl:attribute name="alt"><xsl:text>Editar Propiedades</xsl:text></xsl:attribute>
+					<xsl:attribute name="title"><xsl:text>Editar Propiedades</xsl:text></xsl:attribute>
+				</img></a>
 			</xsl:when>
 			<xsl:otherwise>&#160;</xsl:otherwise>
 		</xsl:choose>
@@ -607,8 +685,6 @@ function setCurrentView(select)
 	</td>
 	<td nowrap="nowrap" align="right"><xsl:apply-templates/></td>
 </tr>
-
-
 </xsl:template>
 
 

@@ -1,0 +1,189 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="inc/estilosciclope.css"/>
+</head>
+<script language="Javascript">
+
+var current_anchor=1;
+
+function Reference()
+{
+	var loc = parent.frames.Fondo.location.pathname;
+
+	if( loc.indexOf("?") != -1 )
+		loc=loc.substring(loc.indexOf("Pegaso.dll")+11,loc.indexOf("?") );
+	else loc=loc.substring(loc.indexOf("Pegaso.dll")+11,loc.length );
+
+	if( loc == "" )
+		return;
+
+	var ref_window = window.open("", "Referencia", "width=500,height=100,top=200,left=200,status=no,toolbar=no");
+	
+
+
+	ref_window.document.title="Referencia";
+
+	html_code="<font size=\"1\" face=\"Verdana, Arial, Helvetica, sans-serif\">";
+	html_code+="<strong>Documento abierto:<br/><br/>";
+
+	do
+	{
+		dir=loc.substring(0,loc.indexOf("/") );
+		dir=unescape(dir);
+
+		html_code += dir +" &gt; ";
+
+		loc=loc.substring(loc.indexOf("/")+1,loc.length );
+	}while(loc.indexOf("/") != -1);
+
+	loc=unescape(loc);
+	html_code+= loc;
+
+	html_code +="</strong></font>";
+
+	ref_window.document.body.innerHTML=html_code;
+
+	ref_window.focus();
+}
+
+function SincronizarToc()
+{
+	var loc = parent.frames.Fondo.location.toString();
+
+	if( loc.indexOf("#") != -1 )
+		loc=loc.substring(0,loc.indexOf("#") );
+
+	if( loc.indexOf("?") != -1 )
+		loc=loc.substring(0,loc.indexOf("?") );
+
+	loc=loc.substring(loc.indexOf("Pegaso.dll")+11,loc.length );
+
+	if( loc.indexOf(".pdf") == loc.length-4)
+	{
+		//bug in Acrobat 6.0. no se puede pasar una url que termine en pdf, porque la atrapa el plug-in
+
+		var file=loc.substring(loc.lastIndexOf("/")+1,loc.length );
+		loc=loc.substring(0,loc.lastIndexOf("/")+1 );
+		
+		parent.frames.Toc.location="Pegaso.dll?Toc?file="+file+"&amp;folder="+loc+"#HighLight_1";
+	}
+	else 
+	{
+		parent.frames.Toc.location="Pegaso.dll?Toc?file=NULL&amp;folder="+loc+"#HighLight_1";
+	}
+}
+
+function ProxMatch()
+{
+
+	if( !DocumentHasAnchors() )
+		return;
+
+	if( current_anchor >= parent.frames.Fondo.document.anchors.length )
+	{
+		alert("No hay más aciertos encontrados en este documento.");
+		return;
+	}
+
+	current_anchor++;
+
+	GotoAnchor(current_anchor);
+
+	
+}
+
+function PrevMatch()
+{
+	if( !DocumentHasAnchors() )
+		return;
+
+	if( current_anchor == 1 )
+	{
+		alert("No hay más aciertos anteriores en este documento.");
+		return;
+	}
+
+	current_anchor--;
+
+	GotoAnchor(current_anchor);
+}
+
+function GotoAnchor(anchor)
+{
+	if( !DocumentHasAnchors() )
+		return;
+
+	var anchor_str="HighLight_"+anchor;
+
+	for (var a = 0; a < parent.frames.Fondo.document.anchors.length; a++)
+	{
+		if (parent.frames.Fondo.document.anchors[a].name == anchor_str )
+		{
+			parent.frames.Fondo.document.anchors[a].scrollIntoView();
+			break;
+		}
+	}
+}
+
+function DocumentHasAnchors()
+{
+	var doc_ok = true;
+
+	var path = parent.frames.Fondo.location.pathname;
+
+	var ext_index = path.lastIndexOf(".");
+	if (ext_index != -1)
+	{
+		var ext = path.substring(ext_index);
+		if (ext == ".doc" || ext == ".pdf" || ext == ".xls" || ext == ".ppt")
+		{
+			return false;
+		}
+		return true
+	}
+	return false;
+}
+
+function manageContent()
+{
+	// get the parent path of the current document, and start the there
+	var current_document = unescape(getCurrentDocument());
+	var parent_path = current_document.substring(0, current_document.lastIndexOf("/"));
+	
+	var doc_lib_url = "#!-- #EXECUTIVE:SCRIPT_NAME --#/" +
+		escape(parent_path) +
+		"?f=udoclist$udoclist_sel=title;path;has-children;name;last-modified;content-type;type;writable;locked;locked-by;hidden$udoclist_lsel=title;type;writable;path$udoclist_xsl=update.xsl$udoclist_sf=update$udoclist_vpc=first$udoclist_upd=yes";
+
+	if (isIE55())
+	{
+		// Server-side XSL is required for manage content on IE 5.5 because uploading doesn't work
+		// if the XSL is done client side.
+		doc_lib_url += "$udoclist_fss=yes";
+	}
+
+	var new_window = window.open(doc_lib_url, "update", "scrollbars=yes,resizable=yes,menubar=yes");
+	new_window.focus();
+}
+
+</script>
+<body topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0"  >
+<table border="0" width="100%" cellspacing="0" cellpadding="0" height="1">
+	<tr>
+		<td bgcolor="DBDBDB" height="25" valign=="middle" align="center">
+			<font size="1" face="Verdana, Arial, Helvetica, sans-serif">
+			<a href="#" onclick="javascript:manageContent();" class="bannerbutton"><img border="0" src="#!-- #IMAGES:ui-update-g.gif --#" align="middle"/>Administrar Contenidos</a>
+			<a href="#" onclick="JavaScript:SincronizarToc();">Sinc. TOC</a>&nbsp;&nbsp;
+			<a href="#" onclick="JavaScript:PrevMatch();">Prev. Hit</a>&nbsp;&nbsp;
+			<a href="#" onclick="JavaScript:ProxMatch();">Prox. Hit</a>&nbsp;&nbsp;
+			<a href="#" onclick="JavaScript:Reference();">Referencia</a></font>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" align="left">
+			<img src="img/angulito.gif">
+		</td>
+	</tr>
+</table>
+</body>
+</html>

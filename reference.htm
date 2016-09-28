@@ -1,15 +1,349 @@
 <html>
+	<head>
+		<title>Referencia</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style.css --#">
+        
+		<script type="text/javascript" src="#!-- #TEMPLATES:hit-tracker.js --#"></script>
+		<script type="text/javascript" src="<!-- #TEMPLATES:update.js -->"></script>        
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<script>
+			var separator_char = " >";
+			var reference_bold = false;
+			function reset()
+			{
+				$("#reference_text").html("");
+			}
+			
+			$(document).ready(function()
+			{
+				reloadRef();
+			});
+			
+			function reloadRef(e)
+			{ 
+				reset();
+				var ref_text = '<b>#!-- #REFERENCE --#</b>'.replace(/[^b]>/g, separator_char);
+				if (!reference_bold)
+					ref_text = ref_text.replace(/<[\/]?b>/g, "");
+				ref_text = ref_text.replace(/.*\//g, "");
+					
+				ref_text = ref_text.replace(/_/g, "-");
+				var myRegexp = /([^-]*)-(.*)/;
+				var match = myRegexp.exec(ref_text);
+				if (match != null)
+					ref_text = match[1]+" "+match[2];
 
-<head>
-	<title>Referencia</title>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8">
-	<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:main.css --#">
-</head>
+				/*ref_text = "hola "+$("#reference_text").name;*/
+				if(e){
+					$("#reference_text").html(e);
+				}else{
+					$("#reference_text").html(ref_text);
+				};
+				
+				gettHitNumber();
+				/**
+				  * Es para agarrar el ID de la norma del DOC y ponerlo aca en la reference.
+				  *	SOLO ANDA EN FF
+				  **/
+				/*
+				if (top.frames[top.DOC_FRAME] != null && top.frames[top.DOC_FRAME].frames[0] != null)
+				{
+					var ref_buena = $("*", top.frames[top.DOC_FRAME].frames[0].document);
+					if ( ref_buena != null)
+					{
+						var id_norma_good = $(".norma_id", ref_buena).html();
+						if (id_norma_good != null && id_norma_good != "")
+						{
+							//alert(id_norma_good);
+							reset();
+							$("#reference_text").html(id_norma_good);
+							$(".norma_id", ref_buena).html("");
+						}
+					}
+				}
+				*/
+			}
+				// funcion para imprimir
+				function doPrintXitlist()
+				{
+					window.parent.view_doc.frames[0].focus();
+					window.parent.view_doc.frames[0].print();
+				}
+				
+				// funcion para regresar en el listado de aciertos.
+				function doPrevPost(){
+					top.toogleLayout_document();
+					
+				}
+				
+				/////////////////////  Snippets for aciertos...
+				
+			var no_more_matches = "No hay mas resultados para este documento";
+			var no_more_documents = "No hay mas documentos";
+			var hit_tracker = new HitTracker(getDocumentWindow());
+			var hit_number = null;
+			
+			
+			//	..... para recorrer los documentos...		
+			
+			function getDocument(hit_number)
+			{
+				var hitlist_frame = top.frames[top.HITLIST_FRAME];
+			//	alert(hit_number);
+			//	return ;
+				
+								
+				if ( hitlist_frame.loadDocumentByHitNumber && !hitlist_frame.loadDocumentByHitNumber(parseInt(hit_number)) )
+				{
+					alert(no_more_documents);
+				}
+				
+				
+			}
+			
+			function setHitNumber(number)
+			{
+				if (number == null && number == 'undefined')
+					return;		
+				hit_number = number;
+				$("#hit_number").html(hit_number);
+			}
+			
+			// OWN
+			function gettHitNumber()
+			{
+				var hit_number = top.frames[top.HITLIST_FRAME].mGetAcert();
+				if (hit_number == null && hit_number == 'undefined')
+					return;		
+				
+				$("#hit_number").html(hit_number);
+			}
+			
+			//// logic magic para los next de los aciertos con las flechas 
+			function mNextAcert_x() 
+			{
+				
+				getDocument(top.frames[top.HITLIST_FRAME].mNextAcert());
+			}
+			
+			function mPrevAcert_x() 
+			{
+				getDocument(top.frames[top.HITLIST_FRAME].mPrevAcert());	
+			}			
+				
+			
+			function showTextDefaultForDocument()
+			{
+				$("#reference_text").html('Texto de Testing');		// Aqui el texto por defecto 	Linea 138
+			}
+			
+			////***********==============
+			function goSHowLegislacion(){
+			
+				top.toogleLayout_Legislacion();	
+			}
+			
+			////***********==============
+			function goSHowJurisprudencia(){
+			
+				top.toogleLayout_jusrip();	
+			}			
+			
+			function goSHowDroctrina(){
+			
+				top.toogleLayout_doctrina();	
+			}		
+							
+						
+			//
+			// Return Home
+			function goHome(){
+				top.toogleLayout_home();		
+			}			
 
-<body>
-<p>Documento Actual:<br />
-<b><!-- #REFERENCE --><b></p>
-</body>
+/*	 Probando		*/
+			function getDocumentWindow()
+			{
+			//	var doc_window = parent.frames[1];
+				var doc_window = top.frames['view_doc'];
+				if (doc_window.frames[0])
+					doc_window = doc_window.frames[0];
+				//else
+					//alert('Ops!!');
+				return doc_window;
+			}
+			
+			function nextMatch()
+			{		
+				var doc_window = getDocumentWindow();
+			
+				if (!hit_tracker.isTracking(doc_window))
+				{
+					alert(use_viewer);
+				}
+				else if (!hit_tracker.nextMatch(doc_window))
+				{
+					alert(no_more_matches);
+				}
+			}
+			
+			function prevMatch()
+			{
+				var doc_window = getDocumentWindow();
+			
+				if (!hit_tracker.isTracking(doc_window))
+				{
+					alert(use_viewer);
+				}
+				else if (!hit_tracker.prevMatch(doc_window))
+				{
+					alert(no_more_matches);
+				}
+			}
+/* 	add function  15.11.2012	*/
+function getCurrentDocument(bUnEscape)
+{
+	var current_document = "";
 
+	var all_cookies = document.cookie;
+
+	var label = "doc=";
+	var offset = all_cookies.indexOf(label);
+	if (offset != -1)
+	{
+		var start = offset + label.length;
+		var end = all_cookies.indexOf(";", start);
+		if (end == -1)
+		{
+			end = all_cookies.length;
+		}
+
+		current_document = all_cookies.substring(start, end);
+	}
+
+	return bUnEscape? unescape(current_document) : current_document;
+}
+
+			
+						
+function showReference()
+{
+	var separator = escape("</b> > <b>");
+	var document_path = escape(getCurrentDocument(true));
+	var ref_window = window.open("/CLP/contenidos.dll?f=templates$fn=reference_path.html$3.0$s=" + separator + "$p=" + document_path, "reference", "width=500,height=100,resizable=yes,scrollbars=yes");
+	ref_window.focus();
+}
+
+		</script>
+		<style type="text/css">
+		<!--
+/*			body {
+				margin: 0px;
+				width:100%;
+			    background-color: black;
+				text-align: center;
+			}
+			
+			#reference_text {
+			    background-color: black;
+				color: white;
+				margin: 0;
+				padding: 0;
+				font-size: 17px;
+				font-weight:bold;
+				vertical-align: middle;
+			}
+			
+			*/
+			.hidden_data
+			{
+				display: none;
+			}
+			
+			/* 		Stlye for Center	*/			
+		/*	#container {
+				margin: 0 18.9%;
+				position: relative;
+				width: 980px;
+			}
+			*/
+			#content {
+				margin-bottom: 0;							
+			}
+			html { overflow-x:hidden; }
+/*			html { overflow-y:hidden; }	*/
+		-->
+		</style>
+	</head>
+	<body align="center">
+		<!-- b>ID de la norma:</b --> <!-- &nbsp;<span id="reference_text" align="center"></span> -->
+        <div id="main">
+	<div id="container">    	
+    	<div id="header">
+<!--        	<div id="spacing_top"></div> -->
+            <div id="menu_logo">
+            	<div id="logo">
+                	<a title="Ir a la Home" href="javascript:goHome();"><img width="326" height="71" border="0" src="#!-- #IMAGES:logo.jpg --#"></a>
+                </div>
+                <div id="conte_menu">
+                	<ul id="menu">
+                        <li><a href="#" onClick="javascript:goSHowLegislacion();">Legislación</a></li>
+                        <li><a href="#" onClick="javascript:goSHowJurisprudencia();">Jurisprudencia</a></li> 
+                        <li><a href="#" onClick="javascript:goSHowDroctrina();">Doctrina</a></li>
+                        <li><a href="#" title="Volver al Buscador" class="icon_home" onClick="javascript:goHome();">Volver</a></li>                                
+                        <li><a href="#" class="icon_logout" onClick="javascript:top.deleteYeahCookies();"  title="Cerrar Sesión">Cerrar</a></li>                                                  
+					</ul>
+                </div>            
+            </div>
+        </div>
+        
+        <div id="content">
+        	
+            <!--  List Results -->
+            <div id="content_results">
+            	<div id="c_results_header"> 
+                	<div id="left_rheaders">               	                
+                        <ul>
+                            <li><a href="#" class="selecti ico_print" onClick="javascript:doPrintXitlist();">Imprimir Doc: &nbsp; <img border="0" style="margin-top:2px;" src="#!-- #IMAGES:b_print.png --#" align="absmiddle" /></a></li>
+                            <li><a href="javascript:mPrevAcert_x();" class="fle_top" title="Anterior Documento con acierto"></a><span style="float: left;">Doc.:</span> <span id="hit_number" style=" display: block; float: left;"></span>  <a title="Proximo Documento con acierto" href="javascript:mNextAcert_x();"  class="fle_bottom"></a> </li>
+                            <li><a title="Acierto Anterior" href="#" onClick="javascript:prevMatch();" class="fle_top"></a> <span style=" display: block; float: left;">Aciertos</span>  <a title="Acierto Siguiente" onClick="javascript:nextMatch();" href="#" class="fle_bottom"></a> </li>
+                             <li><a href="#" class="selecti ico_print" onClick="javascript:doPrevPost();">Regresar Anterior &nbsp; </a></li>
+                             <li><a href="#" class="selecti" onClick="javascript:showReference();" style="font-weight: bold; margin-left:2px;">Referencia del documento</a></li>
+                                                    
+                        </ul>
+                    </div>
+                    <!--<div id="right_rheaders">               	                
+                        <ul>
+	                        <li><a href="#" class="ico_book">Cambiar Contexto</a></li>
+	                        <li><a href="#" class="ico_note">Termino de Busqueda</a></li>
+                            <li><a href="#" class="ico_save">Guardar Busqueda</a></li>
+                            <li>
+                                <select onchange="fnc_ordenar(this)" syle="width: 50px;"><option value="">Ordernar por:
+                                </option><option value="Field:tipo_norma,ASC;Field:fecha_server_publicacion,DESC">Tipo Norma</option>
+                                <option value="Field:emisor,ASC;Field:tipo_norma,ASC;Field:numero,ASC">Org. Emisor</option>
+                                <option value="Field:estado,DESC;Field:tipo_norma,ASC;Field:numero,ASC">Estado</option>
+                                <option value="Field:fecha_server_publicacion,DESC;Field:tipo_norma,ASC;Field:numero,ASC">Fecha</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>-->
+                    
+                </div>     
+                <div id="zone_cont_content">
+                <!-- Begin Content Document -->
+                <p style="border-bottom: 1px solid #CC0000; color: #CC0000; font-weight: bold; font-family: 'Ebrima'; font-size: 20px; margin: 0 !important"> 
+	                <span id="reference_text" align="center"></span>
+                </p>
+                <!--- End Content Document -->
+                </div>                     
+               
+            </div>
+               
+    </div>
+</div>
+</div>
+	</body>
 </html>
 

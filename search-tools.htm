@@ -1,0 +1,314 @@
+<html>
+	<head>
+		<title>Documento</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:main.css --#" />
+		
+		<script type="text/javascript" src="#!-- #TEMPLATES:hit-tracker.js --#"></script>
+		<script type="text/javascript" src="<!-- #TEMPLATES:update.js -->"></script>
+		<script type="text/javascript">
+			var init_search_page = "busquedas_main.html"; //"field-search-frame.htm";
+
+			var no_more_matches = "No hay mas resultados para este documento";
+			var no_more_documents = "No hay mas documentos";
+			var use_viewer = "Use el visualizador de documentos para navegar los resultados.";
+			var hit_tracker;
+			var hit_number = null;
+			
+			function initPage()
+			{
+				hit_tracker = new HitTracker(getDocumentWindow());
+			}
+			
+			
+			function getDocumentWindow()
+			{
+			//	var doc_window = parent.frames[1];
+				var doc_window = top.frames[top.DOC_FRAME];
+				if (doc_window.frames[0])
+					doc_window = doc_window.frames[0];
+				return doc_window;
+			}
+			
+			
+			function getContentsWindow()
+			{
+				var toc_window = top.frames["contents"];
+				return toc_window;
+			}
+			
+			
+			function getCurrentDocument(bUnEscape)
+			{
+				var current_document = "";
+			
+				var all_cookies = document.cookie;
+			
+				var label = "doc=";
+				var offset = all_cookies.indexOf(label);
+				if (offset != -1)
+				{
+					var start = offset + label.length;
+					var end = all_cookies.indexOf(";", start);
+					if (end == -1)
+					{
+						end = all_cookies.length;
+					}
+			
+					current_document = all_cookies.substring(start, end);
+				}
+			
+				return bUnEscape? unescape(current_document) : current_document;
+			}
+			
+			function nextMatch()
+			{
+				var doc_window = getDocumentWindow();
+			
+				if (!hit_tracker.isTracking(doc_window))
+				{
+					alert(use_viewer);
+				}
+				else if (!hit_tracker.nextMatch(doc_window))
+				{
+					alert(no_more_matches);
+				}
+			}
+			
+			function prevMatch()
+			{
+				var doc_window = getDocumentWindow();
+			
+				if (!hit_tracker.isTracking(doc_window))
+				{
+					alert(use_viewer);
+				}
+				else if (!hit_tracker.prevMatch(doc_window))
+				{
+					alert(no_more_matches);
+				}
+			}
+			
+			function getDocument(hit_number)
+			{
+				var hitlist_frame = top.frames[top.HITLIST_FRAME];
+				if ( !hitlist_frame.loadDocumentByHitNumber(parseInt(hit_number)) )
+				{
+					alert(no_more_documents);
+				}
+			}
+
+			function clearStyle(element)
+			{
+				// remove the style attribute
+				element.removeAttribute("style");
+			
+				// set a style object property to force the redraw
+				element.style.textTransform = "none";
+			}
+			
+			
+			function isSingleElement(element)
+			{
+				return (element.removeAttribute != null);
+			}
+			
+			
+			function clearIEHighlights()
+			{
+				var doc_window = getDocumentWindow();
+			
+				var span_tags = doc_window.document.all.lphit;
+				if (span_tags == null)
+				{
+					return false;
+				}
+			
+				if (isSingleElement(span_tags))
+				{
+					clearStyle(span_tags);
+				}
+				else
+				{
+					for (var i = 0; i < span_tags.length; i++)
+					{
+						clearStyle(span_tags[i]);
+					}
+				}
+			
+				return true;
+			}
+			
+			
+			function clearHighlights()
+			{
+				// Using IE, we can clear highlights in-place, so the document doesn't reset to the top.
+				// Otherwise, let the document component remove the highlight span tags by requesting
+				// the document again without a query.
+			
+				if (navigator.appName.indexOf("Microsoft") != -1 &&	parseInt(navigator.appVersion) >= 4)
+				{
+					if (clearIEHighlights())
+					{
+						return;
+					}
+				}
+			
+				// include path info in request, or the document component will ignore the 'q' value here
+				var doc_window = getDocumentWindow();
+				var current_document = getCurrentDocument(true);
+				doc_window.location = "<!-- #EXECUTIVE:SCRIPT_NAME -->/" + current_document + "?f=templates$fn=document-frame.htm$q=$x=";
+			}
+			
+			
+			function synchronizeContents()
+			{
+				var current_document = getCurrentDocument(false);
+			
+				// whack any leading slash character
+				if (current_document.charAt(0) == "/")
+				{
+					current_document = current_document.substring(1);
+				}
+			
+				var contents_window = getContentsWindow();
+				if (contents_window != null)
+				{
+					var synchronize = contents_window.synchronize;
+					synchronize(current_document);
+				}
+			}
+			
+			
+			function showReference()
+			{
+				var separator = escape("</b> > <b>");
+				var document_path = escape(getCurrentDocument(true));
+				var ref_window = window.open("<!-- #TEMPLATES:reference.htm -->$s=" + separator + "$p=" + document_path, "reference", "width=500,height=100,resizable=yes,scrollbars=yes");
+				ref_window.focus();
+			}
+			
+			
+			/*function findSimilar()
+			{
+				if (top.getMainTab != null)
+				{
+					if (top.getMainTab() == "document-results")
+					{
+						document.filter_form.target = "results";
+					}
+				}
+			
+				document.filter_form.xhitlist_pcd.value = getCurrentDocument(true);
+				document.filter_form.submit();
+			}*/
+			
+			function advSearch()
+			{
+				top.frames["main"].location.href = '#!-- #EXECUTIVE:SCRIPT_NAME --#?f=templates$fn=form_busqueda/'+init_search_page;
+				return false;
+			}
+			
+			/*function manageContent()
+			{
+				// get the parent path of the current document, and start the there
+				var current_document = unescape(getCurrentDocument());
+				var parent_path = current_document.substring(0, current_document.lastIndexOf("/"));
+				
+				var doc_lib_url = "#!-- #EXECUTIVE:SCRIPT_NAME --#/" +
+					escape(parent_path) +
+					"?f=udoclist$udoclist_sel=title;path;has-children;name;last-modified;content-type;type;writable;locked;locked-by;hidden$udoclist_lsel=title;type;writable;path$udoclist_xsl=update.xsl$udoclist_sf=update$udoclist_vpc=first$udoclist_upd=yes";
+			
+			//	if (isIE55())
+			//	{
+					// Server-side XSL is required for manage content on IE 5.5 because uploading doesn't work
+					// if the XSL is done client side.
+					doc_lib_url += "$udoclist_fss=yes";
+			//	}
+			
+				var new_window = window.open(doc_lib_url, "update", "scrollbars=yes,resizable=yes,menubar=yes");
+				new_window.focus();
+			}*/
+			
+			function setHitNumber(number)
+			{
+				hit_number = number;
+				document.getElementById("hit_number").innerHTML = hit_number;
+			}
+		</script>
+		<style type="text/css">
+		<!--
+			.style4 {color: #FF0000}
+			body, table
+			{
+				background-color: lightgrey;
+				padding: 0px;
+			}
+		-->
+		</style>
+	</head>
+		<!-- ESTE FORM ES SOLO USADO POR FUNCION DE JS FINDSIMILAR() -->
+		<!-- form name="filter_form" method="post" target="main" action="#!-- #EXECUTIVE:SCRIPT_NAME --#">
+			<input type="hidden" size="0" name="f" value="xhitlist" />
+			<input type="hidden" size="0" name="xhitlist_pcd" value="" />
+			<input type="hidden" size="0" name="xhitlist_ncd" value="" />
+			<input type="hidden" size="0" name="xhitlist_vpc" value="first" />
+			<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl" />
+			<input type="hidden" size="0" name="xhitlist_d"	  value="" />
+			<input type="hidden" size="0" name="xhitlist_s"	  value="relevance-weight" />
+			<input type="hidden" size="0" name="xhitlist_hc"  value="" />
+			<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title" />
+		</form -->
+	<body onLoad="initPage()" style="margin: 0px;">
+		<table width="500" border="0" cellpadding="0" cellspacing="0" align="center">
+			<tr>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<div align="center">
+									<a href="javascript:prevMatch()">
+										<img src="#!-- #IMAGES:prevhit.gif --#" title="Acierto Anterior" alt="Acierto Anterior" border="0"/>
+									</a>
+								</div>
+							</td>
+							<td>
+								<div align="center">
+									<strong>Aciertos</strong>
+								</div>
+							</td>
+							<td>
+								<div align="center">
+									<a href="javascript:nextMatch()">
+										<img src="#!-- #IMAGES:nexthit.gif --#" title="Acierto Siguiente" alt="Acierto Siguiente" border="0"/>
+									</a>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<a href="javascript:getDocument(--hit_number);">
+									<img src="#!-- #IMAGES:prevdoc.gif --#" border="0" title="Anterior Documento con acierto" alt="Anterior Documento con acierto"/>
+								</a>
+							</td>
+							<td>
+								<div align="center">
+									<strong>Documento: <span class="style4" id="hit_number"></span></strong>
+								</div>
+							</td>
+							<td>
+								<a href="javascript:getDocument(++hit_number);">
+									<img src="#!-- #IMAGES:nextdoc.gif --#" border="0" title="Proximo Documento con acierto" alt="Proximo Documento con acierto"/>
+								</a>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

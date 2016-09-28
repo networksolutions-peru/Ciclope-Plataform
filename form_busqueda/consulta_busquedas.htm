@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+	<head>
+		<TITLE>Legislacion</TITLE>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:form_busqueda/search_form.css --#">
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:gaceta_skin.css --#">
+		<!-- script language="Javascript" type="text/javascript" src="#!-- #TEMPLATES:form_busqueda/advanced_search.js --#"></script -->
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:CLPSessionSaveSearchs.js --#"></script>
+		<script language="Javascript" type="text/javascript">
+			$(document).ready(function()
+			{
+				savedSearchsToHTML('busquedas_content');
+			});			
+			function loadSearchCallback()
+			{
+				top.toogleLayout();
+			}
+		</script>
+		<style>
+			a,
+			a:visited
+			{
+				color: black;
+				text-decoration:none;
+			}
+			div > a:hover
+			{
+				background-color:lightgrey;
+			}
+			.debug
+			{
+				display:none;
+			}
+			
+
+	input[type='button'] {
+		background: none repeat scroll 0 0 #E1E1E1;
+		border: 1px solid #B8B8B8;
+		border-radius: 3px 3px 3px 3px;
+		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 1px 0 white;
+		color: #525252;
+		cursor: pointer;
+		display: block;
+		font-size: 11px;
+		font-weight: bold;
+		height: 25px;
+		line-height: 22px;
+		margin: 0;
+		padding: 1px 0 2px;
+		text-align: center;
+		text-shadow: 0 1px 0 white;
+		width: 110px;
+		float: left;
+		margin-left: 8px;
+		font-family:"Helvetica Neue",Helvetica,Arial,Verdana,sans-serif;
+}			
+
+#busquedas_content {
+    border: 1px solid black;
+    float: left;
+    padding-bottom: 6px;
+    width: 98%;	
+}
+#panda_values {
+
+    float: left;
+    padding-bottom: 6px;
+    width: 98%;	
+}
+blockquote {
+	float: left;
+	padding: 5px;
+	display: block;
+    width: 100%;
+	margin: 5px;
+	
+}
+
+html,body{
+	overflow-x:hidden;
+}
+		</style>
+	</head>
+	<body style="font-size: 11px;font-family: Verdana;">
+		<div class="debug">
+			<a href="#" onClick="javascript:alert(unescape(document.cookie)); return false;">Cookies</a><br/>
+			<a href="#" onClick="javascript:DeleteCookie('CLPServerSearch_'+prompt('Nombre/ID de la busqueda a eliminar').replace(/\s+/g, '_')); return false;">Eliminar 'busqueda'</a><br/>
+			<a href="#" onClick="javascript:showSearch(); return false;">Buscar 'busqueda'</a><br/>
+		</div>
+		<table width="100%" border="0" cellspacing="0">
+			<tr>
+				<td>
+					<table width="100%" border="0" cellpadding="0" cellspacing="5">
+						<tr>
+							<td class="header">
+								<strong>Consulta de busquedas</strong>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<table width="100%" align="center" border="0">
+			<tr>
+				<td>
+					<div id="busquedas_content" style="border: 1px solid black;">&nbsp;</div>
+				</td>
+			</tr>
+			<tr bgcolor="#FFFFFF" bordercolor="#000000">
+				<td>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -62,6 +62,8 @@ function utf8Decode(str)
 
 function escapeURL(string)
 {
+	if (string=="" || string==null)
+		return;
 	var escaped = utf8Encode(string);
 	escaped = escape(escaped);
 	

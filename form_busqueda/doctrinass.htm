@@ -1,0 +1,304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+	<head>
+		<TITLE>Legislacion</TITLE>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:form_busqueda/search_form.css --#">
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:jquery-ui-1.8.6.custom.css --#">
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:gaceta_skin.css --#">
+		<script type="text/javascript" src="#!-- #TEMPLATES:CLPSessionSaveSearchs.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.core.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.datepicker-es.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.datepicker.js --#"></script>
+		<script language="Javascript" type="text/javascript">
+			var emisores_exacto = false;
+			
+			$(document).ready(function()
+			{
+				/*
+				$.datepicker.setDefaults($.datepicker.regional['es']);
+				$( "#FechaInicio" ).datepicker({ dateFormat:'MM yy', showOn: 'button', buttonImage: '#!-- #IMAGES:calendar_ico.png --#', buttonImageOnly: true });
+				$( "#FechaFin" ).datepicker({ dateFormat:'MM yy', showOn: 'button', buttonImage: '#!-- #IMAGES:calendar_ico.png --#', buttonImageOnly: true });
+				*/
+				top.expandDocFrameToggle($('#doc-expand-img'));
+				top.hideReference();
+			});
+	
+
+			function open_popup(val)
+			{
+				var file_help = "";
+				switch(val)
+				{
+					case 'libre':
+					file_help="Ayuda_Libre.html";break;
+					case 'anio':
+					file_help="Ayuda_Anio.html";break;
+					case 'entidad_emisora':
+					file_help="Ayuda_Emisor.html";break;
+					case 'Identificador':
+					file_help="Ayuda_Identificador.html";break;
+					case 'numero':
+					file_help="Ayuda_Numero.html";break;
+					case 'norma':
+					file_help="Ayuda_Norma.html";break;
+				}
+				var TEMPLATES_INIT = "#!-- #TEMPLATES:URL --#";
+				var url_form = TEMPLATES_INIT.replace("URL",unescape(file_help));
+
+				switch(val)
+				{
+					case 'libre':
+					window.open (url_form, 'ayuda','scrollbars=yes,toolbar=no,menubar=0,status=0,width=550,height=500');break;
+					case 'anio':
+					window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+					case 'entidad_emisora':
+					window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+					case 'Identificador':
+					window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+					case 'numero':
+					window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+					case 'norma':
+					window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+				}
+			}
+
+			function makeQuery()
+			{
+				if (submitAdvQuery())
+				{
+					top.frames[top.TOOLS_FRAME].closeToc();
+					return true;
+				}				
+				return false;
+			}
+		
+			function submitAdvQuery()
+			{
+				var q = "";
+
+				//////////////////////////////////////////
+				// Campos: pegan cosas en q (query)     //
+				//////////////////////////////////////////
+//				var norma_id = $("#norma_id").val();
+//				if (norma_id != "")
+//				{
+//					norma_id = norma_id.replace(/\s|\.|\/|-|_/g, "\?");
+//					q += ((q != "")?"&":"") + "[Field norma_id:"+norma_id+"*]";
+//				}
+
+				var autor = $("#autor").val();
+				if (autor != "")
+					q += ((q != "")?"&":"") + "[Field Autor:*"+autor+"*]";
+
+				var titulo = $("#titulo").val();
+				if (titulo != "")
+				{
+					titulo = titulo.replace(/ó|ú|á|é|í|ó/g, "\?"); //
+					q += ((q != "")?"&":"") + "[Field Articulo:*"+titulo+"*]"; //EN EL FOLIO DE GACETA ESTA EL FIELD COMO 'ARTICULO'
+				}
+
+//				var tema_sub = $("#tema").val();
+//				if (tema_sub != "")
+//					q += ((q != "")?"&":"") + "[Field areas:*"+tema_sub+"*]or[Field materias:*"+tema_sub+"*]";
+					
+/*				var FechaInicio = date2aaaammdd($("#FechaInicio").val());
+				if (FechaInicio != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:>="+FechaInicio+"]";
+
+				var FechaFin = date2aaaammdd($("#FechaFin").val());
+				if (FechaFin != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:<="+FechaFin+"]";
+					*/
+				//////////////////////////////////////////
+				// Campos generales                     //
+				//////////////////////////////////////////
+				var text = $("#text").val();
+				if (text != "")
+					q += ((q != "")?"&":"") + text;
+					
+				if (q == "")
+				{
+					alert("Debe completar al menos un campo del formulario de búsqueda");
+					return false;
+				}
+				
+				//alert(q);
+				saveSearch(TMP_SEARCH_NAME);
+				
+				$("#xhitlist_q").val(q);
+				top.countStart(); //Tiempo en MS que tarda la busqueda
+				$("#main_form").submit();
+				
+				return true;
+			}
+			
+			function date2aaaammdd(val)
+			{
+				if (val == null || val == "")
+					return val;
+					
+				var val_split = val.split("/");
+				var new_date = "";
+				for (var i=(val_split.length-1) ; i>-1 ; --i)
+				{
+					var item = val_split[i];
+					if (item.length == 1) item = "0"+item;
+					new_date += item;
+				}
+				return new_date;
+			}
+			
+			function toggleType(id, obj)
+			{
+				$('#'+id).toggle();
+				var html = $(obj).html();
+				html = html.replace(/\+/g, "#menos#");
+				html = html.replace(/-/g, "#mas#");
+				html = html.replace(/#menos#/g, "-");
+				html = html.replace(/#mas#/g, "+");
+				$(obj).html(html);
+				return false;
+			}
+			function toggleFiltroEmisores(id, obj)
+			{
+				$('#'+id).toggle();
+				var html = $(obj).html();
+				html = html.replace(/Mostrar Filtro/, "#ocultar#");
+				html = html.replace(/Ocultar Filtro/, "#mostrar#");
+				html = html.replace(/#ocultar#/, "Ocultar Filtro");
+				html = html.replace(/#mostrar#/, "Mostrar Filtro");
+				$(obj).html(html);
+				emisores_exacto = (emisores_exacto == true ? false : true); //lo contrario
+				return false;
+			}
+		</script>
+		<style>
+			.tipo_de_norma_subitem
+			{
+				display:none;
+				/*padding-left:20px;*/
+			}
+			a[href="#"]
+			{
+				text-decoration:none;
+				color:black;
+				padding-top:2px;
+				padding-bottom:2px;
+			}
+		</style>
+	</head>
+	<body>
+		 
+		<table width="100%" border="0" cellpadding="0" cellspacing="5">
+			<tr>
+				<td class="header">
+					<!-- <b>B&uacute;squeda en Legislaci&oacute;n</b>-->
+				</td>
+			</tr>
+		</table>	
+		
+		<form method="get" name="ui_form" onsubmit="return false;">
+			<table width="100%" border="0" cellspacing="0">
+				<tr>
+					<!-- td width="30%" style="vertical-align:top; padding-left:10px;">
+						<div style="padding:0px;overflow: auto; height: 650px;">
+							<ul>
+								<a href="#" onclick="toggleType('Acuerdos', this);"><b>+ Acuerdos</b></a>
+								<ul id="Acuerdos" class="tipo_de_norma_subitem">
+									<li><label value="En Acuerdo"><input type="checkbox" name="A"    id="A "     value="A "/></label>Acuerdo
+									<li><label value="En Acuerdo De Directorio"><input type="checkbox" name="AD"    id="AD"     value="AD"/></label>Acuerdo De Directorio
+									<li><label value="En Acuerdo Regional"><input type="checkbox" name="AR"    id="AR"     value="AR"/></label>Acuerdo Regional
+								</ul>
+								<li><label value="En Auto Divisional"><input type="checkbox" name="ADI"    id="ADI"     value="ADI"/></label>Auto Divisional
+						</div>
+					</td -->
+					<td style="vertical-align:top;">
+						<table width="100%" align="center" border="0">
+							<tr bgcolor="#FFFFFF" bordercolor="#000000">
+								<td>
+									<!--  <h3>Busqueda por identificadores:</h3> -->
+									<table style="border:1px solid black; padding:10px; width:95%;">
+										<tr>
+											<td style="width:40%;">
+											<!-- 	<b>Identificador completo:</b><br/>
+												<label value="ID de la Norma">
+													<input type="text" name="norma_id" id="norma_id" size="30"/>
+													img onclick="javascript:open_popup('Identificador');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/ 
+												</label>
+											</td>
+											<td> -->
+												<b>Autor:</b><br/>
+												<label value="Autor">
+													<input type="text" name="autor" id="autor" size="30"/><!-- img onclick="javascript:open_popup('autor');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/ -->
+												</label>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<b>Titulo:</b><br/>
+												<label value="Titulo"><input type="text" name="titulo" id="titulo" size="70"/></label>
+												<!-- img onclick="javascript:open_popup('numero');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/ -->
+											</td>
+										</tr>
+										<tr>
+											<!-- td colspan="2">
+												<b>Tema / Subtema:</b><br/>
+												<label value="tema"><label value="Tema / Subtema"><input type="text" name="tema" id="tema" size="50"/></label> 
+												img onclick="javascript:open_popup('numero');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/></label 
+											</td -->
+										</tr>
+										<!-- tr>
+											<td>
+												<b>Fecha de Edicion desde:</b><br/>
+												<label value="Fecha de Emision de inicio"><input type="text" name="FechaInicio" id="FechaInicio" size="30"/></label>
+											</td>
+											<td>
+												<b>Fecha de Edicion hasta:</b><br/>
+												<label value="Fecha de Emision de final"><input type="text" name="FechaFin" id="FechaFin" size="30"/></label>
+											</td>
+										</tr -->
+									</table>
+									<br/>
+									<!-- <h3>Busqueda libre:</h3> -->
+									<table style="border:1px solid black; padding:10px; width:95%;">
+										<tr>
+											<td colspan="2">
+												<b>Busqueda libre:</b><br/>
+												<label value="Texto"><input type="text" name="text" id="text" size="70"/></label><img onclick="javascript:open_popup('libre');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/>
+											</td>
+										</tr>
+									</table>
+									<br/>
+									<table>
+										<tr bgcolor="#FFFFFF">
+											<td>
+												<input type="submit" value="Buscar"  onClick="return makeQuery();" class="button" name="submit">&nbsp;&nbsp;
+												<input type="reset" value="Limpiar" class="button">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<form action="#!-- #EXECUTIVE:SCRIPT_NAME--#" method="get" target="HitList" name="main_form" id="main_form">
+			<input type="hidden" size="0" name="f"           value="xhitlist"/>
+			<input type="hidden" size="0" name="xhitlist_x"  value="Advanced"/>
+			<input type="hidden" size="0" name="xhitlist_s"  value="Field:fecha_server_publicacion,DESC;Field:tipo_norma,ASC;Field:numero,ASC"/>
+			<input type="hidden" size="0" name="xhitlist_d"  value="" id="xhitlist_d"/>
+			<input type="hidden" size="0" name="xhitlist_q"  value="" id="xhitlist_q"/>
+			<input type="hidden" size="0" name="xhitlist_hc" value="[XML][Kwic,10]" />
+			<input type="hidden" size="0" name="xhitlist_mh" value="100" />
+			<input type="hidden" size="0" name="global"      value="G_" />
+			<input type="hidden" size="0" name="G_QUERY"     value=""/>
+			<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl"/> 
+			<input type="hidden" size="0" name="xhitlist_vpc" value="first"/> 
+			<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title;hit-context;Field:tipo_norma;Field:estado;Field:emisor;Field:anio;Field:numero;Field:fecha_publicacion;Field:fecha_server_publicacion;Field:autor;Field:articulo_cms" />
+		</form>
+	</body>
+</html>

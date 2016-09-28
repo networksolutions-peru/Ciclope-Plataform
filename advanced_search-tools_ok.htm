@@ -1,0 +1,375 @@
+<html>
+
+	<head>
+		<title>Documento</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:main.css --#" />
+		
+		<script type="text/javascript" src="#!-- #TEMPLATES:hit-tracker.js --#"></script>
+		<script type="text/javascript" src="<!-- #TEMPLATES:update.js -->"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.cookies.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:CLPSessionSaveSearchs.js --#"></script>
+		<script language="JavaScript" type="text/JavaScript">
+		<!--
+		//var init_search_page = "form_busqueda/"+/*"advsearch.htm";//*/"busquedas_main.html"; //"field-search-frame.htm";
+			var init_search_page;
+			//var init_search_page = "form_busqueda/ww_legislacion.htm";//Con word wheels
+			function doPrintDocument()
+			{
+				var strBrowser;
+				if ((i = navigator.userAgent.indexOf("Opera­ ")) >= 0)
+				strBrowser = "Opera";
+				else if ((i = navigator.userAgent.indexOf("Netsc­ ape6/")) >= 0)
+				strBrowser = "Netscape6/";
+				else if ((i = navigator.userAgent.indexOf("Gecko­ ")) >= 0)
+				strBrowser = "Gecko";
+				else if ((i = navigator.userAgent.indexOf("MSIE")) >= 0)
+				strBrowser = "MSIE";
+
+
+				if (strBrowser == "MSIE") {
+					parent['main'].focus();
+					parent['main'].print();
+				} else {
+					window.parent.main.print();
+				}
+			}
+
+			function getCurrentDocument(bUnEscape)
+			{
+				var current_document = "";
+			
+				var all_cookies = document.cookie;
+			
+				var label = "doc=";
+				var offset = all_cookies.indexOf(label);
+				if (offset != -1)
+				{
+					var start = offset + label.length;
+					var end = all_cookies.indexOf(";", start);
+					if (end == -1)
+					{
+						end = all_cookies.length;
+					}
+			
+					current_document = all_cookies.substring(start, end);
+				}
+			
+				return bUnEscape? unescape(current_document) : current_document;
+			}
+
+			function synchronize(current_document)
+			{
+				window.location = "<!-- #TEMPLATES:contents-frame-h.htm -->" + "&tf=main&cp=" + current_document + "&c=100&sync=2#TOCSYNC";
+			}
+			
+			function synchronizeContents()
+			{
+				var current_document = getCurrentDocument(false);
+				//alert(current_document);
+				// whack any leading slash character
+				if (current_document.charAt(0) == "/")
+					current_document = current_document.substring(1);
+			
+				var contents_window = top.frames[top.TOC_FRAME];
+				if (contents_window != null)
+				{
+					//var synchronize = contents_window.synchronize;
+					contents_window.location = "<!-- #TEMPLATES:contents-frame-h.htm -->" + "&tf=main&cp=" + current_document + "&c=100&sync=2#TOCSYNC";
+					//synchronize(current_document);
+				}
+			}
+			
+			/*function showReference()
+			{
+				var separator = escape("</b> > <b>");
+				var document_path = escape(getCurrentDocument(true));
+				var ref_window = window.open("<!-- #TEMPLATES:reference.htm -->$s=" + separator + "$p=" + document_path, "reference", "width=500,height=100,resizable=yes,scrollbars=yes");
+				ref_window.focus();
+			}*/
+			
+			function advSearch()
+			{
+				hideSearchTools();
+				init_search_page = "#!-- #EXECUTIVE:SCRIPT_NAME --#?f=templates$fn=form_busqueda/legislacion.htm";
+				top.frames[top.DOC_FRAME].location.href = '#!-- #EXECUTIVE:SCRIPT_NAME --#?f=templates$fn=form_busqueda/legislacion.htm';
+				//showToc();
+				//closeToc();
+				top.showReference();
+			}
+			
+			function changeButton(where)
+			{
+				var button = document.getElementById("nueva_busqueda");
+				if(where=="novedades")
+					button.innerHTML = "Volver a Novedades";
+				else
+					button.innerHTML = "Nueva b&uacute;squeda"
+				return true;
+			} 
+			
+			function showLegislacion()
+			{
+				changeButton("legislacion");
+				advSearch();
+			}
+			
+			function consultaSearchs()
+			{
+				top.frames[top.DOC_FRAME].location.href = '#!-- #TEMPLATES:form_busqueda/consulta_busquedas.htm --#';
+			}
+
+			function clearQuickSearch()
+			{
+				document.getElementById("xhitlist_q").value = "";
+			}
+			/*function manageContent()
+			{
+				// get the parent path of the current document, and start the there
+				var current_document = unescape(getCurrentDocument());
+				var parent_path = current_document.substring(0, current_document.lastIndexOf("/"));
+				
+				var doc_lib_url = "#!-- #EXECUTIVE:SCRIPT_NAME --#/" +
+					escape(parent_path) +
+					"?f=udoclist$udoclist_sel=title;path;has-children;name;last-modified;content-type;type;writable;locked;locked-by;hidden$udoclist_lsel=title;type;writable;path$udoclist_xsl=update.xsl$udoclist_sf=update$udoclist_vpc=first$udoclist_upd=yes";
+			
+				doc_lib_url += "$udoclist_fss=yes";
+		
+				var new_window = window.open(doc_lib_url, "update", "scrollbars=yes,resizable=yes,menubar=yes");
+				new_window.focus();
+			}*/
+			function EnviarFormulario()
+			{
+				top.frames[top.SEARCH_TOOLS_FRAME].total_hits=0;
+				top.frames[top.SEARCH_TOOLS_FRAME].current_hit=-1;
+				document.forms[0].submit();
+			}
+	
+			function showToc()
+			{
+				top.toggleToc(true)
+				$("#switchTocBtn").html("Mostrar Aciertos");
+			}
+			
+			function closeToc()
+			{
+				top.toggleToc(false)
+				$("#switchTocBtn").html("Mostrar Contenidos");
+			}
+			
+			function toggleToc()
+			{
+				if (!top.is_tocOpened())
+					showToc();
+				else
+					closeToc();
+			}
+		
+			/**
+			 *
+			 *
+			 */
+			var no_more_matches = "No hay mas resultados para este documento";
+			var no_more_documents = "No hay mas documentos";
+			var hit_tracker = new HitTracker(getDocumentWindow());
+			var hit_number = null;
+			
+ 			function setHitNumber(number)
+			{
+				if (number == null && number == 'undefined')
+					return;
+				hit_number = number;
+				$("#hit_number").html(hit_number);
+			}
+
+			function getDocumentWindow()
+			{
+			//	var doc_window = parent.frames[1];
+				var doc_window = top.frames[top.DOC_FRAME];
+				if (doc_window.frames[0])
+					doc_window = doc_window.frames[0];
+				return doc_window;
+			}
+			
+			function nextMatch()
+			{
+				var doc_window = getDocumentWindow();
+			
+				if (!hit_tracker.isTracking(doc_window))
+				{
+					alert(use_viewer);
+				}
+				else if (!hit_tracker.nextMatch(doc_window))
+				{
+					alert(no_more_matches);
+				}
+			}
+			
+			function prevMatch()
+			{
+				var doc_window = getDocumentWindow();
+			
+				if (!hit_tracker.isTracking(doc_window))
+				{
+					alert(use_viewer);
+				}
+				else if (!hit_tracker.prevMatch(doc_window))
+				{
+					alert(no_more_matches);
+				}
+			}
+			
+			function getDocument(hit_number)
+			{
+				var hitlist_frame = top.frames[top.HITLIST_FRAME];
+				if ( hitlist_frame.loadDocumentByHitNumber && !hitlist_frame.loadDocumentByHitNumber(parseInt(hit_number)) )
+				{
+					alert(no_more_documents);
+				}
+			}
+			function showSearchTools()
+			{
+				$(".onSearch").each(function()
+				{
+					$(this).show();
+				});
+				top.showReference();
+				//top.frames[top.DOC_INFO_FRAME].reloadRef();
+			}
+
+			function hideSearchTools()
+			{
+				$(".onSearch").each(function()
+				{
+					$(this).hide();
+				});
+				top.hideReference();
+				//top.frames[top.DOC_INFO_FRAME].reloadRef();
+			}
+		-->
+		</script>
+		<style>
+			body, td, th
+			{
+			}
+			body
+			{
+				/*margin: 10px 0 0 11px;*/
+				background-image:url('#!-- #IMAGES:fondo_gaceta.jpg --#');
+				background-repeat:no-repeat;
+				background-position:right top;
+				background-color:#AB1312;
+			}
+			.td_boton > a
+			{
+				float:bottom;
+				vertical-align:sub;
+				color:white;
+			}
+
+			.td_boton
+			{
+				width: 120px;
+				height: 5px;
+				border-right: 2px;
+				background-image: URL(#!-- #IMAGES:fondo-boton.jpg --#);
+				background-repeat: no-repeat;
+				background-position: center;
+				padding-bottom:7px;
+				padding-right:1px;
+				vertical-align:bottom;
+				text-align:center;
+			}
+			a:link,
+			a:visited,
+			a:active
+			{
+				text-decoration: none;
+				color: white;
+				font-weight: bold;
+			}
+			a:hover   { text-decoration: none; }
+			.onSearch {display:none;}
+		</style>
+	</head>
+	<body>
+		<table border="0" cellspacing="0" cellpadding="0" class="button_table">
+			<tr>
+				<td class="td_boton" style="width:130px;">
+					<a href="#" id="goHome" onclick="javascript:top.toogleLayout();return false;">
+						Volver al Inicio
+					</a>
+				</td>
+				<td class="td_boton" style="width:130px;">
+					<a href="#" id="switchTocBtn" onclick="javascript:toggleToc();return false;">Mostrar Contenidos</a>
+				</td>
+				<td class="td_boton" style="width:130px;">
+					<a href="#" id="nueva_busqueda" onClick="javascript:advSearch(); return false;">Nueva b&uacute;squeda</a>
+				</td>
+				<!-- td class="td_boton" style="width:130px;">
+					<a href="javascript:saveSearch();">Guardar b&uacute;squeda</a>
+				</td -->
+				<td class="td_boton" style="width:130px;">
+					<a href="javascript:consultaSearchs();">B&uacute;squeda guardadas</a>
+				</td>
+				<!-- td>
+					<div align="left">
+						<table width="100" border="0" cellspacing="2" cellpadding="0">
+							<tr>
+								<td>
+									<form name="main_form" target="HitList" method="get" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" >
+										<input type="text" name="xhitlist_q" size="22" id="xhitlist_q"/>
+										<input type="hidden" size="0" name="f"            value="xhitlist"/>
+										<input type="hidden" size="0" name="xhitlist_x"	  value="Simple"/>
+										<input type="hidden" size="0" name="xhitlist_s"	  value="Field:anio_fallo,DESC"/>
+										<input type="hidden" size="0" name="xhitlist_d"	  value=""/>
+										<input type="hidden" size="0" name="xhitlist_hc"  value=""/>
+										<input type="hidden" size="0" name="xhitlist_mh"	value="5000" />
+										<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl"/>
+										<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
+										<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title;Field:anio_fallo;Field:mes_fallo;Field:dia_fallo;Field:autor;Field:titulo_modelo;Field:Tribunal;Field:sala;Field:partes;Field:titulo_fallo;Field:autor;Field:titulo_doctrina;Field:editorial;Field:anio_pub" />
+									</form>
+								</td>
+								<td>
+									<a href="#" onclick="javascript:EnviarFormulario(); return false;">
+										<img src="#!-- #IMAGES:botonbusqueda.gif --#" border="0" alt="Buscar" title="Buscar"/>
+									</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td -->
+				<td class="td_boton onSearch" style="width:130px;">
+					<a href="javascript:prevMatch()">
+						<img src="#!-- #IMAGES:prevhit.gif --#" title="Acierto Anterior" alt="Acierto Anterior" border="0"/>
+					</a>
+					<a href="#" onclick="javascript:;">Aciertos</a>
+					<a href="javascript:nextMatch()">
+						<img src="#!-- #IMAGES:nexthit.gif --#" title="Acierto Siguiente" alt="Acierto Siguiente" border="0"/>
+					</a>
+				</td>
+				<td class="td_boton onSearch" style="width:130px;">
+					<a href="javascript:getDocument(--hit_number);">
+						<img src="#!-- #IMAGES:prevdoc.gif --#" border="0" title="Anterior Documento con acierto" alt="Anterior Documento con acierto"/>
+					</a>
+					<a href="#" onclick="javascript:;">Doc.: <span class="style4" id="hit_number"></span></a>
+					<a href="javascript:getDocument(++hit_number);">
+						<img src="#!-- #IMAGES:nextdoc.gif --#" border="0" title="Proximo Documento con acierto" alt="Proximo Documento con acierto"/>
+					</a>
+				</td>
+				<td class="td_boton onSearch" style="width:130px;">
+					<a href="javascript:top.expandDocFrameToggle($('#doc-expand-img'));">
+						Expandir Doc <img id="doc-expand-img" src="#!-- #IMAGES:m1.gif --#" border="0" title="Pantalla Completa" alt="Pantalla Completa"/>
+					</a>
+				</td>
+				<td class="td_boton onPrint" style="width:130px;">
+					<a href="javascript:doPrintDocument();">
+						Imprimir Doc <img id="doc-expand-img" src="#!-- #IMAGES:print.png --#" border="0" title="Imprimir Documento" alt="Imprimir Documento"/>
+					</a>
+				</td>
+			</tr>
+		</table>
+		<div style="position:absolute;top:0%;right:1%;color:white;text-decoration:none;"><b><a href="#" onclick="return false;">COLECCION DE LEGISLACION</b></div>
+	</body>
+</html>

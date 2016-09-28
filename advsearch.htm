@@ -1,17 +1,9 @@
 <script type="text/javascript">
-
-function OpenHitList()
-{
-	var topFrame = top.document.all("topFrame");
-//	var topFrame = top.frames["topFrame"];
-	topFrame.rows = "40, *, 180";
-}
-
 function SetupQuery()
 {
 	top.frames.DocNav.total_hits=0;
 	top.frames.DocNav.current_hit=-1;
-	OpenHitList();
+//	OpenHitList();
 }
 
 function getDomain()
@@ -150,7 +142,7 @@ function submitQuery()
 	{
 		query = "[rank,100:" + "[domain:[or:" + positive_terms + negative_terms + "]][sum:" + rank_terms + ']]';
 
-		request.xhitlist_s.value = "relevance-weight";
+		//request.xhitlist_s.value = "relevance-weight";
 	}
 	else if (negative_terms != "")
 	{
@@ -158,6 +150,8 @@ function submitQuery()
 	}
 
 	// set the variables in the other form (the one that will be submitted)
+	query ="[Field,tipo_norma:Ley]&"+query;
+	alert(query);
 	request.xhitlist_q.value = query;
 
 	// kwic
@@ -183,7 +177,7 @@ function submitQuery()
 		request.xhitlist_hc.value = "";
 
 	// domain (this function is in searchform.htm)
-	request.xhitlist_d.value = getDomain();
+	//request.xhitlist_d.value = getDomain();
 
 	if (query != "")
 	{
@@ -197,18 +191,43 @@ function submitQuery()
 }
 
 </script>
-
+<style>
+		a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:active {
+	text-decoration: none;
+}
+</style>
+<body  style="margin-top:-6px;">
 <table width="100%" border="0" cellspacing="0">
    <tr>
-	<td><a href="#!-- #TEMPLATES:field-search.htm --#"><img src="#!-- #IMAGES:title-busqueda.gif --#" border="0"/></a></td><BR><BR>
+	<td><table width="100%" border="0" cellpadding="0" cellspacing="5" bgcolor="003399">
+      <tr>
+        <td><a href="#!-- #TEMPLATES:form_busqueda/legislacion.htm --#?pais=Argentina"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFff" decoration="underline">B&uacute;squeda en Legislacion</font></strong></a></td>
+      </tr>
+    </table>	  </td>
+	<BR><BR>
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0">
   <tr>
-	<td><img src="#!-- #IMAGES:title-busqueda2.gif --#" border="0"/></td><BR><BR>
+	<td><table width="100%" border="0" cellpadding="0" cellspacing="5" bgcolor="003399">
+      <tr>
+        <td><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFff" decoration="underline">B&uacute;squeda Avanzada</font></strong></td>
+      </tr>
+    </table></td>
+	<BR><BR>
   </tr>
-</table><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
-<form name="ui_form" onsubmit="submitQuery(); return false;" target="HitList">
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br />
+<form name="ui_form" onSubmit="submitQuery(); return false;" target="HitList">
 
 	Buscar Documentos:<br /><br />
 
@@ -235,10 +254,8 @@ function submitQuery()
 </font>
 	<p>
 		<input type="submit" value="Buscar" class="button">&nbsp;&nbsp;
-		<input type="button" value="Cancelar" onclick="cancelQuery()" class="button">
+		<input type="button" value="Cancelar" onClick="cancelQuery()" class="button">
 	</p>
-</font>
-	<a href="#!-- #TEMPLATES:boolsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda3.gif --#" border="0"/></a>
 </form>
 
 <form name="request_form" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" method="get" target="HitList">
@@ -252,3 +269,5 @@ function submitQuery()
 	<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
 	<input type="hidden" size="0" name="xhitlist_sel" value="title;path;content-type;home-title">
 </form>
+</font>
+</body>

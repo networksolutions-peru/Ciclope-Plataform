@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>Ciclope</title>
+		<script type="text/javascript">
+			var TOC_FRAME          = 0;
+			var TOOLS_FRAME        = 1;
+			var SEARCH_FRAME       = 2;
+			var HITLIST_FRAME      = 3;
+			var DOC_INFO_FRAME     = 4;
+			var SEARCH_TOOLS_FRAME = 5;
+			var DOC_FRAME          = 6;
+		</script>
+	</head>
+
+	<frameset cols="0,*">
+		<!-- TOC -->
+		<frame id="toc_frame" src="#!-- #TEMPLATES:contents-frame-h.htm --#&sel=0&tf=main&tt=document-frameset.htm&t=contents-frame-h.htm&och=onClick" name="contents" resize="true" scrolling="auto" marginheight="0" marginwidth="0" border="0"/>
+		<frameset rows="40,*" border="5" bordercolor="#c4dafa" marginwidth="0" marginheight="0">
+			<!-- TOP FRAME -->
+			<frame src="#!-- #TEMPLATES:advanced_search-tools.htm --#" name="DocNav" resize="true" scrolling="no" marginheight="0" marginwidth="0"/>
+			<frameset cols="371,*">
+				<!-- Resumen de la busqueda y hitlist -->
+				<frameset rows="160,*" border="0">
+					<frame src="#!-- #TEMPLATES:search-resume.htm --#"  name="banner"          scrolling="no"   noresize="noresize" marginwidth="0" marginheight="0" border="5"/>
+					<frame src="#!-- #TEMPLATES:HitListFramset.htm --#" name="HitListFrameset" scrolling="auto"   resize="true"     marginwidth="0" marginheight="0" border="5"/>
+				</frameset>
+				
+				<!-- Referencia, herramientas de la busqueda y documento -->
+				<frameset rows = "120, 27, *" border="0" bordercolor="#c4dafa" name="topFrame"  id="topFrame">
+					<frame src="#!-- #TEMPLATES:reference.htm --#"             name="doc_info"  scrolling="no"   noresize="noresize" marginheight="20" marginwidth="36"/>
+					<frame src="#!-- #TEMPLATES:search-tools.htm --#"          name="doc_tools" scrolling="no"   noresize="noresize" marginheight="20" marginwidth="36"/>
+					<frame src="#!-- #TEMPLATES:document-frameset.htm --#"     name="main"      scrolling="auto"                     marginheight="20" marginwidth="36" resize="true"/>
+				</frameset>
+			</frameset>
+		</frameset>
+	</frameset>
+	<noframes><body></body></noframes>
+</html>
+
+

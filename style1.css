@@ -1,0 +1,318 @@
+
+            @import url(https://fonts.googleapis.com/css?family=Dosis:400,200,300,500,600,700,800&subset=latin,latin-ext);
+@font-face {
+    font-family: 'gaceta';
+    src: url("#!-- #IMAGES:fuentesGaceta.ttf --#");
+}
+			
+			
+/* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+-------------------------------------------------------------- */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline; }
+
+body {
+  line-height: 1; }
+
+h1, h2, h3, h4, h5, h6 {
+  clear: both;
+  font-weight: normal; }
+
+ol, ul {
+  list-style: none; 
+  }
+ 
+
+blockquote {
+  quotes: none; }
+
+blockquote:before, blockquote:after {
+  content: '';
+  content: none; }
+
+del {
+  text-decoration: line-through; }
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+a img {
+  border: none; }
+
+/* =Scss Variables
+-------------------------------------------------------------- */
+/* =Global
+-------------------------------------------------------------- */
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+body {
+  background-color: white;
+  color: #505050;
+  font-family: "Dosis", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.8; }
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+  font-weight: 300; }
+
+a {
+  text-decoration: none;
+  color: #3cb5f9; }
+
+a:hover {
+  color: #0793e2; }
+
+
+
+
+
+header {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: #00697F;
+  background-image: url("#!-- #IMAGES:cabeceraoOkcont.jpg --#");
+  background-repeat: no-repeat;
+  -webkit-transition: height 0.3s;
+  -moz-transition: height 0.3s;
+  -ms-transition: height 0.3s;
+  -o-transition: height 0.3s;
+  transition: height 0.3s; }
+
+  header h1#logo {
+    display: inline-block;
+    height: 50px;
+    line-height: 100px;
+    float: left;
+    font-family: "Oswald", sans-serif;
+    font-size: 60px;
+    color: white;
+    font-weight: 400;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s; 
+/*    padding-top: 10px; */
+	margin-top: 2px;
+
+  }
+
+  header nav {
+    display: inline-block;
+    float: right;
+     }
+
+    header nav a {
+      line-height: 50px;
+      margin-left: 10px;
+      margin-top: 1px;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 18px;
+      -webkit-transition: all 0.3s;
+      -moz-transition: all 0.3s;
+      -ms-transition: all 0.3s;
+      -o-transition: all 0.3s;
+      transition: all 0.3s; 
+   }
+      header nav a:hover {
+        color: blue; 
+    }    
+    nav#menus{
+     background-color: #3E6F76;
+     margin-top: 57px;
+     width: 100%;
+     height: 50px;
+     text-align: center;
+   }
+   nav#menus a{
+     margin-left: 6px;
+     margin-top: 5px;
+     background-color: #3E6F76 !important;
+     border: #3E6F76 !important;  
+     padding-top: 5px;
+     padding-bottom: 5px; 
+
+   }
+
+    /* otr4os estilos*/
+
+    section {
+      margin-top: 85px;
+    }
+form_main {
+    width: 100%;
+}
+.form_main h4 {
+    font-family: roboto;
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+.heading {
+    border-bottom: 1px solid #fcab0e;
+    padding-bottom: 9px;
+    position: relative;
+}
+.heading span {
+    background: #9e6600 none repeat scroll 0 0;
+    bottom: -2px;
+    height: 3px;
+    left: 0;
+    position: absolute;
+    width: 110px;
+}   
+.form {
+    border-radius: 7px;
+    padding: 6px;
+}
+.txt[type="text"] {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    padding: 10px 0 10px 5px;
+    width: 100%;
+}
+
+.txt2, .txt5 {
+    background: #365749 none repeat scroll 0 0;
+    border: 1px solid #365749;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 35px;
+    margin: 10px 0;
+    padding: 0;
+    text-transform: uppercase;
+    width: 30%;
+}
+.txt2[type="reset"] {
+    background: #CCC none repeat scroll 0 0;
+    border: 1px solid #CCC;
+
+}
+
+.txt5[type="button"] {
+    background: #00697F none repeat scroll 0 0;
+    border: 1px solid #00697F;
+    width: 38%;	
+
+}
+
+.txt2[type="button"] {
+    background: #887A5D none repeat scroll 0 0;
+    border: 1px solid #887A5D;
+	width:130px;  
+	margin-top: 17px;
+	text-transform: none;	
+	background: transparent !important;
+	border: 0px solid transparent;
+	color: #000;
+	text-decoration: underline;
+	padding-left: 0px;
+
+}
+
+/* otros estilo */
+.btn span.glyphicon {         
+  opacity: 0;       
+}
+.btn.active span.glyphicon {        
+  opacity: 1;       
+}
+
+.controls-two {
+  margin-top: 10px;
+}
+
+
+footer{
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  background-color: #365749;
+  color: white;
+  font-family: 'gaceta';
+}
+            footer h5{
+              line-height: 19px;
+              margin-top: 5px;
+              font-family: "gaceta", sans-serif;
+            }
+
+  nav#toper a.linki{
+    background-color: transparent !important; 
+    border: none !important;
+  }
+
+  header nav#menus a {
+    margin-top: 0px;
+  }
+  
+   @media only screen and (max-width: 90px) {
+	 
+	 input.m5[type="reset"]  {
+		 width: 25% !important;
+	 }
+	 input.m5[type="button"]  {
+		 width: 33% !important;
+	 }	 
+	 input.m5[type="submit"]  {
+		 width: 28% !important;
+	 }	 
+
+	section .col-md-4 {
+		padding-left: 0;
+		padding-right: 0;
+	}
+ }
+  
+ @media only screen and (max-width: 350px) {
+	 
+	 input.m5[type="reset"]  {
+		 width: 25% !important;
+	 }
+	 input.m5[type="button"]  {
+		 width: 33% !important;
+	 }	 
+	 input.m5[type="submit"]  {
+		 width: 28% !important;
+	 }	 	 
+ }
+ 
+ .linki{
+	color: #555;
+}

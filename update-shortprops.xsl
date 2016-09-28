@@ -59,7 +59,7 @@ function toParent()
 					<img border="0" align="top" width="16" height="16">
 						<xsl:attribute name="src"><!-- #IMAGES:update-to-parent.gif --></xsl:attribute>
 					</img>
-					<b>Up one level</b>
+					<b>Subir un nivel</b>
 				</a>
 			</td>
 		</tr>

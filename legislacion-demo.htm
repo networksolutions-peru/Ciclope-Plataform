@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Legislacion</title>
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style.css --#">
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:jquery-ui-1.8.6.custom.css --#">
+<!-- <link href="style_home.css" rel="stylesheet" media="all" type="text/css" /> -->
+<script type="text/javascript" src="#!-- #TEMPLATES:CLPSessionSaveSearchs.js --#"></script>
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.core.js --#"></script>
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.datepicker-es.js --#"></script>
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.datepicker.js --#"></script>
+<script type="text/javascript" src="#!-- #TEMPLATES:script.js --#"></script>
+
+<script type="text/javascript">
+/////////////
+/////////////////*******
+/**********************/
+
+			function makeQuery()
+			{
+				/*top.frames.DocNav.total_hits=0;
+				top.frames.DocNav.current_hit=-1;*/
+						
+	//	top.frames[top.TOOLS_FRAME].closeToc();
+					//saveSearch(TMP_SEARCH_NAME);
+				if (submitAdvQuery())
+				{
+					//top.frames[top.TOOLS_FRAME].closeToc();
+					//top.toogleLayout();
+					return true;
+				}				
+				return false;
+			}
+
+		function submitAdvQuery()
+			{
+				var q = "";
+
+				//////////////////////////////////////////
+				// Campos: pegan cosas en q (query)     //
+				//////////////////////////////////////////
+				var tipos_norma = "";
+				$.each($("#tipo_de_normas input[@type='checkbox']:checked"), function()
+				{
+//				tipos_norma += ((tipos_norma != "")?"or":"") + "[Field tipo_norma:"+$(this).val()+"]";
+				     tipos_norma += ((tipos_norma != "")?"or":"") + "[Field tipo_norma:'"+$(this).val()+"']";
+				});
+				q += ((q != "")?"&":"") + tipos_norma;
+				
+				var norma_id = $("#norma_id").val();
+				if (norma_id != "")
+				{
+					norma_id = norma_id.replace(/\s|\.|\/|-|_/g, "\?");
+					q += ((q != "")?"&":"") + "[Field norma_id:"+norma_id+"*]";
+				}
+
+				var nro_norma = $("#number").val();
+				if (nro_norma != "")
+					q += ((q != "")?"&":"") + "[Field numero:"+nro_norma+"]";
+
+				var anio_norma = $("#anio").val();
+				if (anio_norma.length > 2 && parseInt(anio_norma)<=1999)
+					anio_norma = anio_norma.substring(2);
+				if (anio_norma != "")
+					q += ((q != "")?"&":"") + "[Field anio:"+anio_norma+"]";
+					
+				var estado = $("#Estado").val();
+				if (estado != "")
+					q += ((q != "")?"&":"") + "[Field estado:"+estado+"]";
+					
+				var FechaInicio = date2aaaammdd($("#FechaInicio").val());
+				if (FechaInicio != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:>="+FechaInicio+"]";
+
+				var FechaFin = date2aaaammdd($("#FechaFin").val());
+				if (FechaFin != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:<="+FechaFin+"]";
+					
+					
+				var emisores = $("#emisor").val().split(",");
+				if (emisores != "")
+				{
+					var emisores_qry="";
+					for  (var i=0 ; i<emisores.length ; ++i)
+					{
+						var asterisco = "*";
+						if (emisores_exacto == true)
+							asterisco = "";
+						
+						emisores_qry += ((emisores_qry != "")?"or":"") + "[Field emisor:"+asterisco+emisores[i]+asterisco+"]";
+					}
+					if (emisores_qry != "")
+						q += ((q != "")?"&":"") + emisores_qry;
+				}
+					
+// Retirado por mlugo,para quitar busqueda	por temas
+
+//				var tema_sub = $("#Tema").val();
+// 				if (tema_sub != "")
+// 				q += ((q != "")?"&":"") + "[Field materias:*"+tema_sub+"*]or[Field areas:*"+tema_sub+"*]";
+					
+				var Sumilla = $("#Sumilla").val();
+				if (Sumilla != "")
+				{
+					Sumilla = Sumilla.replace(/ó|ú|á|é|í|ó/g, "\?"); //
+					//alert("Sumilla: " +Sumilla);
+					q += ((q != "")?"&":"") + "[Field sumilla:*"+Sumilla+"*]";
+				}
+
+				//////////////////////////////////////////
+				// Campos generales                     //
+				//////////////////////////////////////////
+					
+				var text = $("#text").val();
+				if (text != "")
+				{
+					text = text.replace(/ó|ú|á|é|í|ó/g, "\?"); //
+					q += ((q != "")?"&":"") + text;
+					q += ((q != "")?" or ":"") + "[Field keywords:"+text+"]";
+				}
+					
+				if (q == "")
+				{
+					alert("Debe completar al menos un campo del formulario de búsqueda");
+					return false;
+				}
+				
+				//alert(q);
+				saveSearch(TMP_SEARCH_NAME);
+				
+				$("#xhitlist_d").val('Legislacion');	
+				$("#xhitlist_q").val(q);
+				top.countStart(); //Tiempo en MS que tarda la busqueda
+				$("#main_form").submit();
+				
+				return true;
+			}
+
+
+</script>
+</head>
+
+<body>
+<div id="main">
+	<div id="container">    	
+    	<div id="header">
+<!--        	<div id="spacing_top"></div> -->
+            <div id="menu_logo">
+            	<div id="logo">
+                	<img width="326" height="71" border="0" src="images/logo.jpg">
+                </div>
+                <div id="conte_menu">
+                	<ul id="menu">
+                        <li><a href="#">Legislación</a></li>
+                        <li><a href="#">Jurisprudencia</a></li> 
+                        <li><a href="#">Doctrina</a></li>
+                        <li><a href="#">Novedades</a></li>                                                
+					</ul>
+                </div>            
+            </div>
+        </div>
+        
+        <div id="content">
+        	<div id="content_forms">        	
+            	<form name="ui_form" onsubmit="makeQuery(); return false;" target="HitList">
+            	<div id="form_controls" style="background-color: #FFF;">
+                	<div class="single_line">
+	                    Buscar en todas las colecciones! <img src="#!-- #IMAGES:ico_help.png --#" width="15"  height="15" border="0" alt="ico help" />                   
+                    </div>
+                    <div class="single_line" style="margin-bottom: 5px; ">
+	                    <input type="text" value="" id="text" name="text" style="width: 280px; margin-right: 3px" />                    
+                        
+                        <input type="submit" value="Buscar" />
+                    </div>
+               <!--     <div class="single_line">
+                    	<label for="chk_legis"><input type="checkbox" name="chk_legis" id="chk_legis" value="Legislacion" onClick="colecciones(this,this.value)" />Legislación</label>
+                        <label for="chk_jurisp"><input type="checkbox" name="chk_jurisp" id="chk_jurisp" value="Jurisprudencia" onClick="colecciones(this,this.value);" />Jurisprudencia</label>
+                        <label for="chk_Doctrina"><input type="checkbox" name="chk_Doctrina" id="chk_Doctrina" value="Doctrina" onClick="colecciones(this,this.value)" />Doctrina</label>
+                     </div>		-->
+                     <div class="single_line">
+	                   <a id="clicki" href="#"> <img src="#!-- #IMAGES:flech.jpg --#" width="7" height="13" border="0" alt="fecha" /> Búsqueda Avanzada  de Legislación <!--<span style="font-size:12px; display: inline; float: none; ">(Llenar al menos un campo)</span>--></a>               <a id="clickiTN" href="#"> <img src="#!-- #IMAGES:flech.jpg --#" width="7" height="13" border="0" alt="fecha" /> Tipos de Normas</a>
+                    </div>
+                    </div>
+                  <!-- TOpis de Normas-->
+                	<div id="tipo_de_normas" style="padding:0px;overflow: auto; height: 345px; width: 280px">
+							<ul>
+								<a onclick="toggleType('Acuerdos', this);" href="#"><b>+ Acuerdos</b></a>
+								<ul class="tipo_de_norma_subitem" id="Acuerdos">
+									<li><label value="En Acuerdo"><input type="checkbox" value="A " id="A " name="A" /></label><b>Acuerdo</b>
+									</li><li><label value="En Acuerdo De Directorio"><input type="checkbox" value="AD" id="AD" name="AD" /></label>Acuerdo De Directorio
+									</li><li><label value="En Acuerdo Regional"><input type="checkbox" value="AR" id="AR" name="AR" /></label>Acuerdo Regional
+								</li></ul>
+								<li><label value="En Carta Circular"><input type="checkbox" value="CCI" id="CCI" name="CCI" /></label>Carta Circular
+								</li><li><label value="En Circular"><input type="checkbox" value="CIR" id="CIR" name="CIR" /></label>Circular
+								</li><li><label value="En Comunicado"><input type="checkbox" value="COM" id="COM" name="COM" /></label>Comunicado
+								</li><li><label value="En Constitucion Politica Del Peru"><input type="checkbox" value="CPP" id="CPP" name="CPP" /></label>Constitucion Politica Del Peru
+								</li><li><label value="En Decisión Andina"><input type="checkbox" value="DECISION" id="DECISION" name="DECISION" /></label>Decisión Andina
+								</li><li>
+									<a onclick="toggleType('Decretos', this);" href="#"><b>+ Decretos</b></a>
+									<ul class="tipo_de_norma_subitem" id="Decretos">
+										<li><label value="En Decreto"><input type="checkbox" value="DEC" id="DEC" name="DEC" /></label>Decreto
+										</li><li><label value="En Decreto De Alcaldia"><input type="checkbox" value="DA" id="DA" name="DA" /></label>Decreto De Alcaldia
+										</li><li><label value="En Decreto De Urgencia"><input type="checkbox" value="DU" id="DU" name="DU" /></label>Decreto De Urgencia
+										</li><li><label value="En Decreto Ejecutivo Regional"><input type="checkbox" value="DER" id="DER" name="DER" /></label>Decreto Ejecutivo Regional
+										</li><li><label value="En Decreto Legislativo"><input type="checkbox" value="DLEG" id="DLEG" name="DLEG" /></label>Decreto Legislativo
+										</li><li><label value="En Decreto Ley"><input type="checkbox" value="DL" id="DL" name="DL" /></label>Decreto Ley
+										</li><li><label value="En Decreto Regional"><input type="checkbox" value="DR" id="DR" name="DR" /></label>Decreto Regional
+										</li><li><label value="En Decreto Supremo"><input type="checkbox" value="DS" id="DS" name="DS" /></label>Decreto Supremo
+										</li><li><label value="En Decreto Supremo Extraordinario"><input type="checkbox" value="DSE" id="DSE" name="DSE" /></label>Decreto Supremo Extraordinario
+									</li></ul>
+								</li>
+								<li><label value="En Directiva"><input type="checkbox" value="D" id="D" name="D" /></label>Directiva
+								</li><li><label value="En Edicto"><input type="checkbox" value="E" id="E" name="E" /></label>Edicto
+								</li><li><label value="En Expediente"><input type="checkbox" value="EXP" id="EXP" name="EXP" /></label>Expediente
+								</li><li>
+									<a onclick="toggleType('Leyes', this);" href="#"><b>+ Leyes</b></a>
+									<ul class="tipo_de_norma_subitem" id="Leyes">
+										<li><label value="En Ley"><input type="checkbox" value="L" id="L" name="L" /></label>Ley
+										</li><li><label value="En Ley Constitucional"><input type="checkbox" value="LC" id="LC" name="LC" /></label>Ley Constitucional
+										</li><li><label value="En Ley Regional"><input type="checkbox" value="LR" id="LR" name="LR" /></label>Ley Regional
+									</li></ul>
+								</li>
+								<li>
+									<a onclick="toggleType('Oficios', this);" href="#"><b>+ Oficios</b></a>
+									<ul class="tipo_de_norma_subitem" id="Oficios">
+										<li><label value="En Oficio"><input type="checkbox" value="OF" id="OF" name="OF" /></label>Oficio
+										</li><li><label value="En Oficio Circular"><input type="checkbox" value="OCI" id="OCI" name="OCI" /></label>Oficio Circular
+
+									</li></ul>
+								</li>
+								<li>
+									<a onclick="toggleType('Ordenanzas', this);" href="#"><b>+ Ordenanzas</b></a>
+									<ul class="tipo_de_norma_subitem" id="Ordenanzas">
+										<li><label value="En Ordenanza"><input type="checkbox" value="O" id="O" name="O" /></label>Ordenanza
+										</li><li><label value="En Ordenanza Regional"><input type="checkbox" value="OR" id="OR" name="OR" /></label>Ordenanza Regional
+									</li></ul>
+								</li>
+								<li>
+									<a onclick="toggleType('Resoluciones', this);" href="#"><b>+ Resoluciones</b></a>
+									<ul class="tipo_de_norma_subitem" id="Resoluciones">
+										<li><label value="En Resolucion"><input type="checkbox" value="R" id="R" name="R" /></label>Resolucion
+										</li><li><label value="En Resolucion Administrativa"><input type="checkbox" value="RAD" id="RAD" name="RAD" /></label>Resolucion Administrativa
+										</li><li><label value="En Resolución Cambiaria"><input type="checkbox" value="RC" id="RC" name="RC" /></label>Resolución Cambiaria
+										</li><li><label value="En Resolucion De Alcaldia"><input type="checkbox" value="RA" id="RA" name="RA" /></label>Resolucion De Alcaldia
+										</li><li><label value="En Resolucion Directoral"><input type="checkbox" value="RD" id="RD" name="RD" /></label>Resolucion Directoral
+										</li><li><label value="En Resolucion Ejecutiva"><input type="checkbox" value="RE" id="RE" name="RE" /></label>Resolucion Ejecutiva
+										</li><li><label value="En Resolucion Jefatural"><input type="checkbox" value="RJ" id="RJ" name="RJ" /></label>Resolucion Jefatural
+										</li><li><label value="En Resolucion Legislativa"><input type="checkbox" value="RLEG" id="RLEG" name="RLEG" /></label>Resolucion Legislativa
+										</li><li><label value="En Resolucion Legislativa Regional"><input type="checkbox" value="RLR" id="RLR" name="RLR" /></label>Resolucion Legislativa Regional
+										</li><li><label value="En Resolucion Ministerial"><input type="checkbox" value="RM" id="RM" name="RM" /></label>Resolucion Ministerial
+										</li><li><label value="En Resolucion Senatorial"><input type="checkbox" value="RSEN" id="RSEN" name="RSEN" /></label>Resolucion Senatorial
+										</li><li><label value="En Resolucion Suprema"><input type="checkbox" value="RS" id="RS" name="RS" /></label>Resolucion Suprema
+										</li><li><label value="En Resolucion Vice Ministerial"><input type="checkbox" value="RVM" id="RVM" name="RVM" /></label>Resolucion Vice Ministerial 
+									</li></ul>
+								</li>
+								<li>
+									<a onclick="toggleType('Otros', this);" href="#"><b>+ Otros</b></a>
+									<ul class="tipo_de_norma_subitem" id="Otros">
+										<li><label value="En Auto Divisional"><input type="checkbox" value="ADI" id="ADI" name="ADI" /></label>Auto Divisional
+										</li><li><label value="En Instructivo"><input type="checkbox" value="INS" id="INS" name="INS" /></label>Instructivo
+										</li><li><label value="En Investigacion"><input type="checkbox" value="INV" id="INV" name="INV" /></label>Investigacion
+										</li><li><label value="En Mandato"><input type="checkbox" value="MAND" id="MAND" name="MAND" /></label>Mandato
+										</li><li><label value="En Recomendación"><input type="checkbox" value="REC" id="REC" name="REC" /></label>Recomendación
+										</li><li><label value="En Regulacion"><input type="checkbox" value="REG" id="REG" name="REG" /></label>Regulacion		
+										 
+									</li></ul>
+								</li>
+						</ul></div>              
+                <!-- end Tipo de Normas -->
+            <!-- Begin More Options -->
+                    <div id="poption_more">
+	                     <div class="single_line spacing_single">
+                            <span>Identificador:</span> <input class="fheight" type="text" name="norma_id" id="norma_id" style=" margin-right: 3px" />                    
+                             <img src="#!-- #IMAGES:ico_help.png --#" width="15"  height="15" border="0" alt="ico help" /> 
+                  		  </div> 
+                          
+                           <div class="single_line spacing_single">
+                            <span>Numero:</span> <input class="fheight" type="text" name="number" id="number"  style=" margin-right: 3px; width: 50px;" />                    
+                             <img src="#!-- #IMAGES:ico_help.png --#" width="15"  height="15" border="0" alt="ico help" /> 
+                             Año: <input class="fheight" type="text"  name="anio" id="anio" style=" margin-right: 3px; width: 50px;" />                    
+                             <img src="#!-- #IMAGES:ico_help.png --#" width="15"  height="15" border="0" alt="ico help" /> 
+                  		  </div> 
+                          
+                            <div class="single_line spacing_single">
+                            <span>Estado:</span>
+                            <select name="Estado" id="Estado" style="width: 150px;">
+                              <option value="">-- Estado --</option>
+                              <option value="Vigente">Vigente</option>
+                              <option value="Derogada">Derogada</option>
+                              <!-- <option value="DerogadoTacitamente">Derogado Tacitamente</option>
+														<option value="Caduco">Caduco</option>
+														<option value="EnSuspenso">En Suspenso</option>
+														<option value="Inconstitucional">Inconstitucional</option> -->
+                            </select>
+                            <img src="#!-- #IMAGES:ico_help.png --#" width="15"  height="15" border="0" alt="ico help" /> 
+           		    </div> 
+                                             
+                          
+                            <div class="single_line spacing_single">
+                            <span>Organismo Emisor:</span> <input class="fheight" type="text"  name="emisor" id="emisor"  style="margin-right: 3px" />                    
+                             <img src="#!-- #IMAGES:ico_help.png --#" width="15"  height="15" border="0" alt="ico help" /> 
+                  		  </div> 
+        				  
+                          <div class="single_line spacing_single">
+                            <span>Titulo de La Norma:</span> <input class="fheight" type="text" name="Sumilla" id="Sumilla" style="margin-right: 3px" />                    
+                             <img src="#!-- #IMAGES:ico_help.png --#" width="15"  height="15" border="0" alt="ico help" /> 
+                  		  </div>     
+                          	 
+                                 
+                          <div class="single_line spacing_single">
+                            <span>Fecha de Publicacion 
+(Desde):</span> <input class="fheight bg_ico_date" type="text" name="FechaInicio" id="FechaInicio" autocomplete="off" style=" margin-right: 3px; width: 90px;" />          
+                            (Hasta): <input class="fheight bg_ico_date" type="text" autocomplete="off" name="FechaFin" id="FechaFin" style=" margin-right: 3px; width: 90px;" />                    
+                  		  </div>                
+                    </div>
+          
+                    <!-- End More Options -->
+             
+            
+            </form>     
+            
+					<form name="main_form" id="main_form" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" method="get" target="HitList">
+								<input type="hidden" size="0" name="f" value="xhitlist">
+								<input type="hidden" size="0" name="xhitlist_q" id="xhitlist_q" value="">
+								<input type="hidden" size="0" name="xhitlist_x"	value="Advanced">
+								<input type="hidden" size="0" name="xhitlist_s"	value="">
+								<input type="hidden" size="0" name="xhitlist_hc" value="">
+								<input type="hidden" size="0" name="xhitlist_mh"	value="5000" />
+								<input type="hidden" size="0" id="xhitlist_d" name="xhitlist_d" value="">
+								<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl">
+								<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
+								<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title;Field:tipo_norma;Field:estado;Field:emisor;Field:fecha_publicacion;Field:fecha_server_publicacion;Field:tipo_coleccion" />
+							</form>                       
+             </div>
+
+                    
+          
+                    <!-- End More Options -->
+             <div id="content_results">
+            	<div id="c_results_header"> 
+                	<div id="left_rheaders">               	                
+                        <ul>
+                            <li><a href="#" class="selecti">Mostrar Aciertos</a></li>
+                            <li><a href="#" class="">Mostrar Contenidos</a></li>
+                        </ul>
+                    </div>
+                    <!--
+                    <div id="right_rheaders">               	                
+                        <ul>
+	                        <li><a href="#" class="ico_book">Cambiar Contexto</a></li>
+	                        <li><a href="#" class="ico_note">Termino de Busqueda</a></li>
+                            <li><a href="#" class="ico_save">Guardar Busqueda</a></li>
+                            <li>
+                                <select onchange="fnc_ordenar(this)" syle="width: 50px;"><option value="">Ordernar por:
+                                </option><option value="Field:tipo_norma,ASC;Field:fecha_server_publicacion,DESC">Tipo Norma</option>
+                                <option value="Field:emisor,ASC;Field:tipo_norma,ASC;Field:numero,ASC">Org. Emisor</option>
+                                <option value="Field:estado,DESC;Field:tipo_norma,ASC;Field:numero,ASC">Estado</option>
+                                <option value="Field:fecha_server_publicacion,DESC;Field:tipo_norma,ASC;Field:numero,ASC">Fecha</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                    -->
+                </div>     
+                  <div id="zone_cont_content">
+                  
+                  </div>     
+              <!-- <div  id="pagination">
+                  <div id="all_left"><a href="#" class="arrow_left_all"></a> <a class="arrow_left_single" href="#"></a></div>
+                  <div id="all_center">1 a 20 de 500</div>
+                  <div id="all_right"><a href="#" class="arrow_right_single"></a> <a href="#" class="arrow_right_all"></a></div>
+                
+               
+               </div> 		-->
+               <div id="date_update_msg">
+          	  Se actualizó por última vez el: 03-07-2012 a las 7:26:33.25
+            </div>
+            </div>
+            </div>
+            <!--  List Results -->
+            
+               
+    </div>
+</div>
+</div>
+<div id="footer">
+    	<div id="footer_text">
+        	<div id="foot_text_left">&copy;2012 Gaceta Juridica. Todos los derechos Reservados.</div>
+        	<div id="foot_text_right">Desarrollado por el Departamento de Informática</div>            
+        </div>
+</div>
+
+</body>
+</html>

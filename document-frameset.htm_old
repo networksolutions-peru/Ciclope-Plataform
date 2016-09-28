@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Documento</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+
+<script type="text/javascript">
+
+function initPage()
+{
+	// set the correct tab for the document
+	if (parent.setMainTab != null)
+	{
+		parent.setMainTab("document");
+	}
+}
+
+
+function changeHash(url)
+{
+	var hash_offset = url.lastIndexOf("#");
+	if (hash_offset != -1)
+	{
+		// Setting the hash on Netscape requires that we strip off the # symbol.  However, if we want to jump to the
+		// top of the doucment, we must set the hash to #.  So if we don't have a hash, we will set it to # to make it
+		// go to the top of the doucment.
+		var hash = url.substring(hash_offset + 1);
+		if(hash.length == 0)
+		{
+			hash = "#";
+		}
+		frames["doc-body"].location.hash = hash;
+		return false;
+	}
+
+	return true;
+}
+
+
+</script>
+
+</head>
+
+<!-- We'll use script to write out the frameset so that we can pass 
+the hash used to request this page through to the actual document. 
+The hash is used to link to the first search match, to do PDF 
+highlighting, and to link to a subdocument table of contents entry. 
+This only works on the first hash, though, since IE doesn't reload
+the document if only the hash on the new URL changes. Subsequent 
+hashes need to notify this window by calling the changeHash()
+function above. -->
+
+<script type="text/javascript">
+
+var hash_offset = location.href.indexOf("#");
+var hash = "";
+if (hash_offset != -1)
+{
+    hash = location.href.substring(hash_offset);
+}
+
+// IE sometimes holds a document in the cache, which it retrieves
+// when the user clicks "Back" instead of requesting the page from
+// the server. To prevent that, we'll keep the URL unique here. 
+var no_cache = "";
+if (navigator.appName.indexOf("Microsoft") != -1)
+{
+	no_cache = "$nc=" + Math.round(Math.random() * 10000);
+}
+
+var doc_body_src = "#!-- #TEMPLATES:document-frame.htm --#$q=#!-- #EXECUTIVE:PARAM:q --#$x=#!-- #EXECUTIVE:PARAM:x --#" + no_cache + hash ;
+
+
+document.write('<frameset rows="*" border="2" frameborder="2">');
+document.write('<frame name="doc-body" src="' + doc_body_src +'" noresize="noresize"/>');
+document.write('</frameset>');
+
+// Wait a second for the page to finish loading, then call the initialize function.
+// Calling initPage too quickly has been known to cause script problems elsewhere
+// (like in the banner frame) when running on Netscape 6.1.
+setTimeout("initPage()", 1000);
+
+</script>
+
+
+
+</html>

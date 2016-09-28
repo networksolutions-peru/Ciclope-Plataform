@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>Ciclope</title>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<script type="text/javascript">
+			var TOOLS_FRAME        = 0;
+			var TOC_FRAME          = 1;
+			//var SEARCH_FRAME       = 7;
+			var HITLISTBAR_FRAME   = 2;
+			var HITLIST_FRAME      = 3;
+			//var SEARCH_TOOLS_FRAME = 5;
+			var DOC_INFO_FRAME     = 4;
+			var DOC_FRAME          = 5;
+			
+			function is_tocOpened()
+			{
+				var toc_opened = (parseInt($("#toc_frame").parent().attr("cols").split(",")[0]) > 0);
+				return toc_opened;
+			}
+			
+			function toggleToc(val)
+			{
+				if (val) $("#toc_frame").parent().attr("cols", "371,0,*");//TOC
+				else $("#toc_frame").parent().attr("cols", "0,371,*");//HITLIST
+			}
+			
+			function toogleLayout()
+			{
+				var new_href = top.location.href.replace(/vid=Ciclope:vLegislacion/g, "vid=default");
+				top.location.href = new_href;
+				/*var is_in_layout_server = ($("#index_gaceta").parent().attr("rows").split(",")[0] == "*");
+				if (is_in_layout_server)
+				{
+					$("#index_gaceta").parent().attr("rows", "0,*"); //Muestra el index de Gaceta
+				}else
+				{
+					$("#index_gaceta").parent().attr("rows", "*,0"); //Muestra CLP Server
+				}*/
+			}
+			
+			var startTime = null;
+			function countStart()
+			{
+				startTime = new Date();
+			}
+		
+			function countEnd()
+			{
+				var endTime = new Date();
+				var result  = new Date();
+				if (startTime != null)
+				{
+					result.setTime(endTime.getTime() - startTime.getTime());
+					//alert(result.getMilliseconds() + " ms");
+				}
+			}
+			
+			
+			function expandHitlist(expand)
+			{
+				if (expand) $("#mainFrameset").attr("cols", "0,*,0");
+				else $("#mainFrameset").attr("cols", "0,371,*");
+			}
+			
+			function expandHitlistToggle(obj)
+			{
+				var stateactual = $("#mainFrameset").attr("cols");
+				if (stateactual=="0,*,0")
+				{
+					expandHitlist(false);
+					if (obj!=null) obj.attr("src","#!-- #IMAGES:m1.gif --#");
+				}else
+				{
+					expandHitlist(true);
+					if (obj!=null) obj.attr("src","#!-- #IMAGES:m2.gif --#");
+				}
+			}
+
+			function expandDocFrame(expand)
+			{
+				if (expand) $("#mainFrameset").attr("cols", "0,0,*");
+				else $("#mainFrameset").attr("cols", "0,371,*");
+			}
+			
+			function expandDocFrameToggle(obj)
+			{
+				var stateactual = $("#mainFrameset").attr("cols");
+				if (stateactual=="0,0,*")
+				{
+					expandDocFrame(false);
+					if (obj!=null) obj.attr("src","#!-- #IMAGES:m1.gif --#");
+				}else
+				{
+					expandDocFrame(true);
+					if (obj!=null) obj.attr("src","#!-- #IMAGES:m2.gif --#");
+				}
+			}
+			
+			function showReference()
+			{
+				if (top.frames[top.DOC_INFO_FRAME].reloadRef)
+					top.frames[top.DOC_INFO_FRAME].reloadRef();
+				$("#topFrame").attr("rows", "30,*");
+			}
+			function hideReference()
+			{
+				$("#topFrame").attr("rows", "0,*");
+				if (top.frames[top.DOC_INFO_FRAME].reset)
+					top.frames[top.DOC_INFO_FRAME].reset();
+			}
+			$(document).ready(function()
+			{
+				callFormBusqueda();
+				hideReference();
+			});
+			
+			function callFormBusqueda()
+			{
+				if (top.frames[top.TOOLS_FRAME].advSearch)
+					top.frames[top.TOOLS_FRAME].advSearch();
+				else
+				{
+					setTimeout(function()
+					{
+						callFormBusqueda();
+					}, 200);
+				}
+			}
+		</script>
+	</head>
+	<frameset rows="25,*" frameborder="2" border="0" bordercolor="#AF1314" marginwidth="0" marginheight="0" name="contenedor1">
+		<!-- TOP FRAME -->
+		<frame src="#!-- #TEMPLATES:advanced_search-tools.htm --#" name="DocNav" noresize="noresize" scrolling="no" marginheight="0" marginwidth="0" name="contenedor2"/>
+		<frameset cols="371,0,*" frameborder="2" border="2" noresize="noresize" name="mainFrameset" id="mainFrameset">
+			<!-- TOC -->
+			<frame id="toc_frame" src="#!-- #TEMPLATES:contents-frame-h.htm --#&sel=0&tf=main&tt=document-frameset.htm&t=contents-frame-h.htm&och=onClick" name="contents" noresize="noresize" scrolling="none" marginheight="0" marginwidth="0" frameborder="0"/>
+			<!-- Resumen de la busqueda y hitlist -->
+			<frameset rows="0,*" frameborder="5" border="5" framespacing="0" resize="yes">
+				<frame src="#!-- #TEMPLATES:HitListBar.htm --#" name="HitListBar" resize="no" marginheight="0" marginwidth="0" noresize="noresize"/>
+				<frame src="about:blank"                        name="HitList"    resize="no" marginheight="0" marginwidth="0" noresize="noresize" scrolling="auto"/>
+			</frameset>
+			<!-- Referencia, herramientas de la busqueda y documento -->
+			<frameset rows = "0, *" border="2" bordercolor="#FFFFFF" name="topFrame"  id="topFrame">
+				<frame id="doc_info" src="#!-- #TEMPLATES:reference.htm --#"            name="doc_info"  scrolling="no"   noresize="noresize" marginheight="20" marginwidth="36"/>
+				<!-- <frame src="#!-- #TEMPLATES:search-tools.htm --#"         name="doc_tools" scrolling="no"   noresize="noresize" marginheight="20" marginwidth="36"/> -->
+				<frame src="#!-- #TEMPLATES:document-frameset.htm --#"    name="main"      scrolling="auto" noresize="noresize" marginheight="20" marginwidth="36"/>
+			</frameset>
+		</frameset>
+	</frameset>
+	<noframes><body></body></noframes>
+</html>
+
+

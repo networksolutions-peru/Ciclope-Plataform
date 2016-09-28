@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title>Referencia</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style.css --#">		
+		<script type="text/javascript">
+			function load()
+			{
+				var reference_str = "<b>#!-- #REFERENCE --#</b>".replace("<b>", "").replace("</b>", "");
+				var tipo_norma = reference_str.substring(0, reference_str.indexOf(">")-1);
+				reference_str = reference_str.substring(reference_str.indexOf(tipo_norma)+tipo_norma.length, reference_str.length);
+				tipo_norma = "<span style=\"color:red;\">"+tipo_norma+"</span>";
+				document.getElementById("ref_out").innerHTML = tipo_norma + "<span style=\"color: #111; font-size: 12px;\">"+reference_str+"</span>";
+			}
+		</script>
+	</head>
+
+	<body onLoad="load();">
+		<p>Documento Actual:<br />
+			<div id="ref_out"></div>
+		</p>
+	</body>
+</html>

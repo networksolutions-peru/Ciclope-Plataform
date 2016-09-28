@@ -1,0 +1,90 @@
+<html>
+	<head>
+		<title>Referencia</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:main.css --#">
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:gaceta_skin.css --#">
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<script>
+			var separator_char = " >";
+			var reference_bold = false;
+			function reset()
+			{
+				$("#reference_text").html("");
+			}
+			
+			$(document).ready(function()
+			{
+				reloadRef();
+			});
+			
+			function reloadRef()
+			{
+				reset();
+				var ref_text = "<b>#!-- #REFERENCE --#</b>".replace(/[^b]>/g, separator_char);
+				if (!reference_bold)
+					ref_text = ref_text.replace(/<[\/]?b>/g, "");
+				ref_text = ref_text.replace(/.*\//g, "");
+					
+				ref_text = ref_text.replace(/_/g, "-");
+				var myRegexp = /([^-]*)-(.*)/;
+				var match = myRegexp.exec(ref_text);
+				if (match != null)
+					ref_text = match[1]+" "+match[2];
+
+				$("#reference_text").html(ref_text);
+				
+				/**
+				  * Es para agarrar el ID de la norma del DOC y ponerlo aca en la reference.
+				  *	SOLO ANDA EN FF
+				  **/
+				/*
+				if (top.frames[top.DOC_FRAME] != null && top.frames[top.DOC_FRAME].frames[0] != null)
+				{
+					var ref_buena = $("*", top.frames[top.DOC_FRAME].frames[0].document);
+					if ( ref_buena != null)
+					{
+						var id_norma_good = $(".norma_id", ref_buena).html();
+						if (id_norma_good != null && id_norma_good != "")
+						{
+							//alert(id_norma_good);
+							reset();
+							$("#reference_text").html(id_norma_good);
+							$(".norma_id", ref_buena).html("");
+						}
+					}
+				}
+				*/
+			}
+		</script>
+		<style type="text/css">
+		<!--
+			body {
+				margin: 0px;
+				width:100%;
+			    background-color: black;
+				text-align: center;
+			}
+			
+			#reference_text {
+			    background-color: black;
+				color: white;
+				margin: 0;
+				padding: 0;
+				font-size: 17px;
+				font-weight:bold;
+				vertical-align: middle;
+			}
+			.hidden_data
+			{
+				display: none;
+			}
+			
+		-->
+		</style>
+	</head>
+	<body align="center">
+		<!-- b>ID de la norma:</b -->&nbsp;<span id="reference_text" align="center"></span>
+	</body>
+</html>
+

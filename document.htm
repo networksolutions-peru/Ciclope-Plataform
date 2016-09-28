@@ -4,6 +4,7 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 <title>Documento</title>
 <link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:main.css --#">
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
 
 </head>
 
@@ -11,4 +12,11 @@
 	<!-- #DOCUMENT:body -->
 </body>
 
+<script>
+$(document).ready(function()
+{
+	alert("document ready");
+	top.showReference();
+});
+</script>
 </html>

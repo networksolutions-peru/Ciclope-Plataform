@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Compuleg</title>
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:gaceta_skin.css --#">
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+<script type="text/javascript" src="#!-- #TEMPLATES:CLPSessionSaveSearchs.js --#"></script>
+<script type="text/javascript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+function openDetailsSearch()
+{
+	window.open("#!-- #TEMPLATES:boolsearch_details.htm --#", "Ayuda", "location=0,status=0,scrollbars=0,width=580,height=345");
+}
+
+function submitQuery()
+{
+	var ui = document.ui_form;
+	var request = document.request_form;
+
+	if (ui.q.value.indexOf('[rank') != -1)
+	{
+		request.xhitlist_s.value = 'Relevance-Weight';
+	}
+	
+	request.xhitlist_q.value = ui.q.value;
+	//alert(request.xhitlist_q.value);
+	if (request.xhitlist_q.value != "")
+	{
+		//SetupQuery();
+		request.submit();
+		top.toogleLayout();
+		top.frames[top.TOOLS_FRAME].closeToc();
+		saveSearch(TMP_SEARCH_NAME);
+	}
+	else
+	{
+		alert("Ingrese algun criterio de busqueda.");
+	}
+}
+
+function showLegislacion()
+{
+	top.frames[top.TOOLS_FRAME].showLegislacion();
+	//top.frames[top.TOOLS_FRAME].closeToc();
+	top.toogleLayout();
+}
+
+function showJurisprudencia()
+{
+	top.frames[top.TOOLS_FRAME].showJurisprudencia();
+	top.frames[top.TOOLS_FRAME].closeToc();
+	top.toogleLayout();
+}
+
+function showNovedades()
+{
+	top.frames[top.TOOLS_FRAME].showNovedades();
+	top.frames[top.TOOLS_FRAME].showToc();
+	top.toogleLayout();
+}
+
+//-->
+</script>
+<style type="text/css">
+<!--
+p {
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #990000;
+}
+-->
+</style></head>
+
+<body onload="MM_preloadImages('images/botonera/bot_act_01.jpg','images/botonera/bot_act_02.jpg','images/botonera/bot_act_03.jpg','images/botonera/bot_act_04.jpg')">
+<table width="980" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="980" height="104"><img src="images/top.jpg" width="980" height="104" alt="top" /></td>
+  </tr>
+  <tr>
+    <td>
+		<table width="980" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="140" height="51"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('btn_01','','images/botonera/bot_act_01.jpg',1)" onclick="showLegislacion(); return false;"><img src="images/botonera/bot_01.jpg" alt="Legislacion"    name="btn_01" width="140" height="51" border="0" id="btn_01" /></a></td>
+				<td width="139" height="51"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('btn2'  ,'','images/botonera/bot_act_02.jpg',1)" onclick="showJurisprudencia(); return false;"><img src="images/botonera/bot_02.jpg" alt="jurisprudencia" name="btn2"   width="139" height="51" border="0" id="btn2"   /></a></td>
+				<td width="140" height="51"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('btn3'  ,'','images/botonera/bot_act_03.jpg',1)" onclick="top.toogleLayout(); return false;"><img src="images/botonera/bot_03.jpg" alt="doctrina"       name="btn3"   width="140" height="51" border="0" id="btn3"   /></a></td>
+				<td width="139" height="51"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('btn4'  ,'','images/botonera/bot_act_04.jpg',1)" onclick="showNovedades(); return false;"><img src="images/botonera/bot_04.jpg" alt="novedades"      name="btn4"   width="139" height="51" border="0" id="btn4"   /></a></td>
+				<td width="422" height="51"><img src="images/botonera/bot_05.jpg" width="422" height="51" alt="" /></td>
+			</tr>
+		</table>
+	</td>
+  </tr>
+  <tr>
+    <td width="980" height="392"><table width="980" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="536" height="392">
+			<table width="536" border="0" cellpadding="0" cellspacing="0" id="cont">
+				<tr>
+					<td height="392" colspan="4" style="background-image: url(images/fondo.jpg);">
+						<div style="vertical-align: middle; padding-left: 100px;" id="legislacion">
+							<form name="ui_form" onsubmit="submitQuery(); return false;" target="HitList">
+								<table width="50%">
+									<tr>
+										<td colspan="2">
+											Buscar en toda las colecciones:
+											<a href="#" onclick="javascript:openDetailsSearch();">
+												<img src="#!-- #IMAGES:question_ico.gif --#" border="0"/>
+											</a>
+											<label value="Texto">
+												<input id="query" name="q" size="50" type="text" class="control" style="margin:4px 0 4px 0;"><br/>
+											</label>
+										</td>
+									</tr>
+									<tr bgcolor="#FFFFFF">
+										<td>
+											<input type="submit" value="Buscar" name="submit"/>
+										</td>
+									</tr>
+								</table>
+							</form>
+							<form name="request_form" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" method="get" target="HitList">
+								<input type="hidden" size="0" name="f" value="xhitlist">
+								<input type="hidden" size="0" name="xhitlist_q" value="">
+								<input type="hidden" size="0" name="xhitlist_x"	value="Advanced">
+								<input type="hidden" size="0" name="xhitlist_s"	value="">
+								<input type="hidden" size="0" name="xhitlist_hc" value="">
+								<input type="hidden" size="0" name="xhitlist_mh"	value="5000" />
+								<input type="hidden" size="0" name="xhitlist_d" value="">
+								<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl">
+								<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
+								<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title;Field:tipo_norma;Field:estado;Field:emisor;Field:fecha_publicacion;Field:fecha_server_publicacion;Field:tipo_coleccion" />
+							</form>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</td>
+        <td width="444" height="392"><img src="images/libro.jpg" width="444" height="392" alt="imagen_libro" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td width="980" height="33" bgcolor="#CCCCCC"><p>Compuleg. Todos los derechos resevados</p></td>
+  </tr>
+</table>  
+  </body>
+</html>

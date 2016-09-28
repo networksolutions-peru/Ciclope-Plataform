@@ -1,0 +1,60 @@
+body,td,th
+{
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	margin: 0px;
+/*	font-weight: bold;*/
+}
+
+/*input[type='text'],
+input[type='checkbox'],
+select
+{
+	background:none repeat scroll 0 0 #D6CFBD;
+	border:1px solid #D6CFBD;
+	color:#555555;
+	padding:2px;
+}
+
+input[type='submit'],
+.button
+{
+	border-color: #666666;
+	border-width: 1px;
+	font-size:10px;
+	background-color:#D6CFBD;
+	-moz-border-radius:5px;
+	padding:2px;
+}*/
+/*
+input[type='text']:hover,
+input[type='checkbox']:hover,
+select:hover
+{
+	background:none repeat scroll 0 0 #EEEEEE;
+}
+
+input[type='submit']:hover,
+.button:hover
+{
+	background:none repeat scroll 0 0 #AAAAAA;
+}
+*/
+.header
+{
+	background-color:#FFFFFF;
+	border-bottom:1px solid black;
+	color:#AB1312;
+	/*height:25px;*/
+	width:100%;
+}
+/*.header
+{
+	background-image:url('#!-- #IMAGES:fondo_gaceta.jpg --#');
+	background-repeat:no-repeat;
+	background-position:right center;
+	background-color:#AB1312;
+	height:25px;
+	width:100%;
+}*/

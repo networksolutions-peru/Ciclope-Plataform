@@ -3,32 +3,32 @@
 <HTML>
 <HEAD>
 <TITLE>Busqueda</TITLE>
+<script type="text/javascript" src="#!-- #TEMPLATES:hit-list.js --#" /></script>
 <script language="Javascript">
 function makeQuery() 
 {
-	var f = document.forms["main_form"];
-	var query = "";
-	query = checkValue(query,'numero');
-	query = checkValue(query,'tipo');
-//	alert(query);
-	var error = 0;
-	if (error == 0) 
-	{
-		if (query != '') 
-		{
-			f.xhitlist_q.value = query;
-			f.G_QUERY.value = query;
-			//f.submit();
-			SetupQuery();
-			return true;
-		} 
-		else 
-		{
-			alert("Debe completar al menos un campo de búsqueda");
-			return false;
-		}
-	}
+	SetupQuery();
+	submitAdvQuery();
+	return true;
 }
+
+function submitAdvQuery()
+{
+	var q = "";
+	var domain = "";
+
+	//////////////////////////////////////////	
+	// Campos: pegan cosas en q (query)		//
+	//////////////////////////////////////////
+	if (document.main_form.tipo.value != "")
+		q += ((q != "")?"&":"") + "[Field Norma:"+document.main_form.tipo.value+"]";
+	if (document.main_form.numero.value != "")
+		q += ((q != "")?"&":"") + "[Field Numero:"+document.main_form.numero.value+"]";
+		
+//	alert(q);
+	document.main_form.xhitlist_q.value = q;
+}
+
 function checkValue(query,field) {
 	var val = eval('document.forms["main_form"].'+field+'.value');
 	if (val != '') {
@@ -37,13 +37,6 @@ function checkValue(query,field) {
 	}
 	return query;
 }
-function OpenHitList()
-{
-	var topFrame = top.document.all("topFrame");
-//	var topFrame = top.frames["topFrame"];
-	topFrame.rows = "40, *, 180";
-}
-
 function SetupQuery()
 {
 	top.frames.DocNav.total_hits=0;
@@ -56,36 +49,49 @@ function SetupQuery()
 <form action="#!-- #EXECUTIVE:SCRIPT_NAME--#" method="get" target="HitList" name="main_form">
 <font face="verdana">
 <table width="46%" align="center" border="0">
-<table width="100%" border="0" cellspacing="0">
-  <tr>
-	<td><img src="#!-- #IMAGES:title-busqueda.gif --#" border="0"/></td><BR><BR>
-  </tr>
-</table>
-<tr bgcolor="#FFFFFF" bordercolor="#000000"><td align="center"><table width="90%">
-	<tr bgcolor="#FFFFFF"><td colspan="2"><b><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Datos:</font></b></td>
-	</tr><br/>
-	<tr bgcolor="#FFFFFF"><td width="30%">
-	 <li/> <font size="1">N&uacute;mero:</font></td>			
-	<td width="76%"><input type="text" name="numero"></td></tr>
-	<tr bgcolor="#FFFFFF"><td valign="top">
-	 <li/> <font size="1">Tipo:</font></td>			<td><input type="text" name="tipo">
-	    <br>
-	    <br>
-	    <font face="verdana">
-	    <input name="submit" type="submit" onClick="return makeQuery();" value="Buscar">
-	    </font></td></tr>
+	<table width="100%" border="0" cellspacing="0">
+	  <tr>
+		<td><img src="#!-- #IMAGES:title-busqueda.gif --#" border="0"/></td><BR><BR>
+	  </tr>
 	</table>
-<table width="100%" border="0" cellspacing="0">
-  <tr>
-	<td><a href="#!-- #TEMPLATES:_advsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda2.gif --#" border="0"/></a></td><BR><BR>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="0">
-  <tr>
-	<td><a href="#!-- #TEMPLATES:boolsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda3.gif --#" border="0"/></a></td><BR><BR>
-  </tr>
-</table>
-</td></tr>
+	<tr bgcolor="#FFFFFF" bordercolor="#000000"><td align="center"><table width="90%">
+		<tr bgcolor="#FFFFFF">
+			<td colspan="2"><b>
+				<font size="2" face="Verdana, Arial, Helvetica, sans-serif">Datos:</font></b>
+			</td>
+		</tr><br/>
+		
+		<tr bgcolor="#FFFFFF">
+			<td width="30%">
+				<li/><font size="1">N&uacute;mero:</font>
+			</td>			
+			<td width="76%">
+				<input type="text" name="numero">
+			</td>
+		</tr>
+		
+		<tr bgcolor="#FFFFFF">
+			<td valign="top">
+				<li/><font size="1">Tipo:</font>
+			</td>
+			<td>
+				<input type="text" name="tipo"><br><br>
+				<font face="verdana"><input name="submit" type="submit" onClick="return makeQuery();" value="Buscar"></font>
+			</td>
+		</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="0">
+	  <tr>
+		<td><a href="#!-- #TEMPLATES:advsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda2.gif --#" border="0"/></a></td><BR><BR>
+	  </tr>
+	</table>
+	<table width="100%" border="0" cellspacing="0">
+	  <tr>
+		<td><a href="#!-- #TEMPLATES:boolsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda3.gif --#" border="0"/></a></td><BR><BR>
+	  </tr>
+	</table>
+	</td>
+</tr>
 </table></td></tr>
 <tr bgcolor="#FFFFFF" bordercolor="#000000">
   <td colspan="2" align="center">&nbsp;</td>

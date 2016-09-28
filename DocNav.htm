@@ -18,7 +18,7 @@ function Reference()
 	if( loc == "" )
 		return;
 
-	var ref_window = window.open("", "Referencia", "width=500,height=100,top=200,left=200,status=no,toolbar=no");
+	var ref_window = window.open("", "Referencia", "width=500,height=300,top=200,left=200,status=no,toolbar=no");
 	
 
 
@@ -82,7 +82,7 @@ function ProxMatch()
 
 	if( current_anchor >= parent.frames.Fondo.document.anchors.length )
 	{
-		alert("No hay más hits encontrados en este documento.");
+		alert("No hay más aciertos encontrados en este documento.");
 		return;
 	}
 
@@ -100,7 +100,7 @@ function PrevMatch()
 
 	if( current_anchor == 1 )
 	{
-		alert("No hay más hits anteriores en este documento.");
+		alert("No hay más aciertos anteriores en este documento.");
 		return;
 	}
 

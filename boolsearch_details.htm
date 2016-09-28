@@ -1,0 +1,62 @@
+<table border="1" cellspacing="1" cellpadding="2" bordercolor="#AD1010">
+	<tr>
+		<td bgcolor="#AD1010"><font size="2" color="#FFFFFF">Operador</font></td>
+		<td bgcolor="#AD1010"><font size="2" color="#FFFFFF">Ejemplo</font></td>
+		<td bgcolor="#AD1010"><font size="2" color="#FFFFFF">Resultado</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Y</font></td>
+		<td><font size="1">el ella<br>el &amp; ella<br>el and ella</font></td>
+		<td><font size="1">Encuentra ambos "el" y "ella".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">O</font></td>
+		<td><font size="1">el | ella<br>el o ella</font></td>
+		<td><font size="1">Encuentra cualquiera "el" o "ella".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">NO</font></td>
+		<td><font size="1">^el<br>no el</font></td>
+		<td><font size="1">Encuentra documentos que no contengan "el".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">O Exclusivo</font></td>
+		<td><font size="1">el ~ ella<br>el xor ella</font></td>
+		<td><font size="1">Encuentra cualquiera "el" o "ella", pero que no contengan ambos.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Frase</font></td>
+		<td><font size="1">"el y ella"</font></td>
+		<td><font size="1">Encuentra documentos con la frase exacta "el y ella".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Caracter &uacute;nico variable</font></td>
+		<td><font size="1">e?<br>e??a</font></td>
+		<td><font size="1">Encuentra documentos con "el", "es", "en", etc., o "ella", "esta","echa", etc.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Caracter m&uacute;ltiple variable</font></td>
+		<td><font size="1">e*<br>e**a</font></td>
+		<td><font size="1">Encuentra documentos con "el", "este", "elefante", etc., o "ella", "era", "estrella", "esperanza", etc.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Orden de Proximidad</font></td>
+		<td><font size="1">"el y ella"/10</font></td>
+		<td><font size="1">Encuentra documentos con "el", "y", "ella" con 10 palabras entre ellas, en el orden buscado.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Desorden de Proximidad</font></td>
+		<td><font size="1">"el y ella"@10</font></td>
+		<td><font size="1">Encuentra documentos con "el", "y", "ella" con 10 palabras entre ellas, en cualquier orden.</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Familia de Palabras</font></td>
+		<td><font size="1">ver%</font></td>
+		<td><font size="1">Encuentra documentos con "veo", "vere", "vista", y "viendo".</font></td>
+	</tr>
+	<tr>
+		<td><font size="1">Sin&oacute;nimos</font></td>
+		<td><font size="1">ver$</font></td>
+		<td><font size="1">Encuentra documentos con "ver", "mirar", "revisar", "observar", etc.</font></td>
+	</tr>
+</table>

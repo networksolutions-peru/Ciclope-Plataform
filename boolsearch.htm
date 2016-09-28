@@ -1,12 +1,5 @@
+<script type="text/javascript" src="#!-- #TEMPLATES:hit-list.js --#" /></script>
 <script type="text/javascript">
-
-function OpenHitList()
-{
-	var topFrame = top.document.all("topFrame");
-//	var topFrame = top.frames["topFrame"];
-	topFrame.rows = "40, *, 180";
-}
-
 function SetupQuery()
 {
 	top.frames.DocNav.total_hits=0;
@@ -84,7 +77,7 @@ function submitQuery()
 	<td><BR><BR><a href="#!-- #TEMPLATES:field-search.htm --#"><img src="#!-- #IMAGES:title-busqueda.gif --#" border="0"/></a></td>
   </tr>
   <tr>
-	<td><BR><BR><a href="#!-- #TEMPLATES:_advsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda2.gif --#" border="0"/></a><BR><BR><BR></td>
+	<td><BR><BR><a href="#!-- #TEMPLATES:advsearch.htm --#"><img src="#!-- #IMAGES:title-busqueda2.gif --#" border="0"/></a><BR><BR><BR></td>
   </tr>
 </table>
 	<img src="#!-- #IMAGES:title-busqueda3.gif --#" border="0"/><BR><BR>
@@ -117,6 +110,7 @@ function submitQuery()
 	<input type="hidden" size="0" name="xhitlist_s"	value="">
 	<input type="hidden" size="0" name="xhitlist_hc" value="">
 	<input type="hidden" size="0" name="xhitlist_d" value="">
+	<input type="hidden" size="0" name="xhitlist_mh"	value="5000" />
 	<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl">
 	<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
 	<input type="hidden" size="0" name="xhitlist_sel" value="title;path;content-type;home-title">
@@ -129,9 +123,9 @@ function submitQuery()
 </table><br /><br />
 <table border="1" cellspacing="1" cellpadding="2" bordercolor="#999999">
 	<tr>
-		<td bgcolor="#999999"><font size="2" color="#FFFFCC">Operador</font></td>
-		<td bgcolor="#999999"><font size="2" color="#FFFFCC">Ejemplo</font></td>
-		<td bgcolor="#999999"><font size="2" color="#FFFFCC">Resultado</font></td>
+		<td bgcolor="#999999"><font size="2" color="#FFFFFF">Operador</font></td>
+		<td bgcolor="#999999"><font size="2" color="#FFFFFF">Ejemplo</font></td>
+		<td bgcolor="#999999"><font size="2" color="#FFFFFF">Resultado</font></td>
 	</tr>
 	<tr>
 		<td><font size="1">Y</font></td>

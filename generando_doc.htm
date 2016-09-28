@@ -1,0 +1,135 @@
+<html><head>
+<style>
+*{text-align:center;}
+#floatingCirclesG{
+	margin-top: 10px;
+}
+</style>
+
+
+<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+<script>
+function getDocumentWindow()
+{
+//	var doc_window = parent.frames[1];
+/*	var doc_window = opener.top.frames["view_doc"];
+	if (doc_window.frames[0])
+		doc_window = doc_window.frames[0]; */
+	var doc_window = window.self;
+	return doc_window;
+}
+function getCurrentDocument(bUnEscape)
+{
+	var current_document = "";
+
+	var all_cookies = document.cookie;
+
+	var label = "doc=";
+	var offset = all_cookies.indexOf(label);
+	if (offset != -1)
+	{
+		var start = offset + label.length;
+		var end = all_cookies.indexOf(";", start);
+		if (end == -1)
+		{
+			end = all_cookies.length;
+		}
+
+		current_document = all_cookies.substring(start, end);
+	}
+
+	return bUnEscape? unescape(current_document) : current_document;
+}
+var mode = '', 
+	to = '',
+	body='';
+
+$(document).ready(function(){
+	$('#cerrar').hide();
+	
+	//var orgLoc = location.href;
+	mode = location.href.substring(location.href.indexOf('mode=')+"mode=".length);
+	if (mode.indexOf('&')>-1){
+		mode = mode.substring(0, mode.indexOf('&'));
+	}
+	
+	if (location.href.indexOf('to=')>-1){
+		to = location.href.substring(location.href.indexOf('to=')+"to=".length);
+		if (location.href.indexOf('body=') >- 1){
+			body = location.href.substring(location.href.indexOf('body=')+"body=".length);
+			to = to.substring(0, to.indexOf('&'));
+		}
+	}
+	
+	var docId = getCurrentDocument();
+	var doc = getDocumentWindow().location.href;
+	if (docId.indexOf('templates')>-1){
+		alert("El documento seleccionado es invalido. (" + doc+")");
+		return;
+	}
+
+//	var urlWs = "http://190.102.143.212:11080/HTML2Word_Generator/GacetaConvertService";
+	var urlWs = "http://190.102.143.213/HTML2Word_Generator/GacetaConvertService";
+
+	
+	var dataParams = {};
+	dataParams.norma = doc;
+	dataParams.mode = mode;
+	if (to != null && to != ""){
+		dataParams.to = to;
+	}
+	if (body != null && body != ""){
+		dataParams.body = body;
+	}
+	
+	$.ajax({
+		type: 'GET',
+		url: urlWs,
+		crossDomain: true,
+		data: dataParams,
+		dataType: 'json',
+		success: function(responseData, textStatus, jqXHR) {
+			$('#cerrar').show();
+			$('#floatingCirclesG').hide();
+			
+			var text = '';
+			
+			if (mode=='email'){
+				if (responseData.status == 'error'){
+					text = 'Error al enviar el documento. Contacte al administrador.';
+				}else{
+					text = 'Documento enviado a correctamente';
+				}
+			}else{
+				if (responseData.status == 'error'){
+					text = 'Error al generar el documento. Contacte al administrador.';
+				}else{
+					text = 'Documento listo para la descarga.';
+					
+					if (opener.document.getElementById('downloadDocIframe') != null){
+						opener.document.getElementById('downloadDocIframe').src=urlWs+"?justDownload=true&name="+responseData.fileName;
+					}else{
+						opener.document.body.innerHTML += "<iframe id='downloadDocIframe' src='" + urlWs+"?justDownload=true&name="+responseData.fileName + "' style='display:none;' ></iframe>"
+					}
+					window.close();
+				}
+			}
+			
+			$('#msg').text(text);
+		},
+		error: function (responseData, textStatus, errorThrown) {
+			$('#cerrar').show();
+			$('#floatingCirclesG').hide();
+		}
+	});	
+});
+</script>
+</head>
+<body>
+	<div id="floatingCirclesG">
+		<img src="#!-- #IMAGES:ajax-loader.gif --#"/>
+	</div>
+	<p id="msg"><strong>Convirtiendo norma a Word</strong></p>
+	<p id="cerrar"><a href="#" onClick="javascript:window.close(); return false;">Cerrar</a></p>
+</body>
+<html>

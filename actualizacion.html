@@ -1,0 +1,533 @@
+<html>
+<head>
+<title>Norma</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+					.norma_id
+					{
+						margin:0px;
+						padding:0px;
+					}
+					.reference_title
+					{
+						background-color: black;
+						color: white; 
+						font-weight: bold;
+					}
+					.toggle
+					{
+						font-family: monospace;
+						font-size: 12pt;
+						text-decoration: none;
+                                                
+					}
+					.datos_generales_td
+					{
+						border-width: 1px;
+	                                        padding: 3px;
+	                                        border-style: solid;
+	                                        border-color: black;
+	                                        background-color: #FFFFFF;
+	                                        -moz-border-radius: 0px 0px 0px 0px;
+	                                        color: #00F;
+	                                        text-align: center;
+                                                font-family: "Verdana",sans-serif;
+                                                font-size: 10pt;
+					}
+					/*.item_hover:hover { background-color: grey; }*/
+					h1, h3 { text-align: center; }
+					.hidden_data { display:none; }
+					.articulo &gt; div
+					{
+						border: red;
+						margin-left:   30px;
+						margin-right:  30px;
+						margin-top:    15px;
+						margin-bottom: 15px;
+					}
+					.firmantes &gt; div { border: red; }
+					.considerando &gt; div { border: red; }
+					// Estilos de la TOC interna
+					a#toc-link
+					{
+						color:#0645AD;
+						text-decoration:none;
+					}
+					a.link-art { text-decoration: none; }
+					.toctextart
+					{
+						color:#0645AD;
+						font-size: 10px;
+					}
+					.toctext1
+					{
+						font-size: 16px;
+						font-weight: bold;
+					}
+					.toctext2
+					{
+						font-size: 14px;
+						font-weight: bold;
+					}
+					.toctext3 { font-size: 14px; }
+					.toctext4 { font-size: 13px; }
+					.toctext5 { font-size: 11px; }
+					.toctext6 { font-size: 10px; }
+					.toc
+					{
+						background-color:#F9F9F9;
+						border:1px solid #AAAAAA;
+						font-size:95%;
+						padding:7px;
+					}
+					.toctitle
+					{
+						text-align:center;
+						align:center;
+					}
+					li.vinieta-toc
+					{
+						list-style-type: none;
+					}
+					ul.lista-toc
+					{
+						margin-left: -25px;
+					}
+					.nombreversion
+					{
+						font-size: 80%;
+					}
+
+// estilos de Folio
+keyw {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14pt;
+	color: #F00;
+}
+keyw1 {
+	border-width: 1px;
+	padding: 3px;
+	border-style: solid;
+	border-color: black;
+	background-color: #FEE2E6;
+	-moz-border-radius: 0px 0px 0px 0px;
+	color: #00F;
+	text-align: center
+}
+
+.tipo_activa {
+	font-size: 10pt;
+        color: #000000;
+	font-family: "Verdana",sans-serif;
+}
+.tit_tipo_activa {
+	font-size: 10pt;
+        color: #060;
+	font-family: "Verdana",sans-serif;
+}
+.tipo_pasiva {
+	font-size: 10pt;
+        color: #000000;
+	font-family: "Verdana",sans-serif;
+}
+
+.tit_tipo_pasiva {
+	font-size: 10pt;
+        color: #F00;
+	font-family: "Verdana",sans-serif;
+}
+.datos_generales {
+	font-size: 10pt;
+        color: #00F;
+	font-family: "Verdana",sans-serif;
+
+}
+.datos_generales_estado_vigente {
+
+        font-size: 11pt;
+        background-color: #FFFFFF;
+
+}
+.datos_generales_estado_derogada {
+        font-size: 11pt;        
+        color: #F00;
+        background-color: #FFFFFF;
+font-weight: bold;
+}
+.fecha_promulgacion
+{
+        font-family: "Verdana",sans-serif;
+        font-size: 10pt;        
+}
+.fecha_publicacion
+{
+        font-family: "Verdana",sans-serif;
+        font-size: 10pt;        
+}
+.anexo1
+{
+    font-family: "Arial",sans-serif;
+    font-weight: bold;
+    font-size: 14pt;
+    text-align: center;
+}
+.anexo2
+{
+    font-family: "Arial",sans-serif;
+    font-weight: bold;
+    font-size: 10pt;
+    text-align: center;
+}
+
+.anexo3
+{
+    font-family: "Arial",sans-serif;
+    font-weight: bold;
+    font-size: 10pt;
+    text-align: center;
+}
+
+span.capitulo
+{
+    
+    border-width: 1px;
+	padding: 3px;
+	border-style: solid;
+	border-color: black;
+	background-color: #E6E6E6;
+	color: #000000;
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14pt;
+    height: 58px;
+    width: auto;
+	display:block;
+}
+
+p.capitulo
+{
+    
+    border-width: 1px;
+	padding: 3px;
+	border-style: solid;
+	border-color: black;
+	background-color: #E6E6E6;
+	color: #000000;
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14pt;
+    height: 58px;
+    width: auto;
+	display:block;
+}
+
+.Concordancia
+{
+    
+    border-width: 1px;
+    padding: 3px;
+    border-style: solid;
+    border-color: black;
+    background-color: #F9FFFF;
+    color: #000000;
+    font-family: "Arial",sans-serif;
+    text-align: Justify;
+    font-size: 9pt;
+    padding-left: 20pt;
+    width: auto;
+    font-style: italic;
+}
+
+span.xtitulo
+{
+    font-family: "Arial",sans-serif;
+    font-weight: bold;
+    font-size: 11pt;
+    text-align: center;
+}
+div.titulo_norma p.titulo
+{
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 12pt;
+    color: #000000;
+    text-align: center;
+    background-color: #FFFFFF;
+	display:block;
+}
+
+div.titulo_norma p
+{
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 12pt;
+    color: #000000;
+    text-align: center;
+    background-color: #FFFFFF;
+    display:block;
+}
+
+.titulo
+{
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #000040;
+    text-align: center;
+    background-color: #F4F4FF;
+}
+p.Titulo
+{
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #000040;
+    text-align: center;
+    background-color: #F4F4FF;
+}
+
+h2
+{
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #000040;
+    text-align: center;
+    background-color: #F4F4FF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+}
+span.DecretoLegislativo
+{
+
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #FFFFFF;
+    text-align: center;
+    background-color: #ab1312;
+}
+
+.sumilla
+{
+
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #000040;
+    text-align: center;
+    background-color: #F4F4FF;
+}
+span.sumilla
+{
+
+    font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #000040;
+    text-align: center;
+    #background-color: #F4F4FF;
+}
+.Sumilla
+{
+
+   font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #000000;
+    text-align: center;
+    #background-color: #AB9A9A;
+}
+#Sumilla
+{
+
+   font-family: "Times New Roman",serif;
+    font-weight: bold;
+    font-size: 16pt;
+    color: #000000;
+    text-align: center;
+    #background-color: #F4F4FF;
+}
+p
+{
+    font-family: "Arial",sans-serif;
+    font-size: 10pt;
+    text-align: justify;
+}
+
+.Nivelnormal
+{
+    font-family: "Arial",sans-serif;
+    font-weight: normal;
+    font-size: 10pt;
+    text-align: center;
+}
+
+
+/* From Paragraph Style Definitions */
+
+.Centrado
+{
+    font-family: "Arial",sans-serif;
+    font-weight: bold;
+    font-size: 10pt;
+    text-align: center;
+}
+
+.CentradoMes
+{
+    font-family: "Verdana",sans-serif;
+    font-weight: bold;
+    font-size: 12pt;
+    color: #800000;
+    text-align: center;
+}
+
+.Centrado-SN
+{
+    font-family: "Arial",sans-serif;
+    font-size: 10pt;
+    text-align: center;
+}
+
+
+.Derecha
+{
+    font-family: "Arial",sans-serif;
+    font-size: 10pt;
+    text-align: right;
+}
+
+.Derogado
+{
+    font-family: "Arial",sans-serif;
+    font-size: 10pt;
+    color: #808080;
+    text-align: justify;
+}
+
+.Encabezado
+{
+    font-family: "Times New Roman",serif;
+    font-size: 14pt;
+    margin-top: 12pt;
+    margin-bottom: 6pt;
+}
+
+.Normal
+{
+    font-family: "Arial",sans-serif;
+    font-size: 10pt;
+    text-align: justify;
+}
+
+
+.oculto
+{
+    font-family: "Arial",sans-serif;
+    font-weight: bold;
+    font-size: 10pt;
+    display: none;
+    text-align: justify;
+}
+
+.Subtitulo
+{
+    font-family: "Verdana",sans-serif;
+    font-weight: bold;
+    font-size: 8pt;
+    text-align: center;
+}
+.Ttulo
+{
+    font-family: "Arial",sans-serif;
+    font-weight: bold;
+    font-size: 11pt;
+    text-align: center;
+}
+
+p span {
+	color: #555555;
+    font-weight: 600;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    font-style: italic;	
+}
+
+html, body{
+	overflow:hidden;
+	}
+
+</style><script type="text/javascript">
+					function toggle_visibility(id, linktext) {
+						var e = document.getElementById(id);
+						var link = document.getElementById(linktext);
+						if (link == null) return;
+						
+						if(e.style.display == '')
+						{
+							link.innerHTML = "Mostrar";
+						  e.style.display = 'none';
+						}else
+						{
+						link.innerHTML = "Ocultar";
+						  e.style.display = '';
+						}
+					}
+					function toggle(id,nombre)
+					{
+						var item = document.getElementById(id);
+						if (!item){alert("no existe "+ id); return;}
+						toggleItem(item, item.style.display == "none",nombre);
+					}
+					function toggleItem(item,show,nombre)
+					{
+						if (!item) return;
+						item.style.display =  !show ? "none" : "block";
+						var label = document.getElementById('toggle_btn_' + item.id.replace('toggle_',''));
+						if (label)
+							label.innerHTML = !show ? "[+] "+nombre : "[-]";
+					}
+					function toggleAll(show)
+					{
+						var divs = document.getElementsByTagName("div");
+						for (var i in divs)
+						{
+							if (divs[i].className != "toggle_box") continue;
+							toggleItem(divs[i], show, "");
+						}
+					}
+					function openPopup(url, title)
+					{
+						var t = title;
+						if (t== null || t=='') t='popup';
+						var popup = window.open(url, title, 'width=500,height=300,scrollbars=yes,resizable=yes');
+						popup.focus();
+					}
+				</script></head>
+                
+                <body>
+<!--                <div class="norma_id">
+                	<span class="tipo_norma" field="tipo_norma">NORMA</span>  <span class="numero" field="numero">1000000</span>-<span class="anio" field="anio">1000000</span><span class="norma_id hidden_data" field="norma_id">NORMA_1000000_1000000_</span></div>
+                    <div class="texto">
+                    
+                    <div class="cTitle"><a class="toggle" href="#" id="toggle_btn_3255950" onClick="toggle('toggle_3255950','texto');return false;">
+			[-]
+		</a>
+        <a name="res_2846385"/><a name="ver_2846476"/></div> -->
+       	 <div class="toggle_box" id="toggle_3255950"><p style="text-align: left;">
+
+         	<span style="color:#021226; font-size:17px">Legislación actualizada al:</span> 
+            <span style="color:#07274e">14 de Agosto de 2012</span>
+
+         </p>
+		</div>
+<!--
+</div>
+<br/><b>Normas Legales on Line- Software Juridico</b><br/>
+				Contáctenos en: <a href="mailto:soportetecnico@compuleg.com">soportetecnico@compuleg.com</a></body></html>
+                
+                -->

@@ -1,0 +1,139 @@
+<html>
+	<head>
+		<title>Contenidos</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="#!-- #STYLESHEETS:estilosciclope.css --#">
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<style type="text/css">
+			.CONTENTS-SELECT 		{ background-color: "#FFFFFF"; color: #c1c1b8; }
+			.CONTENTS-PARENT-ANCHOR,
+			.CONTENTS-PARENT-LABEL,
+			.CONTENTS-CHILD-LABEL
+			{	
+				font-family: "Verdana";
+				font-size: "10px";
+				color: "#000000";
+				text-decoration: none;
+			}
+			body
+			{
+				margin-left: 6px;
+				background-color: #FFFFff;
+			}
+			td { background-color: "#FFFFFF"; }
+			body,td,th
+			{
+				font-family: Verdana, Arial, Helvetica, sans-serif;
+				font-size: 10px;
+			}
+			hr						{ color: #999999; width: 100%; }
+			.nombres a {
+				font-size: 10px;
+				color: #AB1312;
+			}
+			.toc_childrens a
+			{
+				font-size: 9px;
+				color: black;
+			}
+		</style>
+		<script type="text/javascript">
+
+			function initPage()
+			{
+				if (parent.setContentsTab != null)
+				{
+					parent.setContentsTab("html");
+				}
+			}
+
+			function getDomain()
+			{
+				return "<!-- #CONTENTS:selected -->";
+			}
+			
+			
+			function synchronize(current_document)
+			{
+				window.location = "<!-- #TEMPLATES:contents-frame-h.htm -->" + "&tf=main&cp=" + current_document + "&c=100&sync=2#TOCSYNC";
+			}
+			
+			
+			function setSelectMode(select)
+			{
+				if (select)
+				{
+					window.location.search = "?f=templates&fn=contents-frame-h.htm&tf=_self&tt=contents-frame-h.htm&t=contents-frame-h.htm&sel=1";
+				}
+				else
+				{
+					window.location.search = "?f=templates&fn=contents-frame-h.htm&tf=main&tt=document-frameset.htm&t=contents-frame-h.htm&sel=0"
+				}
+			}
+
+
+			function onClick(url)
+			{
+				return;
+				var doc_window = parent.frames["main"];
+				if (doc_window != null)
+				{
+					var doc_body_window = doc_window.frames["doc-body"];
+					if (doc_body_window != null)
+					{
+						var pathname = url.substring(0, url.indexOf('?'));
+						if(doc_window.frames["doc-body"].location.pathname == pathname)
+						{
+							var changeHash = doc_window.changeHash;
+							if (changeHash != null)
+							{
+								return changeHash(url);
+							}
+						}
+					}
+				}
+				return true;
+			}
+			
+			
+			function refreshMedia()
+			{
+				window.location.reload();
+			}
+
+			// arreglar targets equivocados y de paso ejecutar onClick que no se estaba
+			// ejecutando.
+			$(document).ready(function() 
+			{
+				$("a").each(function()
+				{
+					var href = $(this).attr("href");
+					if (href == "" || href == null) return;
+					
+					if (href.indexOf("document-frameset.htm") <= -1) return;
+						
+					$(this).bind("click", function()
+					{
+						openDoc( href );
+						top.frames[top.DOC_INFO_FRAME].location = "<!-- #TEMPLATES:reference.htm -->$p=" + href.replace("/clp/contenidos.dll/", "").split("?")[0];
+						if (top.frames[top.TOOLS_FRAME].showSearchTools)
+							top.frames[top.TOOLS_FRAME].showSearchTools();
+						return false;
+					});
+					$(this).attr("target","main");
+					$(this).attr("prev_href", href );
+					$(this).attr("href","#");
+				});
+			});
+			function openDoc(val)
+			{
+				top.frames[top.DOC_FRAME].location.href = val;
+			}
+		</script>
+	</head>
+	<body class="colorfondo">
+		<div class="nombres">
+			<!-- #CONTENTS -->
+		</div>
+	</body>
+</html>

@@ -1,23 +1,1292 @@
-<html> 
-<head><title>Ciclope</title></head> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Gaceta Jurisdiccional</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" language="javascript"></script> -->
 
-<frameset cols="271,*" frameborder="NO" border="0" framespacing="0">
-	<frameset rows="105,*" frameborder="NO" border="0" framespacing="0">
-		<frame src="#!-- #TEMPLATES:FormBusqueda.htm --#" scrolling="no" noresize="noresize" marginwidth="0" marginheight="0" name="banner" scrolling="no" marginheight="0" marginwidth="0"/>
-		<frame src="#!-- #TEMPLATES:contents-frame-h.htm --#&sel=0&tf=main&tt=document-frameset.htm&t=contents-frame-h.htm&och=onClick" name="contents" resize="true" scrolling="auto" marginheight="0" marginwidth="0"/>
-	</frameset>
-	<frameset rows = "70, *, 22" frameborder="NO" border="0" framespacing="0" bordercolor="#CCCCCC" id="topFrame" name="topFrame">
-		<frame src="#!-- #TEMPLATES:document-tools.htm --#" name="DocNav" resize="true" scrolling="no" marginheight="0" marginwidth="0"/>
-		<frame src="#!-- #TEMPLATES:document-frameset.htm --#" name="main" resize="true" scrolling="auto" marginheight="20" marginwidth="36"/>
-		<frame src="#!-- #TEMPLATES:HitListFramset.htm --#" name="HitListFrameset" resize="true" scrolling="auto" marginheight="0" marginwidth="0"/>
-	</frameset>
-</frameset>
 
-<noframes>
+
+<!-- <link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:css/bootstrap.min.css --#">  -->
+<!-- <link href="#!-- #TEMPLATES:css/bootstrap.min.css --#" rel="stylesheet" type="text/css" />  -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:style1.css --#">
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+ <script src="#!-- #TEMPLATES:jquery.min3.js --#"></script>
+ <!-- script for bootstrap -->
+ <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+ 
+<!-- <script type="text/javascript" src="#!-- #TEMPLATES:bootstrap.min.js --#"></script> -->
+
+<!-- <link href="style_home.css" rel="stylesheet" media="all" type="text/css" /> -->
+<script type="text/javascript" src="#!-- #TEMPLATES:CLPSessionSaveSearchs.js --#"></script>
+
+<!-- <script type="text/javascript" src="#!-- #TEMPLATES:script.js --#"></script>  -->
+
+<script type="text/javascript" src="#!-- #TEMPLATES:find22.js --#"></script>
+
+
+<script type="text/javascript">
+
+var optVisi = 0;
+
+function allCollecciones(obj){
+// primero obtengo la referencia del campo donde se establece las base da datos
+	var campo = $_('xhitlist_d').value;	
+
+	if (obj.checked)
+		{
+			//campo = "legislacion, jurisprudencia, doctrina";
+			
+		campo = "" ;
+		/*Colections_.push("legislacion");
+		Colections_.push("jurisprudencia");
+		Colections_.push("doctrina");
+		campo= Colections_.join(',');*/
+		
+		// other 
+			var elements = document.getElementsByTagName("input");
+			for (i=0;i<elements.length;i++)
+			{
+				if (elements[i].type == "checkbox"){
+					elements[i].checked= true;
+				}
+		   }
+	}
+	else{
+			campo= "";
+			var elements = document.getElementsByTagName("input");
+			for (i=0;i<elements.length;i++)
+			{
+				if (elements[i].type == "checkbox"){
+					elements[i].checked= false;
+				}
+		   }		
+			
+		}
+}
+/////////////////////////////////////
+
+//////////////////////////////////////
+
+
+
+function elim_cookies()
+{
+    if (document.cookie != "")
+    {
+        if (confirm("Desea salir de la aplicacion?"))
+        {
+            var la_cookie = document.cookie.split("; ");
+            var fecha_fin = new Date();
+            fecha_fin.setDate(fecha_fin.getDate()-1);
+
+            for (i=0; i<la_cookie.length; i++)
+            {
+                var mi_cookie = la_cookie[i].split("=")[0];
+                var cookie_value = (la_cookie[i].split("=")[1] != null ? la_cookie[i].split("=")[1] : "");
+                document.cookie = mi_cookie+"="+cookie_value+";expires=" + fecha_fin.toGMTString()+"; path=/";
+            }
+            //document.write("Se han eliminado: " + la_cookie.length + " Cookies ")
+            //top.window.location = "http://dataonline.gacetajuridica.com.pe/clp/movil.asp";
+			window.location = "http://192.168.0.151/clp/login_infocivil.asp";
+            //window.parent.close();
+        }
+    }
+}
+
+
+
+			var emisores_exacto = false;
+
+
+/* Inicio roger */
+function colecciones(obj,dato){
+
+	var campo = $_('xhitlist_d');	// asigno el ID del Control del FOrmulario
+	if(!obj.checked)	{
+			unCheckid(dato, campo);
+	}else{
+			checkid(dato, campo);
+	}
+}
+
+function checkid(dato, hidden_){
+
+//	var campo = hidden_.value;
+	var campo = Colections_.push(dato);
+	campo = Colections_.join(',');
+
+	hidden_.value = campo;	
+}
+
+function $_(x){
+	return 	document.getElementById(x);
+}
+// Arrat de ka cibkecuibes d edatis,
+var Colections_ = new Array();
+Colections_.push("infocivil");
+// FUNCIONA QUE DESCHEA
+function unCheckid(dato, hidden_){
+	
+	if ( Colections_.indexOf(dato) > -1 ){
+		Colections_.splice(Colections_.indexOf(dato), 1);
+		hidden_.value = Colections_.join(',');
+	}
+	
+}
+
+/* Fin roger */			
+	
+	
+//////////////
+/////////////////*******
+/**********************/
+
+			function makeQuery()
+			{
+				/*top.frames.DocNav.total_hits=0;
+				top.frames.DocNav.current_hit=-1;*/
+						
+	//	top.frames[top.TOOLS_FRAME].closeToc();
+					//saveSearch(TMP_SEARCH_NAME);
+				
+				if (submitAdvQuery())
+				{
+/*					if ( top.ifPreloaoder > 0)	// verifico  q esta vairable este activa para poder llamar a ala function de Preloader
+					{
+						HITLISTX_FRAME_OBJ.goToPreloader();
+					}
+					top.ifPreloaoder++; // Aumentoel contrador de la vairble del preloader!
+*/						
+					//top.frames[top.TOOLS_FRAME].closeToc();
+//					top.toogleLayout();
+					return true;
+				}				
+				return false;
+			}
+
+		function submitAdvQuery()
+			{
+				var q = "";
+
+				//////////////////////////////////////////
+				// Campos: pegan cosas en q (query)     //
+				//////////////////////////////////////////
+								
+				//var tipos_norma = "";
+				//$.each($("#tipo_de_normas input[@type='checkbox']:checked"), function()
+				//{
+////				tipos_norma += ((tipos_norma != "")?"or":"") + "[Field tipo_norma:"+$(this).val()+"]";
+				//     tipos_norma += ((tipos_norma != "")?"or":"") + "[Field tipo_norma:'"+$(this).val()+"']";
+				//});
+				//q += ((q != "")?"&":"") + tipos_norma;
+
+
+				var tipos_norma = $("#tipos_norma").val();
+				if (tipos_norma !='nothing')
+					$("#xhitlist_d").val(tipos_norma); //q += ((q != "")?"&":"") + "[Field tipo_norma:"+tipos_norma+"]";
+				
+			/*	else
+
+					$.each($("#tipo_de_normas input[@type='checkbox']:checked"), function()
+						{
+				     tipos_norma += ((tipos_norma != "")?"or":"") + "[Field tipo_norma:'"+$(this).val()+"']";
+						});
+					q += ((q != "")?"&":"") + tipos_norma;				
+					*/
+				
+				//var norma_id = $("#norma_id").val();
+				//if (norma_id != "")
+				//{
+				//	norma_id = norma_id.replace(/\s|\.|\/|-|_/g, "\?");
+				//	q += ((q != "")?"&":"") + "[Field norma_id:"+norma_id+"*]";
+				//}
+
+/* +++				var nro_norma = $("#number").val();
+				if (nro_norma != "")
+					q += ((q != "")?"&":"") + "[Field numero:"+nro_norma+"]";
+
+				var anio_norma = $("#anio").val();
+				if (anio_norma.length > 2 && parseInt(anio_norma)<=1999)
+					anio_norma = anio_norma.substring(2);
+				if (anio_norma != "")
+					q += ((q != "")?"&":"") + "[Field anio:"+anio_norma+"]";    +++*/
+			/*		
+				var estado = $("#Estado").val();
+				if (estado != "")
+					q += ((q != "")?"&":"") + "[Field estado:"+estado+"]";
+					
+				var FechaInicio = date2aaaammdd($("#FechaInicio").val());
+				if (FechaInicio != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:>="+FechaInicio+"]";
+
+				var FechaFin = date2aaaammdd($("#FechaFin").val());
+				if (FechaFin != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:<="+FechaFin+"]";
+					
+			*/		
+/*+++				var emisores = $("#emisor").val().split(",");
+				if (emisores != "")
+				{
+					var emisores_qry="";
+					for  (var i=0 ; i<emisores.length ; ++i)
+					{
+						var asterisco = "*";
+						if (emisores_exacto == true)
+							asterisco = "";
+						
+						emisores_qry += ((emisores_qry != "")?"or":"") + "[Field emisor:"+asterisco+emisores[i]+asterisco+"]";
+					}
+					if (emisores_qry != "")
+						q += ((q != "")?"&":"") + emisores_qry;
+				}	+++*/
+				
+// Retirado por mlugo,para quitar busqueda	por temas
+
+//				var tema_sub = $("#Tema").val();
+// 				if (tema_sub != "")
+// 				q += ((q != "")?"&":"") + "[Field materias:*"+tema_sub+"*]or[Field areas:*"+tema_sub+"*]";
+					
+	/*			var Sumilla = $("#Sumilla").val();
+				if (Sumilla != "")
+				{
+					Sumilla = Sumilla.replace(/&oacute;|&uacute;|&aacute;|&eacute;|&iacute;|&oacute;/g, "\?"); //
+					//alert("Sumilla: " +Sumilla);
+					q += ((q != "")?"&":"") + "[Field sumilla:*"+Sumilla+"*]";
+				}
+*/
+				//////////////////////////////////////////
+				// Campos generales                     //
+				//////////////////////////////////////////
+
+					
+				var text = $("#texto").val();
+				if (text != "")
+				{
+					text = text.replace(/&oacute;|&uacute;|&aacute;|&eacute;|&iacute;|&oacute;/g, "\?"); //
+					text = text.replace(/-/g, "\_");
+					q += ((q != "")?"&":"") + text;
+					//q += ((q != "")?" or ":"") + "[Field keywords:"+text+"]";
+					// parametros de busqueda 
+						q += ((q != "")?" or ":"") + "[Field norma_id:*"+text+"*]";
+						q += ((q != "")?" or ":"") + "[Field keywords:"+text+"]";
+						q += ((q != "")?" or ":"") + "[Field sumilla:"+text+"]";					
+				}
+					
+				if (q == "")
+				{
+					alert("Debe completar al menos un campo del formulario de b&uacute;squeda");
+					return false;
+				}
+				//
+
+				//alert(top.NAME_CLASS_MENU);
+		//		if ( ($_('chk_legis').checked && $_('chk_jurisp').checked && $_('chk_Doctrina').checked) || ( !($_('chk_legis').checked) && !($_('chk_jurisp').checked )&& !($_('chk_Doctrina').checked)) )
+//					top.NAME_CLASS_MENU = 'mLegislacion';	//'mLegislacion';
+			//	else
+			//		top.NAME_CLASS_MENU = 'hitlist';	//'hitlist';					
+
+				//alert(top.NAME_CLASS_MENU);
+//				return;			
+
+//				saveSearch(TMP_SEARCH_NAME, DOC_FRAME_OBJ);
+				//$("#text").val("");//LIMPIO EL CAMPO DE BUSQUEDA LIBRE
+				
+				$("#xhitlist_q").val(q);
+				//top.countStart(); //Tiempo en MS que tarda la busqueda
+				$("#main_form").submit();
+				
+				return true;
+			}
+/*
+function submitQuery()
+{
+	var ui = document.ui_form;
+	var request = document.request_form;
+
+	if (ui.q.value.indexOf('[rank') != -1)
+	{
+		request.xhitlist_s.value = 'Relevance-Weight';
+	}
+	
+	request.xhitlist_q.value = ui.q.value;
+	//alert(request.xhitlist_q.value);
+	if (request.xhitlist_q.value != "")
+	{
+		//SetupQuery();
+		request.submit();
+		top.toogleLayout();
+	//	top.frames[top.TOOLS_FRAME].closeToc();
+		saveSearch(TMP_SEARCH_NAME);
+	}
+	else
+	{
+		alert("Ingrese algun criterio de busqueda.");
+	}
+}
+
+*/
+///////////////////****** More Script 03/03/2012
+			function date2aaaammdd(val)
+			{
+				if (val == null || val == "")
+					return val;
+					
+				var val_split = val.split("/");
+				var new_date = "";
+				for (var i=(val_split.length-1) ; i>-1 ; --i)
+				{
+					var item = val_split[i];
+					if (item.length == 1) item = "0"+item;
+					new_date += item;
+				}
+				return new_date;
+			}
+
+	
+// Debugger Boyin
+$(document).ready(function(){
+//	saveSearch(TMP_SEARCH_NAME);
+//	alert(document.cookie);
+// change roger
+	//$("#text").focus();
+	$("#texto").focus(function(){
+		$("#myfoot").hide("slow");
+		//alert("hola");
+	// animacion 
+	  $( ".form_main h4" ).animate({    
+		marginTop: "0px"  
+	  }, 1000);
+	// other 
+	$( "#mySection" ).animate({    
+		marginTop: "110px"  
+	  }, 1000,function() {
+		// Animation complete.
+		$( "header" ).css("height","100");
+	  });
+
+  
+  
+	});
+	
+		$("#texto").focusout(function(){
+		$("#myfoot").show("slow");
+		//alert("hola");
+		// animacion 
+		  $( ".form_main h4" ).animate({    
+			marginTop: "15px"
+		  
+		  }, 1000);	
+
+		// other
+		$( "#mySection" ).animate({    
+			marginTop: "100px"  
+		  }, 1000);
+		  $( "header" ).animate({    
+			height: "100px"  
+		  }, 1000,function() {
+		// Animation complete.
+		$( "header" ).css("height","100");
+	  
+	});
+	
+	
+		});
+	/*
+	function ShowResumenMonth(cad)
+		{
+			
+			$("#myIframe").attr('src', cad);
+			
+		}
+		*/
+	
+});
+
+
+	function ShowResumenMonth(cad, bool)
+	{
+		// seteo 
+		optVisi = 1;
+		var mobj;
+		$("#myIframe").attr('src', cad);
+		//var texto = $("span[field='norma_id']").text();
+		$("#btnFlow").css("display","none");
+				$("#myIframe").load(function () {
+				if (bool){
+					$("#referencia").html($(this.contentDocument).find("span[field='norma_id']").html());
+				}else{
+					$("#referencia").html("");
+				}
+					  $(this.contentDocument).find("body").css("width", "90%").css("margin-left","0").css("margin-right", "0");//.css("font-size", "0.2em");
+					  $(this.contentDocument).find("body table td[bgcolor='#FDF5F4']").css("width", "30%").css("word-break","break-word");
+					  $(this.contentDocument).find("body  img").css("width", "80%");
+					  
+					  $(this.contentDocument).find("body  table[width='548']").css("width", "80%");
+					   $(this.contentDocument).find("body table td[width='369']").css("width", "30%").css("word-break","break-word");
+					   
+					//   $(this.contentDocument).find("body table td[width]").css("width", "30%").css("word-break","break-word");
+					  
+					  
+					//$(this.contentDocument).find("body div").css("width", "80%").css("word-break","break-word");
+					// cambio de script
+		//				$(this.contentDocument).find("a[onclick*='openPopup']").attr("onclick","location.href=" + $(this.contentDocument).find("a[onclick*='openPopup']").attr("onclick").substring( $(this.contentDocument).find("a[onclick*='openPopup']").attr("onclick").search(/\(/i) + 1, $(this.contentDocument).find("a[onclick*='openPopup']").attr("onclick").search(/\)/i) - 1 ) + "'");
+				$(this.contentDocument).find("a[onclick*='openPopup']").each(function(i){
+									
+					$(this).attr("onclick", "location.href=" + $(this).attr("onclick").substring( $(this).attr("onclick").search(/\(/i) + 1, $(this).attr("onclick").search(/\)/i) - 1 ) + "'");
+				});
+				
+				//
+				var opt = $("#btnFlow");
+				var cerrar = $("#btnClose");
+				$(this.contentDocument).find("a[onclick]").click(function(){
+					function goma(){
+						opt.css("display","inline");
+						cerrar.css("display","none");
+					}
+					
+					goma();
+				});
+
+
+
+				// agregamos la equiteta
+			/*		var script = document.createElement( 'script' );
+					script.type = 'text/javascript';
+					script.innerHTML = 'function openPopup(title){alert(title);}';
+					$(this.contentDocument).contents().append(script);
+				*/
+
+
+			});
+		//	var texto = $("span[field='norma_id']").text();
+		//	$("#referencia").html(text);
+		
+		
+	}	
+	
+
+			var ui = navigator.userAgent.toLowerCase();
+			var iphone = ui.indexOf("iphone") > -1;
+			if (iphone){
+				var native = window.webkit.messageHandlers.native;	
+			}
+
+			// script for call 
+			var clicks = 0;	
+				// iphone
+				function showIphoneToast(pin){
+					
+					var message = {"cmd":"increment","pin": pin,"close":"cerrar", "count":clicks,"callbackFunc":function(responseAsJSON){
+						var response = JSON.parse(responseAsJSON);
+						clicks = response['count']; /// la mac
+	
+						pin = response['pin'];
+
+					}.toString()}
+					native.postMessage(message)
+					}
+		
+
+// comunicacion con la APP
+function cerrarApp(){
+		var ua = navigator.userAgent.toLowerCase();
+		var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+		if(isAndroid) {
+		  Android.closeApp();
+		}else{
+		  showIphoneToast("");
+		}
+
+	//	Android.closeApp();
+	
+}
+
+
+</script>
+
+<style type="text/css">
+
+/*
+footer {
+ bottom: 27px;
+}
+*/
+
+.btn-prince {
+	width: 80%;
+	margin-bottom: 8px;
+}
+.miBold{
+	color: #333;
+}
+.form-lineal input {
+	width: 32%;
+	display: inline;
+}
+
+.scrollNext {
+	overflow-y: scroll;
+	-webkit-overflow-scrolling:touch;
+	height:440px; 
+}
+
+.miBold2 {
+	font-weight: bold;
+	color: black;
+	font-size: 0.83em;
+}
+.colorBlack a {
+ color: black;
+}
+
+.linki{
+	color: #555;
+}
+
+select#tipos_norma{
+	font-size: 0.9em;
+}
+</style>
+
+</head>
 
 <body>
+
+
+<header>
+    <div class="container clearfix">
+        <h1 id="logo" style="margin-left: -5px;">
+            <img src="#!-- #IMAGES:LOGO-ET.png --#" alt="logo" />
+        </h1>
+        <nav id="toper">
+ 			  <a href="#!-- #TEMPLATES:default.htm --#" class="btn btn-sq-sm btn-danger linki">
+              <i class="glyphicon glyphicon-home"></i><br/>
+              Inicio
+            </a>
+ 			<!-- <a href="#" class="btn btn-sq-sm btn-danger linki">
+              <i class="glyphicon glyphicon-home"></i><br/>
+              Llamar
+            </a>	-->		
+            <a href="#" onclick="cerrarApp();" class="btn btn-sq-sm btn-danger linki">
+              <i class="glyphicon glyphicon-log-out"></i><br/>
+              Salir
+            </a>         
+
+        </nav>
+    </div>
+    <div class="clearfix">
+        <nav id="menus" style="display: none;">
+ 			<a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-chevron-left"></i><br/>
+              Acierto
+            </a>
+            <a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-chevron-right"></i><br/>
+              Acierto
+            </a> 
+            <a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-remove-sign"></i><br/>
+              Borrar
+            </a> 
+            <a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-circle-arrow-down"></i><br/>
+              Descarga
+            </a> 
+            <!--<a href="#" class="btn btn-sq-sm btn-danger">
+              <i class="glyphicon glyphicon-log-out"></i><br/>
+              Enviar Doc.
+            </a> -->
+                       
+        </nav>
+    </div>
+</header>
+<section id="mySection" style="margin-top: 80px">
+  <div class="container clearfix">
+    <div class="row">
+    <div class="col-md-4">
+    <div class="form_main">
+             <!--   <h4 class="heading"><strong>Busqueda </strong> Rapida <span></span></h4> -->
+                <div class="form text-center">
+				<form name="ui_form" onsubmit="makeQuery(); return false;" >                
+                    <input type="text"  autocomplete="off" placeholder="Ingrese un texto a buscar.." value="" name="texto" id="texto" class="txt">
+
+				<div id="busAvanzando" class="form-lineal collapse">	
+
+					<select  id="tipos_norma" class="form-control" style="margin-bottom: 5px;	">
+					  <option value="nothing" >-- Seleccione tipo --</option>
+					  <option value="">TODOS</option>
+					  <option value="EasyLawTributario/1589961">Normas Principales </option>
+					  <option value="EasyLawTributario/1247327">Legislaci&oacute;n</option>
+					  <option value="EasyLawTributario/1589958">Jurisprudencia de Observancia</option>
+					  <option value="EasyLawTributario/1589959">Pronunciamientos SUNAT</option>
+					  <option value="EasyLawTributario/1247372">Jurisprudencia relevante</option>
+	
+					</select>	
+					
+			<!--		 <input type="text" class="form-control" id="number" placeholder=" N&uacute;mero">
+					 
+					 <input type="text" class="form-control" id="anio" placeholder=" A&ntilde;o">
+					 
+					 <input type="text" class="form-control" id="emisor" placeholder=" Emisor">      -->
+					 
+				</div>			
+				
+					
+                    <input type="reset" value="Limpiar" name="limpiar" class="txt2 m5">
+                     <input type="submit"  value="Buscar" name="submit" class="txt2 m5">
+					 <input type="button" data-toggle="collapse" value="B. Avanzada" data-target="#busAvanzando" style="background-color: #333; border-color: #333;"  class="txt5 m5" />	
+				<script>
+				//document.write(screen.width + " - " + screen.height);
+var txt = "";
+txt += "<p>Browser CodeName: " + navigator.appCodeName + "</p>";
+txt += "<p>Browser Name: " + navigator.appName + "</p>";
+txt += "<p>Browser Version: " + navigator.appVersion + "</p>";
+txt += "<p>Cookies Enabled: " + navigator.cookieEnabled + "</p>";
+txt += "<p>Browser Language: " + navigator.language + "</p>";
+txt += "<p>Browser Online: " + navigator.onLine + "</p>";
+txt += "<p>Platform: " + navigator.platform + "</p>";
+txt += "<p>User-agent header: " + navigator.userAgent + "</p>";
+// document.write(txt);				
+				//	document.write(Android.getMac());
+				
+				  
+				</script>
+					 
+
+                </form>
+					
+					<form name="main_form" id="main_form" action="#!-- #EXECUTIVE:SCRIPT_NAME --#" method="get" >
+								<input type="hidden" size="0" name="f" value="xhitlist">
+								<input type="hidden" size="0" name="xhitlist_q" id="xhitlist_q" value="">
+								<input type="hidden" size="0" name="xhitlist_x"	value="Advanced">
+								<input type="hidden" size="0" name="xhitlist_s"	value="relevance-weight"|"Field:fecha_publicacion,DESC">
+								<input type="hidden" size="0" name="xhitlist_hc" value="[XML][Kwic,5]">
+								<input type="hidden" size="0" name="xhitlist_mh"	value="5000" />
+								<input type="hidden" size="0" id="xhitlist_d" name="xhitlist_d" value="">
+								<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl">
+								<input type="hidden" size="0" name="xhitlist_vpc" value="first"/>
+                                <input type="hidden" size="0" name="xhitlist_vps" value="10"/> 
+								<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title;hit-context;Field:tipo_norma;Field:estado;Field:emisor;Field:fecha_publicacion;Field:fecha_server_publicacion;Field:tipo_coleccion" />
+							</form>				
+            </div>
+            </div>
+            </div>
+</div>
+</div>
+</section>
+<section class="controls-two" style="">
+	  <div class="container">
+		  <div class="row">
+				<div class="col-xs-12 text-center" >
+				
+			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+			  <div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingOne">
+				  <h4 class="panel-title">
+					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					 Normas Principales
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+				  <div class="panel-body">
+						<ul class="list-group">
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#uno" data-toggle="collapse"   class="miBold2">NIC/NIIF</a></li>
+							<ul class="list-group collapse colorBlack" id="uno">
+							<!-- grupo nuevo cambio -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt text-primary"></span> <a href="#g_uno" data-toggle="collapse"   class="miBold2">NIC/NIIF versi&oacute;n 2015</a></li>
+								  <ul class="list-group collapse colorBlack" id="g_uno">							
+								
+								<!-- sub lista BEGIN -->
+								  <li class="list-group-item text-left"><span class="glyphicon glyphicon-tasks text-success"></span> <a href="#n_uno" data-toggle="collapse"   class="miBold2">NIC 2015</a></li>
+								  <ul class="list-group collapse colorBlack" id="n_uno">
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690878 --#', false);">NIC 1 Presentaci&oacute;n de Estados Financieros </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690879 --#', false);">NIC 2 Inventarios </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690880 --#', false);">NIC 7 Estado de Flujos de Efectivo </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690882 --#', false);">NIC 8 Pol&iacute;ticas Contables, Cambios en las Estimaciones Contables y Errores </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690883 --#', false);">NIC 10 Hechos Ocurridos Despu&eacute;s del Periodo sobre el que se Informa </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697198 --#', false);">NIC 12 Impuesto a las Ganancias </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690886 --#', false);">NIC 16 Propiedades, Planta y Equipo </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697199 --#', false);">NIC 17 Arrendamientos </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690893 --#', false);">NIC 19 Beneficios a los Empleados </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690984 --#', false);">NIC 20 Contabilizaci&oacute;n de las Subvenciones del Gobierno e Informaci&oacute;n a Revelar sobre Ayudas Gubernamentales </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690934 --#', false);">NIC 21 Efectos de las Variaciones en las Tasas de Cambio de la Moneda Extranjera </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690985 --#', false);">NIC 23 Costos por Pr&eacute;stamos </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690987 --#', false);">NIC 24 Informaci&oacute;n a Revelar sobre Partes Relacionadas </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697274 --#', false);">NIC 26 Contabilizaci&oacute;n e Informaci&oacute;n Financiera sobre Planes de Beneficio por Retiro </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690989 --#', false);">NIC 27 Estados Financieros Consolidados y Separados </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690990 --#', false);">NIC 28 Inversiones en Asociadas y Negocios Conjuntos </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=690992 --#', false);">NIC 29 Informaci&oacute;n Financiera en Econom&iacute;as Hiperinflacionarias </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=692299 --#', false);">NIC 32 Instrumentos Financieros: Presentaci&oacute;n</a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=692318 --#', false);">NIC 33 Ganancias por Acci&oacute;n </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=692320 --#', false);">NIC 34 Informaci&oacute;n Financiera Intermedia </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=692327 --#', false);">NIC 36 Deterioro del Valor de los Activos </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=692328 --#', false);">NIC 37 Provisiones, Pasivos Contingentes y Activos Contingentes </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696180 --#', false);">NIC 38 Activos Intangibles </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696241 --#', false);">NIC 39 Instrumentos Financieros: Reconocimiento y Medici&oacute;n </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696447 --#', false);">NIC 40 Propiedades de Inversi&oacute;n </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696575 --#', false);">NIC 41 Agricultura</a></li>
+									
+								
+								  </ul>
+								  <!-- sub lista END -->
+								<!-- sub lista BEGIN -->
+								  <li class="list-group-item text-left"><span class="glyphicon glyphicon-tasks text-success"></span> <a href="#n_dos" data-toggle="collapse"   class="miBold2">NIIF 2015</a></li>
+								  <ul class="list-group collapse colorBlack" id="n_dos">
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696887 --#', false);">NIIF 1 Adopci&oacute;n por Primera vez de las Normas Internacionales de Informaci&oacute;n Financiera </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696974 --#', false);">NIIF 2 Pagos Basados en Acciones </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696975 --#', false);">NIIF 3 Combinaciones de Negocios </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696976 --#', false);">NIIF 4 Contratos de Seguro </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696977 --#', false);">NIIF 5 Activos no Corrientes Mantenidos para la Venta y Operaciones Discontinuadas </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696978 --#', false);">NIIF 6 Exploraci&oacute;n y Evaluaci&oacute;n de Recursos Minerales </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696979 --#', false);">NIIF 7 Instrumentos Financieros: Informaci&oacute;n a Revelar </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696981 --#', false);">NIIF 8 Segmentos de Operaci&oacute;n </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=696982 --#', false);">NIIF 9 Instrumentos Financieros </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1313011 --#', false);">NIIF 10 Estados Financieros Consolidados </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1313012 --#', false);">NIIF 11 Acuerdos Conjuntos </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1313013 --#', false);">NIIF 12 Informaci&oacute;n a Revelar sobre Participaciones en Otras Entidades </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1313014 --#', false);">NIIF 13 Medici&oacute;n del Valor Razonable </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1313015 --#', false);">NIIF 14 Cuentas de Diferimientos de Actividades Reguladas </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1313016 --#', false);">NIIF 15 Ingresos de Actividades Ordinarias Procedentes de Contratos con Clientes</a></li>
+
+									
+								
+								  </ul>
+								  <!-- sub lista END -->	
+								<!-- sub lista BEGIN -->
+								  <li class="list-group-item text-left"><span class="glyphicon glyphicon-tasks text-success"></span> <a href="#n_tres" data-toggle="collapse"   class="miBold2">CINIIF 2015</a></li>
+								  <ul class="list-group collapse colorBlack" id="n_tres">
+
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697275 --#', false);">CINIIF 1 Cambios en Pasivos Existentes por Retiro de Servicio, Restauraci&oacute;n y Similares </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697276 --#', false);">CINIIF 2 Aportaciones de Socios de Entidades Cooperativas e Instrumentos Similares </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697277 --#', false);">CINIIF 4 Determinaci&oacute;n de si un Acuerdo contiene un Arrendamiento </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697278 --#', false);">CINIIF 5 Derechos por la Participacin en Fondos para el Retiro del servicio, la Restauracin y la Rehabilitacin Medioambiental </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697279 --#', false);">CINIIF 6 Obligaciones Surgidas de la Participaci&oacute;n en Mercados Especficos - Residuos de Aparatos Elctricos y Electrnicos </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697281 --#', false);">CINIIF 7 Aplicaci&ocaute;n del Procedimiento de Reexpresi&oacute;n seg&oacute;n la NIC 29 Informacin Financiera en Economas Hiperinflacionarias </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697284 --#', false);">CINIIF 10 Informaci&oacute;n Financiera Intermedia y Deterioro del Valor </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697285 --#', false);">CINIIF 12 Acuerdos de Concesi&oacute;n de Servicios </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697287 --#', false);">CINIIF 14 NIC 19 - El L&iacute;mite de un Activo por Beneficios Definidos, Obligaci&oacute;n de Mantener un Nivel M&iacute;nimo de Financiaci&oacute;n y su Interacci&oacute;n </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697289 --#', false);">CINIIF 16 Coberturas de una Inversi&oacute;n Neta en un Negocio en el Extranjero </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697290 --#', false);">CINIIF 17 Distribuciones, a los Propietarios, de Activos Distintos al Efectivo </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697292 --#', false);">CINIIF 19 Cancelaci&oacute;n de Pasivos Financieros con Instrumentos de Patrimonio </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1307517 --#', false);">CINIIF 20 Costos de Desmonte en la Fase de Producci&oacute;n de una Mina a Cielo Abierto </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1313071 --#', false);">CINIIF 21 Grav&aacute;menes</a></li>
+									
+								
+								  </ul>
+								  <!-- sub lista END -->	
+								<!-- sub lista BEGIN -->
+								  <li class="list-group-item text-left"><span class="glyphicon glyphicon-tasks text-success"></span> <a href="#n_cuatro" data-toggle="collapse"   class="miBold2">SIC 2015</a></li>
+								  <ul class="list-group collapse colorBlack" id="n_cuatro">
+
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697296 --#', false);">SIC 7 Introducci&oacute;n del Euro </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697301 --#', false);">SIC 10 Ayudas Gubernamentales - Sin Relaci&oacute;n Espec&iacute;fica con Actividades de Operaci&oacute;n </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697346 --#', false);">SIC 15 Arrendamientos Operativos - Incentivos </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697348 --#', false);">SIC 25 Impuesto a las Ganancias - Cambios en la Situaci&oacute;n Fiscal de la Entidad o de sus Accionistas </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697349 --#', false);">SIC 27 Evaluaci&oacute;n de la Esencia de las Transacciones que Adoptan la Forma Legal de un Arrendamiento </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697350 --#', false);">SIC 29 Acuerdos de Concesi&oacute;n de Servicios: Informaci&oacute;n a Revelar </a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=697352 --#', false);">SIC 32 Activos Intangibles - Costos de sitios web</a></li>
+									
+					
+								
+								  </ul>
+								  <!-- sub lista END -->	
+								</ul>
+
+							<!-- sub lista BEGIN -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt text-primary"></span> <a href="#g_tres" data-toggle="collapse"   class="miBold2"> NIC/NIIF versi&oacute;n 2016</a></li>
+							   <ul class="list-group collapse colorBlack" id="g_tres">								
+															
+							   </ul>
+							  <!-- sub lista END -->									
+								
+							<!-- sub lista BEGIN -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt text-primary"></span> <a href="#g_dos" data-toggle="collapse"   class="miBold2">NIIF para las PYMES</a></li>
+							   <ul class="list-group collapse colorBlack" id="g_dos">								
+
+								<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=19040 --#', false);">R 45-2010-EF/94 Oficializa NIIF para las PYMES </a></li>
+								<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=705939 --#', false);">NIIF para las PYMES</a></li>
+															
+							   </ul>
+							  <!-- sub lista END -->								  
+
+							</ul>								
+							<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#unop" data-toggle="collapse"   class="miBold2">TRIBUTARIAS</a></li>
+							<ul class="list-group collapse colorBlack" id="unop">
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1082686 --#', false);">C&oacute;digo Tributario</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199534 --#', false);">Reglamento de la Sanci&oacute;n de Internamiento Temporal de Veh&iacute;culos prevista en el Art. 182 del C&oacute;digo Tributario</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199535 --#', false);">Reglamento de la sanci&oacute;n de comiso de bienes prevista en el Art. 184 del C&oacute;digo Tributario</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=200929 --#', false);">Reglamento del R&eacute;gimen de Gradualidad Aplicable a Infracciones del C&oacute;digo tributario</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1284236 --#', false);">Reglamento de Aplazamiento y/o Fraccionamiento de la Deuda Tributaria por Tributos Internos</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=176192 --#', false);">Reglamento del Procedimiento de Fiscalizaci&oacute;n de la SUNAT</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199504 --#', false);">Reglamento de Procedimiento de Cobranza Coactiva</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=202117 --#', false);">Establecen la obligaci&oacute;n de emitir comprobantes de pago en las transferencias de bienes, en propiedad o en uso, o en prestaciones de servicios de cualquier naturaleza</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199964 --#', false);">Reglamento de Comprobantes de Pago</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199217 --#', false);">Normas referidas a Libros y Registros vinculados a asuntos tributarios</a></li>
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=200752 --#', false);">Dictan disposiciones para la implementaci&oacute;n del llevado de determinados libros y registros vinculados a asuntos tributarios de manera electr&oacute;nica</a></li>  -->
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1044368 --#', false);">Crean el Sistema de Llevado del Registro de Ventas e Ingresos y de Compras de Manera Electr&oacute;nica en SUNAT Operaciones en L&iacute;nea</a></li> -->
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1204073 --#', false);">Sujetos obligados a llevar los Registros de Ventas e Ingresos y de Compras de manera electr&oacute;nica</a></li>  -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=176310 --#', false);">TUO de la Ley para la Lucha contra la Evasi&oacute;n y para la Formalizaci&oacute;n de la Econom&iacute;a</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=18506 --#', false);">Reglamento de la Ley para la lucha contra la evasi&oacute;n y para la formalizaci&oacute;n de la econom&iacute;a</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=177597 --#', false);">TUO de la Ley del Impuesto a la Renta</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=180641 --#', false);">Reglamento de la Ley del Impuesto a la Renta</a></li>
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199703 --#', false);">R&eacute;gimen Especial de Recuperaci&oacute;n Anticipada del Impuesto General a las Ventas</a></li>-->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=177510 --#', false);">Normas Reglamentarias del Nuevo R&eacute;gimen &Uacute;nico Simplificado</a></li>
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199518 --#', false);">Dictan normas referidas al cambio de r&eacute;gimen de los sujetos del nuevo RUS, R&eacute;gimen Especial y R&eacute;gimen General</a></li>-->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199339 --#', false);">R&eacute;gimen de retenci&oacute;n del impuesto a la renta sobre operaciones por las cuales se emitan liquidaciones de compra</a></li>-->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199563 --#', false);">Ley que crea el Impuesto Temporal a los Activos Netos</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=177096 --#', false);">Reglamento del Impuesto Temporal a los Activos Netos</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=179439 --#', false);">TUO de la ley del Impuesto General a las Ventas e Impuesto Selectivo al Consumo</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=180614 --#', false);">Reglamento de la Ley del Impuesto General a las Ventas e Impuesto Selectivo al Consumo</a></li>
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=6157 --#', false);">Ley que establece medidas para promover la formalizaci&oacute;n del transporte p&uacute;blico interprovincial de pasajeros y de carga</a></li>  -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=177618 --#', false);">TUO del D. Leg. 940 referente al Sistema de Pago de Obligaciones Tributarias con el Gobierno Central</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=136619 --#', false);">Normas para la aplicaci&oacute;n del Sistema de Pago de Obligaciones Tributarias con el Gobierno Central al que se refiere el D. Leg. 940</a></li>
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1194266 --#', false);">Establecen supuestos de excepci&oacute;n y flexibilizaci&oacute;n de los ingresos como recaudaci&oacute;n que contempla el Sistema de Pago de Obligaciones Tributarias, requisitos y procedimiento para solicitar el extorno</a></li>-->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199489 --#', false);">Reglamento del R&eacute;gimen de Gradualidad vinculado al Sistema de Pago de Obligaciones Tributarias con el Gobierno Central</a></li>-->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=157841 --#', false);">tabla de valores referenciales para la aplicaci&oacute;n del Sistema de Pago de Obligaciones Tributarias en el servicio de transporte de bienes realizado por v&iacute;a terrestre</a></li> -->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=6506 --#', false);">Normas para la aplicaci&oacute;n del Sistema de Pago de Obligaciones Tributarias con el Gobierno Central al transporte de bienes realizado por v&iacute;a terrestre</a></li>	-->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=6331 --#', false);">Normas para la aplicaci&oacute;n del Sistema de Pago de Obligaciones Tributarias con el Gobierno Central al transporte p&uacute;blico de pasajeros realizado por v&iacute;a terrestre</a></li>-->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=106646 --#', false);">R&eacute;gimen de retenciones del IGV aplicable a los proveedores</a></li>
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1288748 --#', false);">Emisi&oacute;n electr&oacute;nica de los comprobantes de retenci&oacute;n y de los comprobantes de percepci&oacute;n</a></li> -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=202151 --#', false);">R&eacute;gimen de Percepciones del Impuesto General a las Ventas</a></li>
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=201622 --#', false);">R&eacute;gimen de Percepciones del IGV aplicable a la importaci&oacute;n de bienes</a></li>-->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199190 --#', false);">R&eacute;gimen de Percepciones del IGV Aplicable a la Venta de Bienes</a></li>-->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199703 --#', false);">Texto del Nuevo R&eacute;gimen &Uacute;nico Simplificado</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=199174 --#', false);">R&eacute;gimen Especial de Recuperaci&oacute;n Anticipada del Impuesto General a las Ventas</a></li>
+
+							</ul>							
+							<!-- end list -->
+							<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#dosp" data-toggle="collapse"   class="miBold2">LABORALES</a></li>
+							<ul class="list-group collapse colorBlack" id="dosp">
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159279 --#', false);">Ley de Productividad y Competitividad Laboral, TUO del D.Leg. 728</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159310 --#', false);">Reglamento de Ley de Fomento del Empleo</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159280 --#', false);">Ley de Formaci&oacute;n y Promoci&oacute;n Laboral, TUO del D.Leg. 728</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=158534 --#', false);">Texto Oficial de la S&iacute;ntesis de la Legislaci&oacute;n Laboral</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=204634 --#', false);">Ley sobre Modalidades Formativas Laborales</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=33011 --#', false);">Reglamento de la Ley sobre Modalidades Formativas Laborales</a></li>
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=206006 --#', false);">Ley que regula la actividad de las empresas especiales de servicios y de las cooperativas de trabajadores</a></li>   -->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=204820 --#', false);">Establecen disposiciones para la aplicaci&oacute;n de las Leyes que regulan la Actividad de las Empresas Especiales de Servicios y de las Cooperativas de Trabajadores</a></li> -->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=206400 --#', false);">Ley que regula los servicios de tercerizaci&oacute;n</a></li>  -->
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=158695 --#', false);">Reglamento de la Ley 29245 y del Decreto Legislativo 1038, que regulan los servicios de tercerizaci&oacute;n</a></li> -->
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1079772 --#', false);">Ley que regula el Teletrabajo</a></li> -->
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1290641 --#', false);">Reglamento de la Ley 30036, Ley que regula el teletrabajo</a></li> -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=178569 --#', false);">Texto &Uacute;nico Ordenado de la Ley de Jornada de Trabajo, Horario y Trabajo en Sobretiempo</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=178564 --#', false);">Reglamento del TUO de la Ley de Jornada de Trabajo, Horario y Trabajo en Sobretiempo</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=206275 --#', false);">Dispone la armonizaci&oacute;n y consolidaci&oacute;n de normas sobre descansos remunerados de los trabajadores sujetos al r&eacute;gimen de la actividad privada</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159471 --#', false);">Reglamento del Decreto Legislativo 713 sobre los descansos remunerados de los trabajadores sujetos al r&eacute;gimen laboral de la actividad privada</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=206004 --#', false);">Ley que regula el otorgamiento de las gratificaciones para los trabajadores del r&eacute;gimen de la actividad privada por fiestas patrias y navidad</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159113 --#', false);">Dictan normas reglamentarias de la Ley que regula el otorgamiento de gratificaciones para trabajadores del r&eacute;gimen de la actividad privada por Fiestas Patrias y Navidad</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1282889 --#', false);">Disponibilidad temporal de los dep&oacute;sitos de la compensaci&oacute;n por tiempo de servicios (CTS)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159281 --#', false);">Texto &Uacute;nico Ordenado de la Ley de Compensaci&oacute;n por Tiempo de Servicios</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159278 --#', false);">Reglamento de la Ley de Compensaci&oacute;n por tiempo de servicios</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159678 --#', false);">Establece que los trabajadores de la actividad privada cuyas remuneraciones no se regulan por negociaci&oacute;n colectiva, percibir&aacute;n asignaci&oacute;n familiar</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159625 --#', false);">Fijan la Asignaci&oacute;n Familiar para los trabajadores de la actividad privada, cuyas remuneraciones no se regulan por negociaci&oacute;n colectiva</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=152795 --#', false);">Regulan la participaci&oacute;n en utilidad, gesti&oacute;n y propiedad de los trabajadores de las empresas que desarrollan actividades generadoras de Rentas de Tercera Categor&iacute;a y que est&aacute;n sujetos al r&eacute;gimen laboral de la actividad privada</a></li>
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=151628 --#', false);">Ley de Promoci&oacute;n de la inversi&oacute;n en la Educaci&oacute;n</a></li> -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159248 --#', false);">Reglamento para la aplicaci&oacute;n del derecho de los trabajadores de la actividad privada a participar en las utilidades que generen las empresas donde prestan servicios</a></li>
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=205627 --#', false);">Ley de Consolidaci&oacute;n de Beneficios Sociales</a></li> -->
+							  <!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=18806 --#', false);">Reglamento de la Ley 29549, Ley que modifica el Decreto Legislativo 688, Ley de consolidaci&oacute;n de beneficios sociales y crea el registro obligatorio de contratos de seguros vida ley</a></li> -->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=206028 --#', false);">Ley que establece nuevo plazo de prescripci&oacute;n de las acciones derivadas de la relaci&oacute;n laboral</a></li> -->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=158791 --#', false);">Establecen disposiciones relativas al uso del documento denominado “Planilla Electr&oacute;nica”</a></li> -->
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159252 --#', false);">Reglamento de Planillas de Pago de empleadores</a></li>-->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=158854 --#', false);">Dictan disposiciones sobre el registro de control de asistencia y de salida en el r&eacute;gimen laboral de la actividad privada</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=298144 --#', false);">Ley de Seguridad y Salud en el Trabajo</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=648602 --#', false);">Reglamento de la Ley 29783, Ley de Seguridad y Salud en el Trabajo</a></li>
+							  <!--<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159045 --#', false);">Texto &Uacute;nico Ordenado de la Ley de Relaciones Colectivas de Trabajo</a></li> -->
+							<!--  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=159472 --#', false);">Reglamento de la Ley de Relaciones Colectivas de Trabajo	</a></li> -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=646386 --#', false);">Ley Procesal del Trabajo</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=158851 --#', false);">Ley General de Inspecci&oacute;n del Trabajo </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=158860 --#', false);">Reglamento de la Ley General de Inspecci&oacute;n del Trabajo</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=41179 --#', false);">Ley de Modernizaci&oacute;n de la Seguridad Social en Salud</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=205326 --#', false);">Reglamento de la Ley de Modernizaci&oacute;n de la Seguridad Social en Salud</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=41206 --#', false);">Texto &Uacute;nico Concordado del Decreto Ley 19990</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=125387 --#', false);">Reglamento del  Decreto Ley 19990, relativo al Sistema Nacional de Pensiones de Seguridad Social</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=179908 --#', false);">Texto &Uacute;nico Ordenado de la Ley del Sistema Privado de Administraci&oacute;n de Fondos de Pensiones</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=18979 --#', false);">Reglamento del Texto &Uacute;nico Ordenado de la Ley del Sistema Privado de Administraci&oacute;n de Fondos de Pensiones</a></li>
+							  
+
+
+							</ul>							
+							<!-- end list -->
+						  
+						</ul>
+				  </div>
+				</div>
+			  </div>
+			  <div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingTwo">
+				  <h4 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					 Jurisprudencia
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				  <div class="panel-body">
+						
+						<ul class="list-group">
+						<!-- nuevos cambios sept -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt text-primary"></span> <a href="#u_one" data-toggle="collapse"   class="miBold2">Jurisprudencia de observancia obligatoria del Tribunal Fiscal</a></li>
+							   <ul class="list-group collapse colorBlack" id="u_one">		
+						
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#unoc" data-toggle="collapse"   class="miBold2">2016</a></li>
+							<ul class="list-group collapse colorBlack" id="unoc">
+							<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320688 --#', false);">Base cierta (RTF 6415-10-2016) <span class="label label-success">Nuevo</span></a></li>
+							<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320689 --#', false);">Queja (RTF 2862-Q-2016) <span class="label label-success">Nuevo</span></a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1310874 --#', false);">Impuesto a la Renta (RTF 2256-4-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318265 --#', false);">Queja (RTF 1918-Q-2016) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1310982 --#', false);">Devoluci&oacute;n (RTF 1292-7-2016) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318267 --#', false);">Apelaci&oacute;n (RTF 926-A-2016) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318266 --#', false);">Queja (RTF 226-Q-2016) </a></li>
+						<!--	  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1315849 --#', false);">Pleno</a></li>  -->
+
+							</ul>	
+						<!-- end list -->
+						
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#dosc" data-toggle="collapse"   class="miBold2">2015</a></li>
+							<ul class="list-group collapse colorBlack" id="dosc">
+							  
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318262 --#', false);">Cierre de Establecimiento (RTF 11714-5-2015)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318263 --#', false);">Impuesto a la Renta y Multas (RTF 11116-4-2015)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318264 --#', false);">Responsabilidad Solidaria (RTF 10885-3-2015)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318258 --#', false);">Apelaci&oacute;n (RTF 8340-A-2015) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318260 --#', false);">Multa (RTF 8246-8-2015)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318259 --#', false);">Apelaci&oacute;n (RTF 7957-A-2015)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318261 --#', false);">Multa (RTF 4289-8-2015) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318257 --#', false);">Queja (RTF 1682-Q-2015) </a></li>
+
+							</ul>	
+						<!-- end list -->
+
+  
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#tresc" data-toggle="collapse"   class="miBold2">2014</a></li>
+							<ul class="list-group collapse colorBlack" id="tresc">
+							  
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318106 --#', false);">Impuesto a la Renta - Recuperaci&oacute;n de Capital Invertido (RTF 11869-5-2014)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318107 --#', false);">Devoluci&oacute;n (RTF 11541-7-2014)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318109 --#', false);">Impuesto General a las Ventas y Multa (RTF 11160-8-2014)</a></li>			
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318105 --#', false);">Prescripci&oacute;n (RTF 7217-5-2014) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318103 --#', false);">Cierre de Establecimiento (RTF 6067-1-2014)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318104 --#', false);">Multa (RTF 5922-2-2014) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318102 --#', false);">Cierre de establecimiento (RTF 4336-9-2014)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318108 --#', false);">Impuesto a la Renta (RTF 403-8-2014)</a></li>
+
+							</ul>	
+						<!-- end list -->
+
+
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#cuatroc" data-toggle="collapse"   class="miBold2">2013</a></li>
+							<ul class="list-group collapse colorBlack" id="cuatroc">
+							  
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1105580 --#', false);">Multa (RTF 12227-5-2013)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1094801 --#', false);">Prescripci&oacute;n (RTF 11996-4-2013) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1094800 --#', false);">Devoluci&oacute;n (RTF 11714-3-2013) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1105581 --#', false);">Prescripci&oacute;n (RTF 11125-7-2013)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1092165 --#', false);">Cierre de establecimiento (RTF 9882-9-2013)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1078867 --#', false);">Arbitrios Municipales (RTF 7455-11-2013) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1078866 --#', false);">Impuesto Predial y Multa (RTF 6592-11-2013)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1078838 --#', false);">Impuesto a la Renta (RTF 6335-1-2013) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1053107 --#', false);">Apelaci&oacute;n (RTF 3893-A-2013)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1052063 --#', false);">Multa (RTF 2889-5-2013) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1044321 --#', false);">Impuesto a la Renta y Multa (RTF 1479-10-2013) </a></li>
+
+							</ul>	
+						<!-- end list -->
+ 
+ 						
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#cincoc" data-toggle="collapse"   class="miBold2">2012</a></li>
+							<ul class="list-group collapse colorBlack" id="cincoc">
+							  
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=965718 --#', false);">Queja (RTF 20904-1-2012) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=758867 --#', false);">Queja (RTF 12591-5-2012) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=692321 --#', false);">Arbitrios Municipales (RTF 9641-8-2012)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=776838 --#', false);">Arbitrios Municipales (RTF 7917-8-2012) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=776834 --#', false);">Arbitrios Municipales (RTF 7656-11-2012)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=776383 --#', false);">Arbitrios Municipales (RTF 6559-8-2012) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=776382 --#', false);">Arbitrios Municipales (RTF 5572-11-2012)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=775953 --#', false);">Arbitrios Municipales (RTF 5140-8-2012) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=775950 --#', false);">Impuesto al Patrimonio Vehicular (RTF 3708-8-2012)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=775949 --#', false);">Arbitrios Municipales (RTF 1595-7-2012)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=775580 --#', false);">Arbitrios Municipales (RTF 1263-7-2012)</a></li>
+
+							</ul>	
+						<!-- end list -->
+					
+
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#seisc" data-toggle="collapse"   class="miBold2">2011</a></li>
+							<ul class="list-group collapse colorBlack" id="seisc">
+							  
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=777459 --#', false);">Multas (RTF 21480-9-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=762854 --#', false);">Multa (RTF 20924-10-2011)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=777458 --#', false);">Multa (RTF 19718-10-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=762853 --#', false);">Queja (RTF 16876-9-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=777454 --#', false);">Impuesto a la Renta y otros (RTF 16192-2-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=684257 --#', false);">Prescripci&oacute;n (RTF 11952-9-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=658078 --#', false);">Responsabilidad Solidaria (RTF 11701-3-2011)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=777361 --#', false);">Arbitrios Municipales (RTF 9817-7-2011)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=777089 --#', false);">Arbitrios Municipales (RTF 8591-11-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=777091 --#', false);">Arbitrios Municipales (RTF 8581-11-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=777090 --#', false);">Arbitrios Municipales (RTF 8580-11-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=776982 --#', false);">Devoluci&oacute;n (RTF 7623-1-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=776981 --#', false);">Arbitrios Municipales (RTF 4346-7-2011) </a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=658081 --#', false);">Impuesto General a las Ventas y Multas (RTF 4170-1-2011)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=658076 --#', false);">Multa (RTF 1608-9-2011)</a></li>
+
+
+							</ul>	
+						<!-- end list -->						
+							</ul>
+							<!-- end change Sept -->
+						<!-- nuevos cambios sept -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt text-primary"></span> <a href="#u_dos" data-toggle="collapse"   class="miBold2">Jurisprudencia tributaria reciente</a></li>
+							   <ul class="list-group collapse colorBlack" id="u_dos">		
+								</ul>
+						<!-- nuevos cambios sept -->
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt text-primary"></span> <a href="#uu_tres" data-toggle="collapse"   class="miBold2">Jurisprudencia laboral reciente</a></li>
+							   <ul class="list-group collapse colorBlack" id="uu_tres">	
+							   <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320687 --#', false);">Criterios para el despido en periodo de prueba (Cas. 5252-2014 Lima) <span class="label label-success">Nuevo</span></a></li>		
+							   <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320686 --#', false);">Supuestos de validez para la reducci&oacute;n de remuneraciones (Cas. 489-2015 Lima) <span class="label label-success">Nuevo</span></a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320594 --#', false);">No procede otorgar remuneraciones devengadas en procesos de amparo (Cas. 15959-2013 Hu&uacute;nuco)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320595 --#', false);">Duda razonable y aplicaci&oacute;n del principio de favorecimiento del proceso (Cas. 13637-2013 Huancavelica)</a></li>
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320596 --#', false);">Protecci&oacute;n legal de servidores p&uacute;blicos bajo el amparo de la Ley Nro 24041 (Cas. 14909-2013 Ayacucho)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320597 --#', false);">Solicitar beneficios distintos en diferentes instancias no ocasiona improcedencia de una demanda (Cas. 148-2014 Piura)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320598 --#', false);">Trabajadores amparados por la Ley Nro 24041 (Cas. 2048-2015 Loreto)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320599 --#', false);">Protecci&oacute;n de servidor administrativo por desempe&ntilde;ar labores permanentes por m&aacute;s de un año (Cas. 4945-2014 Ica)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320600 --#', false);">Contrato CAS no surte efectos en servidor amparado por la Ley Nro 24041 (Cas. 7089-2014 Lambayeque)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320601 --#', false);">Rebaja de remuneraci&oacute;n genera da&ntilde;o moral indemnizable (Cas. 7204-2014 Arequipa)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320602 --#', false);">Rol protag&oacute;nico de juez en un proceso contencioso administrativo (Cas. 11550-2014 Arequipa)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320603 --#', false);">Tribunal del Servicio Civil no es competente para resolver casos sobre desnaturalizaci&oacute;n de contratos CAS (Cas. 6309-2014 La Libertad)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320604 --#', false);">Desnaturalizaci&oacute;n de contrato civil y reposici&oacute;n de trabajador municipal obrero (Cas. 11459-2013 Lima)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320605 --#', false);">Desnaturalizaci&oacute;n de contratos de servicios no personales (Cas. 16471-2013 La Libertad)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320606 --#', false);">La sola existencia de un convenio colectivo, no es raz&oacute;n suficiente para fundar una demanda y otorgar beneficios (Cas. 17450-2013 Lambayeque)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320607 --#', false);">Interpretaci&oacute;n favorable al trabajador en caso de vac&iacute;o normativo (Cas. 2596-2014 Jun&iacute;n)</a></li>		
+									<li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1320608 --#', false);">Reposici&oacute;n por despido fraudulento. Aplicaci&oacute;n discrecional de la potestad sancionadora del empleador (Cas. 7145-2014 Arequipa)</a></li>		
+										
+								</ul>								
+						</ul>					
+				  </div>
+				</div>
+			  </div>
+			  <div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingThree">
+				  <h4 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					  Pronunciamientos recientes de la Sunat 
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+				  <div class="panel-body">
+						<ul class="list-group">
+						<!-- <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt"></span> <a href="#uno_q" data-toggle="collapse"   class="miBold2">2016</a></li>
+							<ul class="list-group collapse colorBlack" id="uno_q"> -->
+						
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt  text-success"></span> <a href="#unox" data-toggle="collapse"   class="miBold2">CARTAS</a></li>
+							<ul class="list-group collapse colorBlack" id="unox">
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317190 --#', false);">Oportunidad de emitir el comprobante de pago en el caso de exportaci&oacute;n de bienes (CARTA 006-2016-SUNAT)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317189 --#', false);">IR e IGV &#150;	 Cesi&oacute;n de cr&eacute;ditos sin recurso en el marco de un contrato de concesi&oacute;n (CARTA 003-2016-SUNAT)</a></li>
+
+							</ul>	
+						<!-- end list -->	  
+	
+
+
+ 
+					
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt  text-success"></span> <a href="#dox" data-toggle="collapse"   class="miBold2">OFICIOS</a></li>
+							<ul class="list-group collapse colorBlack" id="dox">
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317191 --#', false);">Retenci&oacute;n del IR de quinta categor&iacute;a, trat&aacute;ndose del pago de devengados por concepto de la bonificaci&oacute;n establecida por el D.U. 037-94</a></li>
+							  
+							</ul>	
+						<!-- end list -->	  						
+						
+						<!-- begin list -->
+						  <li class="list-group-item text-left"><span class="glyphicon glyphicon-list-alt  text-success"></span> <a href="#tresx" data-toggle="collapse"   class="miBold2">INFORMES</a></li>
+							<ul class="list-group collapse colorBlack" id="tresx">
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317203 --#', false);">Amazon&iacute;a &#150;  Beneficios tributarios (INFORME 007 2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317222 --#', false);">C&oacute;digo Tributario &#150;	 Aplicaci&oacute;n de la multa correspondiente a la infracci&oacute;n tipificada en el num. 1 del art. 178 del CT (INFORME 037-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317230 --#', false);">C&oacute;digo Tributario &#150;	 Aplicaci&oacute;n de saldos procedentes de ejecuci&oacute;n de garant&iacute;as (INFORME 053 2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317204 --#', false);">C&oacute;digo Tributario &#150; Bienes embargables (INFORME 010-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317251 --#', false);">C&oacute;digo Tributario &#150; Comiso de bienes (INFORME 094-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318833 --#', false);">C&oacute;digo Tributario &#150; Determinaci&oacute;n de la deuda sobre base presunta (INFORME 117-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317221 --#', false);">C&oacute;digo Tributario &#150; Determinaci&oacute;n de la multa correspondiente a la infracci&oacute;n tipificada en el num. 1 del art. 178 del CT (INFORME 036-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317228 --#', false);">C&oacute;digo Tributario &#150; Embargo y ejecuci&oacute;n de bien inmueble de propiedad de una asociaci&oacute;n (INFORME 049-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317257 --#', false);">C&oacute;digo Tributario &#150; Facultad de Fiscalizaci&oacute;n (INFORME 104-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317206 --#', false);">C&oacute;digo Tributario &#150; Infracci&oacute;n tipificada en el num. 1 del art. 178. Rectificaci&oacute;n de p&eacute;rdidas (INFORME 014-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317229 --#', false);">C&oacute;digo Tributario &#150; P&eacute;rdida de fraccionamiento y-o aplazamiento (INFORME 052-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317238 --#', false);">C&oacute;digo Tributario &#150; Prescripci&oacute;n (INFORME 072-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317211 --#', false);">C&oacute;digo Tributario &#150; Solicitudes de devoluci&oacute;n - Recursos impugnatorios (INFORME 019-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317249 --#', false);">C&oacute;digo Tributario &#150; Suspensi&oacute;n de plazos de prescripci&oacute;n de la acci&oacute;n para exigir el pago de la obligaci&oacute;n tributaria (INFORME 087-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317232 --#', false);">C&oacute;digo Tributario y Comprobantes de pago &#150; Gu&iacute;a de remisi&oacute;n transportista (INFORME 058-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317205 --#', false);">Comprobantes de pago &#150; Contratos de Consorcio (INFORME 012-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317231 --#', false);">Comprobantes de pago &#150; Emisi&oacute;n electr&oacute;nica (INFORME 057-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317213 --#', false);">Comprobantes de pago &#150; Formulario 820 (INFORME 025-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317233 --#', false);">Comprobantes de pago &#150; Porcentaje adicional a cargo del MTC a favor de OSITRAN (INFORME 061-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317208 --#', false);">Comprobantes de pago &#150; Servicios prestados por sujetos no domiciliados (INFORME 016-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317248 --#', false);">Comprobantes de pago &#150; Sujetos obligados a su emisi&oacute;n (INFORME 086-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317223 --#', false);">Comprobantes de pago &#150; Transporte nacional de pasajeros (INFORME 039-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317236 --#', false);">Comprobantes de pago electr&oacute;nicos &#150; Requisitos de la factura electr&oacute;nica (INFORME 065-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317216 --#', false);">IGV &#150; Base imponible en la prestaci&oacute;n de servicios notariales (INFORME 030-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318838 --#', false);">IGV &#150; Base imponible y retiro de bienes (INFORME 119-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317255 --#', false);">IGV &#150; Exportaci&oacute;n de servicios (INFORME 101-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318835 --#', false);">IGV &#150; Nacimiento de la obligaci&oacute;n tributaria (INFORME 107-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317224 --#', false);">IGV &#150; Operaciones gravadas - Vales de consumo (INFORME 040-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317240 --#', false);">IGV &#150; Prestaci&oacute;n de servicios (INFORME 076-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317200 --#', false);">IGV &#150; Prorrata del Cr&eacute;dito Fiscal (INFORME 001-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317235 --#', false);">IGV &#150; R&eacute;gimen Especial de Recuperaci&oacute;n Anticipada (INFORME 064-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317225 --#', false);">IGV &#150; Servicios complementarios portuarios (INFORME 044-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317226 --#', false);">IGV &#150; Transporte terrestre internacional de pasajeros (INFORME 045-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317207 --#', false);">IGV &#150; Tratamiento del recargo FISE por el distribuidor mayorista (INFORME 015-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317243 --#', false);">IR &#150; Actividades realizadas por Fondos de Inversi&oacute;n Empresarial (INFORME 080-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317247 --#', false);">IR &#150; Afectaci&oacute;n al Impuesto &#150; Deducci&oacute;n de costos – depreciaci&oacute;n (INFORME 085-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317212 --#', false);">IR &#150; Afectaci&oacute;n de la asignaci&oacute;n por desempe&ntilde;o de la funci&oacute;n congresal (INFORME 021-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317202 --#', false);">IR &#150; Asistencia T&eacute;cnica - (INFORME 004-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318834 --#', false);">IR &#150; Condici&oacute;n de domiciliado (INFORME 098-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317254 --#', false);">IR &#150; Cr&eacute;dito contra el impuesto – Decreto Legislativo 882 (INFORME 100-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317218 --#', false);">IR &#150; Cr&eacute;dito tributario por reinversi&oacute;n – Ley Universitaria (INFORME 032-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317220 --#', false);">IR &#150; Cr&eacute;dito Tributario por Reinversi&oacute;n de las Universidades (INFORME 035-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318839 --#', false);">IR &#150; Deducibilidad de la depreciaci&oacute;n anotada en una cuenta de orden (INFORME 120-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317239 --#', false);">IR &#150; Determinaci&oacute;n de la renta neta de fuente extranjera (INFORME 074-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317253 --#', false);">IR &#150; Determinaci&oacute;n de la retribuci&oacute;n derivada de Acuerdos de No Competencia y tasa aplicable (INFORME 096-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317245 --#', false);">IR &#150; Determinaci&oacute;n del coeficiente para el c&aacute;lculo de los pagos a cuenta del Impuesto a la Renta (INFORME 083-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317246 --#', false);">IR &#150; Diferencias de cambio (INFORME 084-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317241 --#', false);">IR &#150; Dividendos presuntos (INFORME 078-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317256 --#', false);">IR &#150; Enajenaci&oacute;n directa e indirecta de acciones y participaciones representativas de capital de personas jur&iacute;dicas (INFORME 102-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317219 --#', false);">IR &#150; Estabilidad Tributaria (INFORME 033-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318836 --#', false);">IR &#150; Fideicomisos de Titulizaci&oacute;n (INFORME 109-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317242 --#', false);">IR &#150; Gastos preoperativos (INFORME 079-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317217 --#', false);">IR &#150; IGV &#150; Adjudicaci&oacute;n bien mueble por titular de una EIRL en liquidaci&oacute;n (INFORME 031-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318837 --#', false);">IR &#150; Inafectaci&oacute;n de indemnizaci&oacute;n laboral por mandato judicial (INFORME 113-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317250 --#', false);">IR &#150; Ingresos propios de las Instituciones Educativas P&uacute;blicas previstos en el D.S. 028-2007-ED (INFORME 088-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317227 --#', false);">IR &#150; Principio de reciprocidad &#150; inc. d) del art. 48 de la LIR (INFORME 048-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317210 --#', false);">IR &#150; Retenciones a sujetos no domiciliados (INFORME 018-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317244 --#', false);">IR &#150; Retribuci&oacute;n econ&oacute;mica otorgada a los beneficiarios de las becas para la repatriaci&oacute;n de investigadores peruanos (INFORME 082-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317237 --#', false);">IR &#150; Sentido y alcance de expresi&oacute;n utilizada en el Convenio suscrito entre Per&uacute; y la Confederaci&oacute;n Suiza (INFORME 070-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317209 --#', false);">IR &#150; Sustentaci&oacute;n del costo de adquisici&oacute;n o construcci&oacute;n de bienes depreciables con comprobantes de pago para la deducci&oacute;n (INFORME 017-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318840 --#', false);">ISC &#150; Antracita para uso energ&eacute;tico (INFORME 123-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317252 --#', false);">Ley 30230 &#150; Actualizaci&oacute;n excepcional de las deudas tributarias (INFORME 095-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317214 --#', false);">Ley de Promoci&oacute;n del Sector Agrario – Actividades Agroindustriales (INFORME 027-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317234 --#', false);">Libros y Registros Electr&oacute;nicos (INFORME 062-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317201 --#', false);">OTROS &#150; Factura Negociable (INFORME 002-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1317215 --#', false);">SPOT &#150; Contratos de construcci&oacute;n (INFORME 029-2016)</a></li>
+							  <li class="list-group-item text-left"><span class="glyphicon glyphicon-file text-primary"></span><a href="#" data-toggle="modal" data-target="#myModal" onclick="javascript:ShowResumenMonth('#!-- #id=1318841 --#', false);">SPOT &#150; Cr&eacute;dito Fiscal (INFORME 118-2016)</a></li>
+					
+
+
+							</ul>	
+						<!-- end list -->	
+  
+
+						<!-- </ul> -->
+
+						
+						</ul>						
+				  </div>
+				</div>
+			  </div>
+			</div>
+
+						
+				</div>		
+		  </div>
+
+
+
+
+	 
+    <div class="row">
+		<div class="col-md-4 text-left" style="border-top: 1px solid #ccc; margin:0 auto; margin-top:2px; width: 80%">  
+
+			 <i class="glyphicon glyphicon-indent-left"></i> <input type="button" value="Lista de Contenidos" onclick='location.href="#!-- #TEMPLATES:contents-frame.htm --#"' name="lista" class="txt2" />
+		</div>
+	</div>		
+	</div>
+</section>
+
+<footer id="myfoot">
+  <div class="container">
+    <h5 class="text-center">Software Tributario Contable - Gaceta Jur&iacute;dica S.A. - Todos los derechos reservados 2016</h5>
+    <!-- <h5 class="text-center">Web: www.gacetajuridica.com.pe - Email: legal@gacetajuridica.com.pe</h5> -->
+
+  </div>
+</footer>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-xs" role="document">
+    <div class="modal-content">
+     <div class="modal-header text-center">
+		<span id="referencia"></span> <br>
+		<!-- <input type="button" id="btnbusque" value="Buscar" class="btn btn-success"  onclick="show();" /> -->
+		<button type="button" id="btnbusque" class="btn btn-success" onclick="show();"><i class="glyphicon glyphicon-search"></i> Buscar</button>
+		<button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Cerrar</button>
+		<button type="button" class="btn btn-info" style="display: none;" id="btnFlow" onclick="history.back();$(this).css('display','none');$('#btnClose').css('display','inline');">Atr&aacute;s</button>
+       <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Titulo Normal</h4>  -->
+      </div> 
+      <div class="modal-body scrollNext" >
+			<iframe style="height:15040px; width:auto; margin-top: 11px; overflow-y: auto;" id="myIframe" name="myIframe"  src="about:blank" marginheight="20" marginwidth="10" frameborder="0" ></iframe>
+      </div>
+      <!--<div class="modal-footer">
+       
+        
+      </div> -->
+    </div>
+  </div>
+</div>
+
+			   
+			   
+			   
+			                   <script type="text/javascript">
+							   /*
+// Create the DIV
+var findwindow = document.createElement("div");
+create_div();
+
+// over variable is whether mouse pointer is over the DIV to move
+var over = 0;
+
+// Object to hold findwindow for MouseMove
+var objDiv = null;
+
+// ID of DIV for MouseMove functions
+var DivID = null;
+
+var test = document.getElementById('test');
+
+///
+	if (ie) 
+	{	
+		document.getElementById('btnbusque').style.width = '190px';
+		document.getElementById('btnbusque').value = 'Pulse CTRL + F para Buscar';	
+		document.getElementById('btnbusque').onclick = '';
+	}
+	*/
+				
+				
+				</script>
+	
+
+
+
+
+
 </body>
-
-</noframes>
-
 </html>

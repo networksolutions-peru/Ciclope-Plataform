@@ -1,0 +1,94 @@
+/* Para tener en cosideración y cambiar el color del texto del link, cambiar en la etiqueta body,td,th
+y para cambiar el color del link cambiar a:link,a:visited etc*/
+
+body,td,th
+{
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	color: #0c0852;
+/*	font-weight: bold;*/
+}
+body
+{
+	background-color: #FFFFFF;
+	margin: 0px;
+}
+
+input[type='text'],
+input[type='checkbox'],
+select
+{
+	-moz-box-shadow:0 0 4px #AAAAAA;
+	background:none repeat scroll 0 0 #FFFFFF;
+	border:1px solid #DDDDDD;
+	color:#555555;
+	padding:2px;
+}
+
+input[type='text']:hover,
+input[type='checkbox']:hover,
+select:hover
+{
+	background:none repeat scroll 0 0 #EEEEEE;
+}
+
+input[type='submit'],
+.button
+{
+	border-color: #666666;
+	border-width: 1px;
+	font-size:10px;
+	background-color:#CCCCCC;
+	-moz-border-radius:5px;
+	padding:2px;
+}
+
+input[type='submit']:hover,
+.button
+{
+	background:none repeat scroll 0 0 #AAAAAA;
+}
+
+input.button                       { background-color: #c1c1b8; }
+h1,h2,h3                             { color: #18284a; }
+h1                                        { font-size: 14pt; }
+h2                                        { font-size: 11pt; }
+form                                     { margin: 0; padding: 0; }
+a:link                                { color: #af1314; }
+a:visited                          { color: #af1314; /*color: #555544;*/ }
+a.button,
+a.button:visited            { color: #af1314; text-decoration: none; }
+a.bannerbutton,
+a.bannerbutton:visited{ color: #c1c1b8; text-decoration: none; }
+.hit-head                          { background-color: /*#e7e7e7*/#AB1312; color: #333333; }
+.hit-title                        { font-weight: bold; }
+.scroll                              { background-color: #FFFFFF; }
+a.scroll-link,
+a.scroll-link:visited { text-decoration: none; color: #af1314; }
+.reference                       { font-size: 10pt; }
+.hit_selected,
+.hit_selected > td
+{
+	background-color: #D6D3D6;
+}
+
+#item_table
+{
+	width:100%; 
+	/*padding-left:10px;*/
+}
+
+.item_count
+{
+	width:1%;
+}
+
+.item_name
+{
+	vertical-align:top;
+}
+
+.item_name > a > img
+{
+	padding: 0 5px 0 5px
+}

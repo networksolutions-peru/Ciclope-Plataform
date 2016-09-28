@@ -1,0 +1,531 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+	<head>
+		<TITLE>Legislacion</TITLE>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:form_busqueda/search_form.css --#">
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:jquery-ui-1.8.6.custom.css --#">
+		<link rel="stylesheet" type="text/css" href="#!-- #TEMPLATES:gaceta_skin.css --#">
+		<script type="text/javascript" src="#!-- #TEMPLATES:CLPSessionSaveSearchs.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.core.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.datepicker-es.js --#"></script>
+		<script type="text/javascript" src="#!-- #TEMPLATES:jquery.ui.datepicker.js --#"></script>
+		<script language="Javascript" type="text/javascript">
+			var emisores_exacto = false;
+			
+			$(document).ready(function()
+			{
+				$.datepicker.setDefaults($.datepicker.regional['es']);
+				$( "#FechaInicio" ).datepicker({ dateFormat:'d/m/yy', showOn: 'button', buttonImage: '#!-- #IMAGES:calendar_ico.png --#', buttonImageOnly: true });
+				$( "#FechaFin" ).datepicker({ dateFormat:'d/m/yy', showOn: 'button', buttonImage: '#!-- #IMAGES:calendar_ico.png --#', buttonImageOnly: true });
+				//loadSavedSearch();
+				/*if (top.frames[top.DOC_INFO_FRAME].reset)
+					top.frames[top.DOC_INFO_FRAME].reset();*/
+				top.expandDocFrameToggle($('#doc-expand-img'));
+				top.hideReference();
+			});
+	
+
+			function open_popup(val)
+			{
+				var file_help = "";
+				switch(val)
+				{
+				case 'libre':
+				file_help="Ayuda_Libre.html";break;
+
+				case 'anio':
+				file_help="Ayuda_Anio.html";break;
+
+				case 'entidad_emisora':
+				file_help="Ayuda_Emisor.html";break;
+
+				case 'Identificador':
+				file_help="Ayuda_Identificador.html";break;
+
+				case 'numero':
+				file_help="Ayuda_Numero.html";break;
+
+				case 'norma':
+				file_help="Ayuda_Norma.html";break;
+
+
+				}
+				var TEMPLATES_INIT = "#!-- #TEMPLATES:URL --#";
+				var url_form = TEMPLATES_INIT.replace("URL",unescape(file_help));
+
+
+				switch(val)
+				{
+				case 'libre':
+				window.open (url_form, 'ayuda','scrollbars=yes,toolbar=no,menubar=0,status=0,width=550,height=500');break;
+
+				case 'anio':
+				window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+
+				case 'entidad_emisora':
+				window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+
+				case 'Identificador':
+				window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+
+				case 'numero':
+				window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+
+				case 'norma':
+				window.open (url_form, 'ayuda','menubar=0,resizable=0,status=0,width=300,height=150');break;
+
+
+				}
+
+
+
+				
+
+
+
+
+				}
+
+
+
+	
+			function makeQuery()
+			{
+				/*top.frames.DocNav.total_hits=0;
+				top.frames.DocNav.current_hit=-1;*/
+				if (submitAdvQuery())
+				{
+					top.frames[top.TOOLS_FRAME].closeToc();
+					return true;
+				}				
+				return false;
+			}
+		
+			function submitAdvQuery()
+			{
+				var q = "";
+
+				//////////////////////////////////////////
+				// Campos: pegan cosas en q (query)     //
+				//////////////////////////////////////////
+				var tipos_norma = "";
+				$.each($("input[@type='checkbox']:checked"), function()
+				{
+					tipos_norma += ((tipos_norma != "")?"or":"") + "[Field tipo_norma:"+$(this).val()+"]";
+				});
+				q += ((q != "")?"&":"") + tipos_norma;
+				
+				var norma_id = $("#norma_id").val();
+				if (norma_id != "")
+				{
+					norma_id = norma_id.replace(/\s|\.|\/|-|_/g, "\?");
+					q += ((q != "")?"&":"") + "[Field norma_id:"+norma_id+"*]";
+				}
+
+				var nro_norma = $("#number").val();
+				if (nro_norma != "")
+					q += ((q != "")?"&":"") + "[Field numero:"+nro_norma+"]";
+
+				var anio_norma = $("#anio").val();
+				if (anio_norma.length > 2 && parseInt(anio_norma)<=1999)
+					anio_norma = anio_norma.substring(2);
+				if (anio_norma != "")
+					q += ((q != "")?"&":"") + "[Field anio:"+anio_norma+"]";
+					
+				var estado = $("#Estado").val();
+				if (estado != "")
+					q += ((q != "")?"&":"") + "[Field estado:"+estado+"]";
+					
+				var FechaInicio = date2aaaammdd($("#FechaInicio").val());
+				if (FechaInicio != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:>="+FechaInicio+"]";
+
+				var FechaFin = date2aaaammdd($("#FechaFin").val());
+				if (FechaFin != "")
+					q += ((q != "")?"&":"") + "[Field fecha_server_publicacion:<="+FechaFin+"]";
+					
+					
+				var emisores = $("#emisor").val().split(",");
+				if (emisores != "")
+				{
+					var emisores_qry="";
+					for  (var i=0 ; i<emisores.length ; ++i)
+					{
+						var asterisco = "*";
+						if (emisores_exacto == true)
+							asterisco = "";
+						
+						emisores_qry += ((emisores_qry != "")?"or":"") + "[Field emisor:"+asterisco+emisores[i]+asterisco+"]";
+					}
+					if (emisores_qry != "")
+						q += ((q != "")?"&":"") + emisores_qry;
+				}
+					
+				var tema_sub = $("#Tema").val();
+				if (tema_sub != "")
+					q += ((q != "")?"&":"") + "[Field materias:*"+tema_sub+"*]or[Field areas:*"+tema_sub+"*]";
+					
+				var Sumilla = $("#Sumilla").val();
+				if (Sumilla != "")
+				{
+					Sumilla = Sumilla.replace(/ó|ú|á|é|í|ó/g, "\?"); //
+					//alert("Sumilla: " +Sumilla);
+					q += ((q != "")?"&":"") + "[Field sumilla:*"+Sumilla+"*]";
+				}
+
+				//////////////////////////////////////////
+				// Campos generales                     //
+				//////////////////////////////////////////
+					
+				var text = $("#text").val();
+				if (text != "")
+				{
+					text = text.replace(/ó|ú|á|é|í|ó/g, "\?"); //
+					q += ((q != "")?"&":"") + text;
+					q += ((q != "")?" or ":"") + "[Field keywords:"+text+"]";
+				}
+					
+				if (q == "")
+				{
+					alert("Debe completar al menos un campo del formulario de búsqueda");
+					return false;
+				}
+				
+				//alert(q);
+				saveSearch(TMP_SEARCH_NAME);
+				
+				$("#xhitlist_q").val(q);
+				top.countStart(); //Tiempo en MS que tarda la busqueda
+				$("#main_form").submit();
+				
+				return true;
+			}
+			
+			/*function goToMainSearchPage()
+			{
+				top.frames[top.DOC_FRAME].location.href = '#!-- #EXECUTIVE:SCRIPT_NAME --#?f=templates$fn='+top.frames[top.TOOLS_FRAME].init_search_page;
+			}
+			var tiposnormaslista = "";
+			function tipo_normaInsertWWHook(sTerm, sText, nTermStartIndex, nTermEndIndex, nSelectionStartIndex, nSelectionEndIndex)
+			{
+				tiposnormaslista+=sText;
+				document.write(sText+"<br/>");
+			}*/
+			
+			function date2aaaammdd(val)
+			{
+				if (val == null || val == "")
+					return val;
+					
+				var val_split = val.split("/");
+				var new_date = "";
+				for (var i=(val_split.length-1) ; i>-1 ; --i)
+				{
+					var item = val_split[i];
+					if (item.length == 1) item = "0"+item;
+					new_date += item;
+				}
+				return new_date;
+			}
+			
+			function toggleType(id, obj)
+			{
+				$('#'+id).toggle();
+				var html = $(obj).html();
+				html = html.replace(/\+/g, "#menos#");
+				html = html.replace(/-/g, "#mas#");
+				html = html.replace(/#menos#/g, "-");
+				html = html.replace(/#mas#/g, "+");
+				$(obj).html(html);
+				return false;
+			}
+			function toggleFiltroEmisores(id, obj)
+			{
+				$('#'+id).toggle();
+				var html = $(obj).html();
+				html = html.replace(/Mostrar Filtro/, "#ocultar#");
+				html = html.replace(/Ocultar Filtro/, "#mostrar#");
+				html = html.replace(/#ocultar#/, "Ocultar Filtro");
+				html = html.replace(/#mostrar#/, "Mostrar Filtro");
+				$(obj).html(html);
+				emisores_exacto = (emisores_exacto == true ? false : true); //lo contrario
+				return false;
+			}
+			function emisoresWWHook(val)
+			{
+				var emisor_val = $("#emisor").val();
+				$("#emisor").val( emisor_val+(emisor_val==''? '': ',') + val);
+			}
+		</script>
+		<style>
+			a[href="#"]
+			{
+				text-decoration:none;
+				color:black;
+				padding-top:2px;
+				padding-bottom:2px;
+			}
+		</style>
+	</head>
+	<body>
+		 
+		<table width="100%" border="0" cellpadding="0" cellspacing="5">
+			<tr>
+				<td class="header">
+					<!-- <b>B&uacute;squeda en Legislaci&oacute;n</b>-->
+				</td>
+			</tr>
+		</table>	
+		
+		<form method="get" name="ui_form" onsubmit="return false;">
+			<table width="100%" border="0" cellspacing="0">
+				<tr>
+					<td width="30%" style="vertical-align:top; padding-left:10px;">
+						<!--  <h3>Tipos de normas:</h3> -->
+						<div style="padding:0px;overflow: auto; height: 650px;">
+							<ul>
+								<a href="#" onclick="toggleType('Acuerdos', this);"><b>+ Acuerdos</b></a>
+								<ul id="Acuerdos" class="tipo_de_norma_subitem">
+									<li><label value="En Acuerdo"><input type="checkbox" name="A"    id="A "     value="A "/></label>Acuerdo
+									<li><label value="En Acuerdo De Directorio"><input type="checkbox" name="AD"    id="AD"     value="AD"/></label>Acuerdo De Directorio
+									<li><label value="En Acuerdo Regional"><input type="checkbox" name="AR"    id="AR"     value="AR"/></label>Acuerdo Regional
+								</ul>
+								<li><label value="En Auto Divisional"><input type="checkbox" name="ADI"    id="ADI"     value="ADI"/></label>Auto Divisional
+								<li><label value="En Carta Circular"><input type="checkbox" name="CCI"    id="CCI"     value="CCI"/></label>Carta Circular
+								<li><label value="En Circular"><input type="checkbox" name="CIR"    id="CIR"     value="CIR"/></label>Circular
+								<li><label value="En Comunicado"><input type="checkbox" name="COM"    id="COM"     value="COM"/></label>Comunicado
+								<li><label value="En Constitucion Politica Del Peru"><input type="checkbox" name="CPP"    id="CPP"     value="CPP"/></label>Constitucion Politica Del Peru
+								<li><label value="En Decisión Andina"><input type="checkbox" name="DECISION"    id="DECISION"     value="DECISION"/></label>Decisión Andina
+								<li>
+									<a href="#" onclick="toggleType('Decretos', this);"><b>+ Decretos</b></a>
+									<ul id="Decretos" class="tipo_de_norma_subitem">
+										<li><label value="En Decreto"><input type="checkbox" name="DEC"    id="DEC"     value="DEC"/></label>Decreto
+										<li><label value="En Decreto De Alcaldia"><input type="checkbox" name="DA"    id="DA"     value="DA"/></label>Decreto De Alcaldia
+										<li><label value="En Decreto De Urgencia"><input type="checkbox" name="DU"    id="DU"     value="DU"/></label>Decreto De Urgencia
+										<li><label value="En Decreto Ejecutivo Regional"><input type="checkbox" name="DER"    id="DER"     value="DER"/></label>Decreto Ejecutivo Regional
+										<li><label value="En Decreto Legislativo"><input type="checkbox" name="DLEG"    id="DLEG"     value="DLEG"/></label>Decreto Legislativo
+										<li><label value="En Decreto Ley"><input type="checkbox" name="DL"    id="DL"     value="DL"/></label>Decreto Ley
+										<li><label value="En Decreto Regional"><input type="checkbox" name="DR"    id="DR"     value="DR"/></label>Decreto Regional
+										<li><label value="En Decreto Supremo"><input type="checkbox" name="DS"    id="DS"     value="DS"/></label>Decreto Supremo
+										<li><label value="En Decreto Supremo Extraordinario"><input type="checkbox" name="DSE"    id="DSE"     value="DSE"/></label>Decreto Supremo Extraordinario
+									</ul>
+								</li>
+								<li><label value="En Directiva"><input type="checkbox" name="D"    id="D"     value="D"/></label>Directiva
+								<li><label value="En Edicto"><input type="checkbox" name="E"    id="E"     value="E"/></label>Edicto
+								<li><label value="En Expediente"><input type="checkbox" name="EXP"    id="EXP"     value="EXP"/></label>Expediente
+								<li><label value="En Instructivo"><input type="checkbox" name="INS"    id="INS"     value="INS"/></label>Instructivo
+								<li><label value="En Investigacion"><input type="checkbox" name="INV"    id="INV"     value="INV"/></label>Investigacion
+								<li>
+									<a href="#" onclick="toggleType('Leyes', this);"><b>+ Leyes</b></a>
+									<ul id="Leyes" class="tipo_de_norma_subitem">
+										<li><label value="En Ley"><input type="checkbox" name="L"    id="L"     value="L"/></label>Ley
+										<li><label value="En Ley Constitucional"><input type="checkbox" name="LC"    id="LC"     value="LC"/></label>Ley Constitucional
+										<li><label value="En Ley Regional"><input type="checkbox" name="LR"    id="LR"     value="LR"/></label>Ley Regional
+									</ul>
+								</li>
+								<li><label value="En Mandato"><input type="checkbox" name="MAND"    id="MAND"     value="MAND"/></label>Mandato
+								<li>
+									<a href="#" onclick="toggleType('Oficios', this);"><b>+ Oficios</b></a>
+									<ul id="Oficios" class="tipo_de_norma_subitem">
+										<li><label value="En Oficio"><input type="checkbox" name="OF"    id="OF"     value="OF"/></label>Oficio
+										<li><label value="En Oficio Circular"><input type="checkbox" name="OCI"    id="OCI"     value="OCI"/></label>Oficio Circular
+									</ul>
+								</li>
+								<li>
+									<a href="#" onclick="toggleType('Ordenanzas', this);"><b>+ Ordenanzas</b></a>
+									<ul id="Ordenanzas" class="tipo_de_norma_subitem">
+										<li><label value="En Ordenanza"><input type="checkbox" name="O"    id="O"     value="O"/></label>Ordenanza
+										<li><label value="En Ordenanza Regional"><input type="checkbox" name="OR"    id="OR"     value="OR"/></label>Ordenanza Regional
+									</ul>
+								</li>
+								<li><label value="En Recomendación"><input type="checkbox" name="REC"    id="REC"     value="REC"/></label>Recomendación
+								<li><label value="En Regulacion"><input type="checkbox" name="REG"    id="REG"     value="REG"/></label>Regulacion
+								<li>
+									<a href="#" onclick="toggleType('Resoluciones', this);"><b>+ Resoluciones</b></a>
+									<ul id="Resoluciones" class="tipo_de_norma_subitem">
+										<li><label value="En Resolucion"><input type="checkbox" name="R"    id="R"     value="R"/></label>Resolucion
+										<li><label value="En Resolucion Administrativa"><input type="checkbox" name="RAD"    id="RAD"     value="RAD"/></label>Resolucion Administrativa
+										<li><label value="En Resolución Cambiaria"><input type="checkbox" name="RC"    id="RC"     value="RC"/></label>Resolución Cambiaria
+										<li><label value="En Resolucion De Alcaldia"><input type="checkbox" name="RA"    id="RA"     value="RA"/></label>Resolucion De Alcaldia
+										<li><label value="En Resolucion Directoral"><input type="checkbox" name="RD"    id="RD"     value="RD"/></label>Resolucion Directoral
+										<li><label value="En Resolucion Ejecutiva"><input type="checkbox" name="RE"    id="RE"     value="RE"/></label>Resolucion Ejecutiva
+										<li><label value="En Resolucion Jefatural"><input type="checkbox" name="RJ"    id="RJ"     value="RJ"/></label>Resolucion Jefatural
+										<li><label value="En Resolucion Legislativa"><input type="checkbox" name="RLEG"    id="RLEG"     value="RLEG"/></label>Resolucion Legislativa
+										<li><label value="En Resolucion Legislativa Regional"><input type="checkbox" name="RLR"    id="RLR"     value="RLR"/></label>Resolucion Legislativa Regional
+										<li><label value="En Resolucion Ministerial"><input type="checkbox" name="RM"    id="RM"     value="RM"/></label>Resolucion Ministerial
+										<li><label value="En Resolucion Senatorial"><input type="checkbox" name="RSEN"    id="RSEN"     value="RSEN"/></label>Resolucion Senatorial
+										<li><label value="En Resolucion Suprema"><input type="checkbox" name="RS"    id="RS"     value="RS"/></label>Resolucion Suprema
+										<li><label value="En Resolucion Vice Ministerial"><input type="checkbox" name="RVM"    id="RVM"     value="RVM"/></label>Resolucion Vice Ministerial
+									</ul>
+								</li>
+						</div>
+					</td>
+					<td style="vertical-align:top;">
+						<table width="100%" align="center" border="0">
+							<tr bgcolor="#FFFFFF" bordercolor="#000000">
+								<td>
+									<!--  <h3>Busqueda por identificadores:</h3> -->
+									<table style="border:1px solid black; padding:10px; width:95%;">
+										<tr>
+											<td colspan="2">
+												<b>Identificador completo:</b><br/>
+												<label value="ID de la Norma">
+													<input type="text" name="norma_id" id="norma_id" size="30"/><img onclick="javascript:open_popup('Identificador');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/>
+												</label>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<table>
+													<tr>
+														<td>
+															<b>Numero:</b><br/>
+															<label value="Numero"><input type="text" name="number" id="number" maxlength="10" size="10"/></label><img onclick="javascript:open_popup('numero');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/>
+														</td>
+														<td>
+															<b>A&ntilde;o:</b><br/>
+															<label value="Año"><input type="text" name="anio" id="anio" maxlength="4" size="4"/></label><img onclick="javascript:open_popup('anio');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/>
+														</td>
+													</tr>
+												</table>
+											</td>
+											<td>
+												<b>Estado:</b><br/>
+												<label value="Estado">
+													<select name="Estado" id="Estado">
+														<option value="">-- Estado --</option>
+														<option value="Vigente">Vigente</option>
+														<option value="Derogada">Derogada</option>
+														<option value="DerogadoTacitamente">Derogado Tacitamente</option>
+														<option value="Caduco">Caduco</option>
+														<option value="EnSuspenso">En Suspenso</option>
+														<option value="Inconstitucional">Inconstitucional</option>
+													</select>
+												</label>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<b>Organismo emisor:</b><br/>
+												<label value="Organismo Emisor"><input type="text" name="emisor" id="emisor" size="30"/></label><img onclick="javascript:open_popup('entidad_emisora');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/>
+												<a href="#" onclick="toggleFiltroEmisores('FiltroEmisores', this);"><b>Mostrar Filtro</b></a>
+												<div id="FiltroEmisores" style="display:none;">
+													<br/>
+													<applet archive="JWW.jar"
+														  code="EditBox.class"
+														  codeBase="/CLP/Applets"
+														  name="EmisorEditBox"
+														  width="300" 
+														  height="22"
+														  MAYSCRIPT>
+															<param name="background"  value="0xAAAAAA">
+															<param name="bordercolor" value="0xb0b0b0">
+															<param name="textcolor"   value="0x000000">
+
+															<param name="wordwheel"	 value="EmisorWordWheel"> 
+															<param name="query"		 value="[Field,emisor:*]">
+															<param name="ScriptName" value="#!-- #EXECUTIVE:SCRIPT_NAME --#">
+													</applet>
+													<br/>
+													<applet 
+														  archive="JWW.jar"
+														  code="WordWheel.class"
+														  codeBase="/CLP/Applets"
+														  name="EmisorWordWheel"
+														  width="500"
+														  height="200"
+														  MAYSCRIPT>
+															<param name="background"	  value="0xAAAAAA">
+															<param name="buttoncolor"	  value="0xb0b0b0">
+															<param name="scrollcolor"	  value="0xd0d0d0">
+															<param name="bordercolor"	  value="0xb0b0b0">
+															<param name="textcolor"	      value="0x000000">
+															<param name="selectcolor"	  value="0xe0e0e0">
+															<param name="selecttextcolor" value="0x000000">
+
+															<PARAM NAME="cachesize"	 VALUE="500">
+															<PARAM NAME="chunksize"	 VALUE="500">
+															<PARAM NAME="domain"	 VALUE="">
+															<PARAM NAME="inserthook" VALUE="tipo_normaInsertWWHook">
+															<PARAM NAME="selecthook" VALUE="emisoresWWHook">
+															<PARAM NAME="extdll"	 VALUE="#!-- #EXECUTIVE:SCRIPT_NAME --#">
+															<PARAM NAME="query"		 VALUE="[Field,emisor:*]">
+															<PARAM NAME="selectable" VALUE="1">
+															<param NAME="editbox"	 VALUE="EmisorEditBox">
+													</applet>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<b>T&iacute;tulo de la Norma:</b><br/>
+												<label value="Sumilla"><input type="text" name="Sumilla" id="Sumilla" size="70"/></label><img onclick="javascript:open_popup('norma');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Fecha de publicacion desde:</b><br/>
+												<label value="Fecha de inicio"><input type="text" name="FechaInicio" id="FechaInicio" size="30"/></label>
+											</td>
+											<td>
+												<b>Fecha de publicacion hasta:</b><br/>
+												<label value="Fecha de final"><input type="text" name="FechaFin" id="FechaFin" size="30"/></label>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<b>Tema/SubTema:</b><br/>
+												<label value="Tema"><input type="text" name="Tema" id="Tema" size="70"/></label>
+											</td>
+										</tr>
+									</table>
+									<br/>
+									<!-- <h3>Busqueda libre:</h3> -->
+									<table style="border:1px solid black; padding:10px; width:95%;">
+										<tr>
+											<td colspan="2">
+												<b>Busqueda libre:</b><br/>
+												<label value="Texto">
+													<input type="text" name="text" id="text" size="70"/>
+												</label>
+												<img onclick="javascript:open_popup('libre');" src='#!-- #IMAGES:ayuda.gif --#' style='vertical-align: middle;' alt='Ayuda' title='Ayuda' border='0' class='iconButton'/>
+											</td>
+										</tr>
+									</table>
+									<br/>
+									<table>
+										<tr bgcolor="#FFFFFF">
+											<td>
+												<!-- input type="text" name="keywords" id="keywords" size="70"/ -->
+												<input type="submit" value="Buscar"  onClick="return makeQuery();" class="button" name="submit">
+												&nbsp;&nbsp;
+												<input type="reset" value="Limpiar" class="button">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<form action="#!-- #EXECUTIVE:SCRIPT_NAME--#" method="get" target="HitList" name="main_form" id="main_form">
+			<input type="hidden" size="0" name="f"           value="xhitlist"/>
+			<input type="hidden" size="0" name="xhitlist_x"  value="Advanced"/>
+			<input type="hidden" size="0" name="xhitlist_s"  value="Field:fecha_server_publicacion,DESC;Field:tipo_norma,ASC;Field:numero,ASC"/>
+			<input type="hidden" size="0" name="xhitlist_d"  value="Legislacion" id="xhitlist_d"/>
+			<input type="hidden" size="0" name="xhitlist_q"  value="" id="xhitlist_q"/>
+			<input type="hidden" size="0" name="xhitlist_hc" value="[XML][Kwic,10]" />
+			<input type="hidden" size="0" name="xhitlist_mh" value="1000" />
+			<input type="hidden" size="0" name="global"      value="G_" />
+			<input type="hidden" size="0" name="G_QUERY"     value=""/>
+			<!--input type="hidden" size="0" name="xhitlist_xsl" value=""/--> 
+			<input type="hidden" size="0" name="xhitlist_xsl" value="xhitlist.xsl"/>
+			<input type="hidden" size="0" name="xhitlist_vpc" value="first"/> 
+			<input type="hidden" size="0" name="xhitlist_sel" value="title;path;relevance-weight;content-type;home-title;hit-context;Field:tipo_norma;Field:estado;Field:emisor;Field:numero;Field:fecha_publicacion;Field:fecha_server_publicacion" />
+		</form>
+	</body>
+</html>
